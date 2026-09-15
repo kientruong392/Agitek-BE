@@ -1,14 +1,13 @@
-﻿using AgitekBackend.Models;
+using AgitekBackend.Models;
 using Microsoft.EntityFrameworkCore;
 
 namespace AgitekBackend.Data
 {
     public class AppDbContext : DbContext
     {
-
         public DbSet<User> Users { get; set; }
         public DbSet<Profile> Profiles { get; set; }
-        public DbSet<Address> Address { get; set; }
+        public DbSet<Address> Addresses { get; set; }
         public DbSet<Product> Products { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }
@@ -22,6 +21,7 @@ namespace AgitekBackend.Data
         public DbSet<Review> Reviews { get; set; }
         public DbSet<Warranty> Warranties { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
+        public DbSet<Media> Medias { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
