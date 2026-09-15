@@ -10,8 +10,7 @@ namespace AgitekBackend.Models
 
         [Required, MaxLength(500)]
         public string ImageUrl { get; set; } = string.Empty;
-
-        public bool IsPrimary { get; set; }
+        public bool IsPrimary { get; set; } = false;
         public int SortOrder { get; set; }
 
         public Product? Product { get; set; }

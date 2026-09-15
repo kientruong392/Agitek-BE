@@ -6,9 +6,11 @@ namespace AgitekBackend.Models
     {
         [Key]
         public int Id { get; set; }
+        [Required, Length(3, 6)]
+        public string Code { get; set; } = string.Empty;
         [Required, MaxLength(50)]
         public string CategoryName { get; set; } = string.Empty;
-        [Required, MaxLength(100)]
+        [Required, MaxLength(150)]
         public string Slug { get; set; } = string.Empty;
         public int? ParentCategoryId { get; set; }
         public Category? ParentCategory { get; set; }

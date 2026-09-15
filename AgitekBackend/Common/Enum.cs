@@ -11,7 +11,9 @@
 
     public enum ProductStatus
     {
-        Active,
+        Pending,
+        InStock,
+        LowStock,
         OutOfStock,
         Hidden,
         PreOrder,

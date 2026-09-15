@@ -9,8 +9,10 @@ namespace AgitekBackend.Models
         public int ProductId { get; set; }
         public int UserId { get; set; }
         public int Rating { get; set; }
+        [MaxLength(1000)]
         public string? Comment { get; set; }
         public int? ReplyUserId { get; set; }
+        [MaxLength(1000)]
         public string? ReplyComment { get; set; }
         public DateTime? ReplyCreatedAt { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
