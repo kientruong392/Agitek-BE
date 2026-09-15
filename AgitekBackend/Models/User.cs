@@ -1,0 +1,36 @@
+﻿using AgitekBackend.Common;
+using System.ComponentModel.DataAnnotations;
+
+namespace AgitekBackend.Models
+{
+    public class User
+    {
+        [Key]
+        public int Id { get; set; }
+        [Required, MaxLength(20)]
+        public string Username { get; set; } = string.Empty;
+        [Required, MaxLength(50)]
+        public string Email { get; set; } = string.Empty;
+        [Required, MaxLength(100)]
+        public string PasswordHash { get; set; } = string.Empty;
+        public RoleName Role { get; set; } = RoleName.Customer;
+        public int? GrantedByUserId { get; set; }
+        public DateTime? RoleGrantedAt { get; set; }
+        public bool IsActive { get; set; } = true;
+        public bool IsVerified { get; set; } = false;
+        public DateTime CreatedAt { get; set; } = DateTime.Now;
+        public DateTime UpdatedAt { get; set; } = DateTime.Now;
+        public DateTime? DeletedAt { get; set; }
+        public User? GrantedByUser { get; set; }
+        public Profile? Profile { get; set; }
+        public ICollection<Address> Addresses { get; set; } = new List<Address>();
+        public ICollection<Product> CreatedProducts { get; set; } = new List<Product>();
+        public ICollection<Order> Orders { get; set; } = new List<Order>();
+        public ICollection<Order> ApprovedOrders { get; set; } = new List<Order>();
+        public ICollection<Order> DeliveredOrders { get; set; } = new List<Order>();
+        public ICollection<Review> Reviews { get; set; } = new List<Review>();
+        public ICollection<Review> RepliedReviews { get; set; } = new List<Review>();
+        public ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();
+        public ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();
+    }
+}
