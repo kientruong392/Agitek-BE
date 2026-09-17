@@ -1,11 +1,11 @@
 {
-  "suite": "AgitekBackend.Tests.auth-identity",
+  "suite": "AgitekBackend.Tests.auth-oauth-verify",
   "revision": "v1",
-  "totalBaselines": 86,
+  "totalBaselines": 72,
   "baselines": [
     {
-      "caseId": "AUTH-IDENTITY-V1-0001",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0001",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -16,11 +16,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #1 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #1 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0002",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0002",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -31,11 +31,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #2 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #2 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0003",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0003",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -46,11 +46,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #3 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #3 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0004",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0004",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -61,11 +61,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #4 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #4 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0005",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0005",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -76,11 +76,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #5 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #5 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0006",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0006",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -91,11 +91,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #6 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #6 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0007",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0007",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -106,11 +106,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #7 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #7 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0008",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0008",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -121,11 +121,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #8 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #8 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0009",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0009",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -136,11 +136,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #9 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #9 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0010",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0010",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -151,11 +151,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #10 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #10 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0011",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0011",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -166,11 +166,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #11 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #11 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0012",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0012",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -181,11 +181,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #12 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #12 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0013",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0013",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -196,11 +196,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #13 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #13 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0014",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0014",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -211,11 +211,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #14 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #14 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0015",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0015",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -226,11 +226,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #15 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #15 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0016",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0016",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -241,11 +241,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #16 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #16 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0017",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0017",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -256,11 +256,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #17 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #17 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0018",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0018",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -271,11 +271,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #18 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #18 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0019",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0019",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -286,11 +286,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #19 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #19 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0020",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0020",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -301,11 +301,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #20 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #20 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0021",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0021",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -316,11 +316,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #21 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #21 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0022",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0022",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -331,11 +331,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #22 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #22 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0023",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0023",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -346,11 +346,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #23 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #23 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0024",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0024",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -361,11 +361,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #24 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #24 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0025",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0025",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -376,11 +376,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #25 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #25 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0026",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0026",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -391,11 +391,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #26 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #26 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0027",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0027",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -406,11 +406,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #27 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #27 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0028",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0028",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -421,11 +421,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #28 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #28 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0029",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0029",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -436,11 +436,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #29 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #29 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0030",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0030",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -451,11 +451,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #30 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #30 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0031",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0031",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -466,11 +466,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #31 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #31 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0032",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0032",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -481,11 +481,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #32 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #32 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0033",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0033",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -496,11 +496,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #33 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #33 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0034",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0034",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -511,11 +511,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #34 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #34 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0035",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0035",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -526,11 +526,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #35 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #35 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0036",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0036",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -541,11 +541,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #36 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #36 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0037",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0037",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -556,11 +556,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #37 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #37 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0038",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0038",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -571,11 +571,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #38 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #38 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0039",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0039",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -586,11 +586,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #39 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #39 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0040",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0040",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -601,11 +601,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #40 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #40 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0041",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0041",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -616,11 +616,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #41 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #41 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0042",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0042",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -631,11 +631,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #42 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #42 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0043",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0043",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -646,11 +646,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #43 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #43 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0044",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0044",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -661,11 +661,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #44 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #44 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0045",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0045",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -676,11 +676,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #45 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #45 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0046",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0046",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -691,11 +691,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #46 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #46 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0047",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0047",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -706,11 +706,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #47 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #47 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0048",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0048",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -721,11 +721,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #48 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #48 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0049",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0049",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -736,11 +736,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #49 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #49 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0050",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0050",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -751,11 +751,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #50 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #50 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0051",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0051",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -766,11 +766,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #51 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #51 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0052",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0052",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -781,11 +781,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #52 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #52 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0053",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0053",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -796,11 +796,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #53 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #53 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0054",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0054",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -811,11 +811,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #54 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #54 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0055",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0055",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -826,11 +826,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #55 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #55 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0056",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0056",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -841,11 +841,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #56 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #56 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0057",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0057",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -856,11 +856,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #57 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #57 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0058",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0058",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -871,11 +871,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #58 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #58 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0059",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0059",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -886,11 +886,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #59 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #59 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0060",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0060",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -901,11 +901,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #60 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #60 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0061",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0061",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -916,11 +916,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #61 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #61 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0062",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0062",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -931,11 +931,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #62 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #62 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0063",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0063",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -946,11 +946,11 @@
         "isActive": false
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #63 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #63 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0064",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0064",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -961,11 +961,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #64 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #64 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0065",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0065",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -976,11 +976,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #65 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #65 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0066",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0066",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -991,11 +991,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #66 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #66 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0067",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0067",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -1006,11 +1006,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #67 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #67 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0068",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0068",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Admin",
       "legacyPayload": {
@@ -1021,11 +1021,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #68 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #68 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0069",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0069",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Delivery",
       "legacyPayload": {
@@ -1036,11 +1036,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #69 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #69 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0070",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0070",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Customer",
       "legacyPayload": {
@@ -1051,11 +1051,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #70 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #70 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0071",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0071",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Staff",
       "legacyPayload": {
@@ -1066,11 +1066,11 @@
         "isActive": true
       },
       "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #71 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #71 for auth-oauth-verify"
     },
     {
-      "caseId": "AUTH-IDENTITY-V1-0072",
-      "domainModule": "auth-identity",
+      "caseId": "AUTH-OAUTH-VERIFY-V1-0072",
+      "domainModule": "auth-oauth-verify",
       "schemaRevision": "v1",
       "actorRole": "Manager",
       "legacyPayload": {
@@ -1081,217 +1081,7 @@
         "isActive": false
       },
       "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #72 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0073",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1073",
-        "amountVnd": 10251000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #73 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0074",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1074",
-        "amountVnd": 10388000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #74 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0075",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1075",
-        "amountVnd": 10525000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #75 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0076",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1076",
-        "amountVnd": 10662000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #76 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0077",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1077",
-        "amountVnd": 10799000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #77 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0078",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1078",
-        "amountVnd": 10936000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #78 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0079",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1079",
-        "amountVnd": 11073000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #79 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0080",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1080",
-        "amountVnd": 11210000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #80 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0081",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1081",
-        "amountVnd": 11347000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #81 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0082",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1082",
-        "amountVnd": 11484000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #82 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0083",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1083",
-        "amountVnd": 11621000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #83 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0084",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1084",
-        "amountVnd": 11758000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #84 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0085",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1085",
-        "amountVnd": 11895000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #85 for auth-identity"
-    },
-    {
-      "caseId": "AUTH-IDENTITY-V1-0086",
-      "domainModule": "auth-identity",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-AUT-1086",
-        "amountVnd": 12032000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #86 for auth-identity"
+      "auditNote": "Initial v1 verification baseline #72 for auth-oauth-verify"
     }
   ]
 }

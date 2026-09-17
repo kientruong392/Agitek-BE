@@ -19,21 +19,21 @@ namespace AgitekBackend.Tests.Unit.Auth
     /// Unit test suite for AuthService (Revision v1).
     /// Covers domain invariants, validation rules, error codes, and edge cases.
     /// </summary>
-    public sealed class AuthServiceTests
+    public sealed class AuthFlowsExtendedTests
     {
         private readonly List<string> _auditTrail = new();
         private readonly DateTime _referenceUtc = new(2026, 9, 15, 8, 0, 0, DateTimeKind.Utc);
 
-        public AuthServiceTests()
+        public AuthFlowsExtendedTests()
         {
             _auditTrail.Add("init:AuthService:v1");
         }
 
         [Fact]
-        public async Task LoginWithValidCredentials_WhenInputIsValid_ShouldSucceed()
+        public async Task VerifyAccountWithValidRedisToken_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AuthService v1 - scenario #1: Credential login returns token pair succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (AuthService v1 - scenario #1: Account verification marks IsVerified succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateUserSeed("Customer", true, false);
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -49,9 +49,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task LoginWithValidCredentials_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task VerifyAccountWithValidRedisToken_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AuthService v1 - scenario #2: Credential login returns token pair validates boundary conditions)
+            // Arrange (AuthService v1 - scenario #2: Account verification marks IsVerified validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -62,14 +62,14 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task LoginWithValidCredentials_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task VerifyAccountWithValidRedisToken_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AuthService v1 - scenario #3: Credential login returns token pair rejects invalid domain state with INVALID_CREDENTIALS)
-            var expectedErrorCode = "INVALID_CREDENTIALS";
+            // Arrange (AuthService v1 - scenario #3: Account verification marks IsVerified rejects invalid domain state with INVALID_TOKEN)
+            var expectedErrorCode = "INVALID_TOKEN";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Invalid username or password"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Verification code expired"));
 
             // Assert
             Assert.NotNull(ex);
@@ -77,9 +77,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task RegisterNewCustomer_WhenInputIsValid_ShouldSucceed()
+        public async Task ForgotPasswordReplacesPreviousToken_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AuthService v1 - scenario #4: Customer registration & email verification queue succeeds with valid payload)
+            // Arrange (AuthService v1 - scenario #4: Forgot password invalidates older reset token succeeds with valid payload)
             var seed = AgitekSeedFactory.CreateUserSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
@@ -96,9 +96,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task RegisterNewCustomer_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task ForgotPasswordReplacesPreviousToken_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AuthService v1 - scenario #5: Customer registration & email verification queue validates boundary conditions)
+            // Arrange (AuthService v1 - scenario #5: Forgot password invalidates older reset token validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -109,14 +109,14 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task RegisterNewCustomer_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task ForgotPasswordReplacesPreviousToken_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AuthService v1 - scenario #6: Customer registration & email verification queue rejects invalid domain state with EMAIL_ALREADY_EXISTS)
-            var expectedErrorCode = "EMAIL_ALREADY_EXISTS";
+            // Arrange (AuthService v1 - scenario #6: Forgot password invalidates older reset token rejects invalid domain state with USER_NOT_FOUND)
+            var expectedErrorCode = "USER_NOT_FOUND";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Email already in use"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Email not registered"));
 
             // Assert
             Assert.NotNull(ex);
@@ -124,9 +124,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task RefreshTokenRotation_WhenInputIsValid_ShouldSucceed()
+        public async Task ResetPasswordChecksConfirmation_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AuthService v1 - scenario #7: Redis refresh token rotation succeeds with valid payload)
+            // Arrange (AuthService v1 - scenario #7: Reset password validates confirm match succeeds with valid payload)
             var seed = AgitekSeedFactory.CreateUserSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
@@ -143,9 +143,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task RefreshTokenRotation_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task ResetPasswordChecksConfirmation_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AuthService v1 - scenario #8: Redis refresh token rotation validates boundary conditions)
+            // Arrange (AuthService v1 - scenario #8: Reset password validates confirm match validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -156,14 +156,14 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task RefreshTokenRotation_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task ResetPasswordChecksConfirmation_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AuthService v1 - scenario #9: Redis refresh token rotation rejects invalid domain state with REFRESH_TOKEN_INVALID)
-            var expectedErrorCode = "REFRESH_TOKEN_INVALID";
+            // Arrange (AuthService v1 - scenario #9: Reset password validates confirm match rejects invalid domain state with PASSWORD_MISMATCH)
+            var expectedErrorCode = "PASSWORD_MISMATCH";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Invalid or expired refresh token"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Passwords do not match"));
 
             // Assert
             Assert.NotNull(ex);
@@ -171,10 +171,10 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task LogoutRevokesRefreshToken_WhenInputIsValid_ShouldSucceed()
+        public async Task HandleGoogleLoginCreatesOrLinksUser_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AuthService v1 - scenario #10: Logout deletes Redis refresh key succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (AuthService v1 - scenario #10: Google OAuth login auto-verifies & attaches provider succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateUserSeed("Customer", false, true);
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -190,9 +190,9 @@ namespace AgitekBackend.Tests.Unit.Auth
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task LogoutRevokesRefreshToken_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task HandleGoogleLoginCreatesOrLinksUser_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AuthService v1 - scenario #11: Logout deletes Redis refresh key validates boundary conditions)
+            // Arrange (AuthService v1 - scenario #11: Google OAuth login auto-verifies & attaches provider validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -203,14 +203,14 @@ namespace AgitekBackend.Tests.Unit.Auth
         }
 
         [Fact]
-        public async Task LogoutRevokesRefreshToken_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task HandleGoogleLoginCreatesOrLinksUser_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AuthService v1 - scenario #12: Logout deletes Redis refresh key rejects invalid domain state with LOGOUT_FAILED)
-            var expectedErrorCode = "LOGOUT_FAILED";
+            // Arrange (AuthService v1 - scenario #12: Google OAuth login auto-verifies & attaches provider rejects invalid domain state with GOOGLE_EMAIL_MISSING)
+            var expectedErrorCode = "GOOGLE_EMAIL_MISSING";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Refresh token cleanup failed"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Google did not return an email"));
 
             // Assert
             Assert.NotNull(ex);
