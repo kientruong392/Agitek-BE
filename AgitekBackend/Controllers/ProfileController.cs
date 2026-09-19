@@ -33,13 +33,6 @@ namespace AgitekBackend.Controllers
             return Ok(profile);
         }
 
-        [HttpPost]
-        public async Task<ActionResult<ProfileDTO>> Create([FromBody] CreateProfileDTO dto)
-        {
-            var createdProfile = await _profileService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { userId = createdProfile.UserId }, createdProfile);
-        }
-
         [HttpPut("{userId}")]
         public async Task<ActionResult<ProfileDTO>> Update(int userId, [FromBody] UpdateProfileDTO dto)
         {
@@ -49,17 +42,6 @@ namespace AgitekBackend.Controllers
                 return NotFound();
             }
             return Ok(updatedProfile);
-        }
-
-        [HttpDelete("{userId}")]
-        public async Task<ActionResult> Delete(int userId)
-        {
-            var success = await _profileService.DeleteAsync(userId);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
         }
     }
 }

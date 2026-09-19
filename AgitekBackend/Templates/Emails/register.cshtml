@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Xác nhận tài khoản Agitek</title>
+  <style>
+    body { margin: 0; padding: 0; background-color: #f4f6f9; font-family: 'Segoe UI', Arial, sans-serif; }
+    .wrapper { max-width: 600px; margin: 40px auto; background: #ffffff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 24px rgba(0,0,0,0.08); }
+    .header { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); padding: 40px 32px; text-align: center; }
+    .header h1 { color: #ffffff; margin: 0; font-size: 26px; font-weight: 700; letter-spacing: 1px; }
+    .header p { color: #a0aec0; margin: 8px 0 0; font-size: 14px; }
+    .body { padding: 40px 32px; }
+    .greeting { font-size: 18px; color: #2d3748; font-weight: 600; margin-bottom: 12px; }
+    .message { font-size: 15px; color: #4a5568; line-height: 1.7; margin-bottom: 28px; }
+    .code-box { background: #f7f8fc; border: 2px dashed #667eea; border-radius: 10px; padding: 24px; text-align: center; margin: 24px 0; }
+    .code-label { font-size: 12px; color: #718096; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 10px; }
+    .code-value { font-size: 32px; font-weight: 800; color: #667eea; letter-spacing: 6px; font-family: 'Courier New', monospace; }
+    .note { font-size: 13px; color: #718096; background: #fff8e1; border-left: 4px solid #f6c90e; padding: 12px 16px; border-radius: 0 8px 8px 0; margin-top: 20px; }
+    .footer { background: #f7f8fc; padding: 24px 32px; text-align: center; border-top: 1px solid #e2e8f0; }
+    .footer p { font-size: 12px; color: #a0aec0; margin: 4px 0; }
+    .footer a { color: #667eea; text-decoration: none; }
+  </style>
+</head>
+<body>
+  <div class="wrapper">
+    <div class="header">
+      <h1>🛒 Agitek</h1>
+      <p>Xác nhận tài khoản của bạn</p>
+    </div>
+    <div class="body">
+      <p class="greeting">Xin chào, @Model.Username!</p>
+      <p class="message">
+        Cảm ơn bạn đã đăng ký tài khoản tại <strong>Agitek</strong>. 
+        Để kích hoạt tài khoản, vui lòng sử dụng mã xác nhận bên dưới:
+      </p>
+      <div class="code-box">
+        <div class="code-label">Mã xác nhận</div>
+        <div class="code-value">@Model.ActivationCode</div>
+      </div>
+      <p class="message">
+        Sao chép mã này và nhập vào ứng dụng để hoàn tất quá trình xác thực tài khoản.
+      </p>
+      <div class="note">
+        ⏰ Mã xác nhận có hiệu lực trong <strong>5 phút</strong>. Nếu bạn không thực hiện yêu cầu này, hãy bỏ qua email này.
+      </div>
+    </div>
+    <div class="footer">
+      <p>© 2025 Agitek. Tất cả quyền được bảo lưu.</p>
+      <p>Bạn nhận được email này vì đã đăng ký tại <a href="#">agitek.com</a></p>
+    </div>
+  </div>
+</body>
+</html>
