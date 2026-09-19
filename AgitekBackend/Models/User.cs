@@ -7,12 +7,13 @@ namespace AgitekBackend.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(20)]
+        [Required, Length(6,20)]
         public string Username { get; set; } = string.Empty;
         [Required, MaxLength(50)]
         public string Email { get; set; } = string.Empty;
-        [Required, MaxLength(100)]
+        [Required, Length(6, 100)]
         public string PasswordHash { get; set; } = string.Empty;
+        public List<Provider> Providers { get; set; } = new List<Provider>();
         public RoleName Role { get; set; } = RoleName.Customer;
         public int? GrantedByUserId { get; set; }
         public DateTime? RoleGrantedAt { get; set; }

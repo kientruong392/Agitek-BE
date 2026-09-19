@@ -1,5 +1,11 @@
 ﻿namespace AgitekBackend.Common
 {
+    public enum Provider
+    {
+        Credentials,
+        Google
+    }
+
     public enum RoleName
     {
         Admin,
@@ -7,6 +13,13 @@
         Staff,
         Delivery,
         Customer
+    }
+
+    public enum GenderType
+    {
+        Male,
+        Female,
+        Other
     }
 
     public enum ProductStatus

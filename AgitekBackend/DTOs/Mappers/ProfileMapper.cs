@@ -1,18 +1,18 @@
-using AgitekBackend.DTOs.Profiles;
-using AutoMapper;
-using Profile = AgitekBackend.Models.Profile;
+    using AgitekBackend.DTOs.Profiles;
+    using AutoMapper;
+    using Profile = AgitekBackend.Models.Profile;
 
-namespace AgitekBackend.DTOs.Mappers
-{
-    public class ProfileMapper : AutoMapper.Profile
+    namespace AgitekBackend.DTOs.Mappers
     {
-        public ProfileMapper()
+        public class ProfileMapper : AutoMapper.Profile
         {
-            CreateMap<CreateProfileDTO, Profile>();
-            CreateMap<UpdateProfileDTO, Profile>();
-            CreateMap<Profile, ProfileDTO>();
+            public ProfileMapper()
+            {
+                CreateMap<CreateProfileDTO, Profile>();
+                CreateMap<UpdateProfileDTO, Profile>();
+                CreateMap<Profile, ProfileDTO>();
+            }
         }
     }
-}
 
 

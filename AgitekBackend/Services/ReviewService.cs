@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Reviews;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<ReviewDTO?> GetByIdAsync(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
-            return review == null ? null : _mapper.Map<ReviewDTO>(review);
+            if (review == null) throw new NotFoundException($"Review with id {id} not found.");
+            return _mapper.Map<ReviewDTO>(review);
         }
 
         public async Task<ReviewDTO> CreateAsync(CreateReviewDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<ReviewDTO?> UpdateAsync(int id, UpdateReviewDTO dto)
         {
             var review = await _context.Reviews.FindAsync(id);
-            if (review == null) return null;
+            if (review == null) throw new NotFoundException($"Review with id {id} not found.");
 
             _mapper.Map(dto, review);
             review.UpdatedAt = DateTime.Now;
@@ -52,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var review = await _context.Reviews.FindAsync(id);
-            if (review == null) return false;
+            if (review == null) throw new NotFoundException($"Review with id {id} not found.");
 
             _context.Reviews.Remove(review);
             await _context.SaveChangesAsync();
@@ -60,5 +62,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

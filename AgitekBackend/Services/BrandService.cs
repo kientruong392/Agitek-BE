@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Brands;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<BrandDTO?> GetByIdAsync(int id)
         {
             var brand = await _context.Brands.FindAsync(id);
-            return brand == null ? null : _mapper.Map<BrandDTO>(brand);
+            if (brand == null) throw new NotFoundException($"Brand with id {id} not found.");
+            return _mapper.Map<BrandDTO>(brand);
         }
 
         public async Task<BrandDTO> CreateAsync(CreateBrandDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<BrandDTO?> UpdateAsync(int id, UpdateBrandDTO dto)
         {
             var brand = await _context.Brands.FindAsync(id);
-            if (brand == null) return null;
+            if (brand == null) throw new NotFoundException($"Brand with id {id} not found.");
 
             _mapper.Map(dto, brand);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var brand = await _context.Brands.FindAsync(id);
-            if (brand == null) return false;
+            if (brand == null) throw new NotFoundException($"Brand with id {id} not found.");
 
             _context.Brands.Remove(brand);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

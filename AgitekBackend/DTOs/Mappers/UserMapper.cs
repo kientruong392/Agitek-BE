@@ -16,6 +16,7 @@ namespace AgitekBackend.DTOs.Mappers
 
             // Model -> ViewDTO
             CreateMap<User, UserDTO>();
+            CreateMap<User, GrantedByUserDTO>();
         }
     }
 }

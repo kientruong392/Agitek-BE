@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Orders;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<OrderDTO?> GetByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            return order == null ? null : _mapper.Map<OrderDTO>(order);
+            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
+            return _mapper.Map<OrderDTO>(order);
         }
 
         public async Task<OrderDTO> CreateAsync(CreateOrderDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<OrderDTO?> UpdateAsync(int id, UpdateOrderDTO dto)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null) return null;
+            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
 
             _mapper.Map(dto, order);
             order.UpdatedAt = DateTime.Now;
@@ -52,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null) return false;
+            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
 
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();
@@ -60,5 +62,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

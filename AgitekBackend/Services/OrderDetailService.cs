@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.OrderDetails;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,8 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            return orderDetail == null ? null : _mapper.Map<OrderDetailDTO>(orderDetail);
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
+            return _mapper.Map<OrderDetailDTO>(orderDetail);
         }
 
         public async Task<OrderDetailDTO> CreateAsync(CreateOrderDetailDTO dto)
@@ -43,7 +45,7 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            if (orderDetail == null) return null;
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
 
             _mapper.Map(dto, orderDetail);
             await _context.SaveChangesAsync();
@@ -54,7 +56,7 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            if (orderDetail == null) return false;
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
 
             _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();
@@ -62,5 +64,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Medias;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<MediaDTO?> GetByIdAsync(int id)
         {
             var media = await _context.Medias.FindAsync(id);
-            return media == null ? null : _mapper.Map<MediaDTO>(media);
+            if (media == null) throw new NotFoundException($"Media with id {id} not found.");
+            return _mapper.Map<MediaDTO>(media);
         }
 
         public async Task<MediaDTO> CreateAsync(CreateMediaDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<MediaDTO?> UpdateAsync(int id, UpdateMediaDTO dto)
         {
             var media = await _context.Medias.FindAsync(id);
-            if (media == null) return null;
+            if (media == null) throw new NotFoundException($"Media with id {id} not found.");
 
             _mapper.Map(dto, media);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var media = await _context.Medias.FindAsync(id);
-            if (media == null) return false;
+            if (media == null) throw new NotFoundException($"Media with id {id} not found.");
 
             _context.Medias.Remove(media);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

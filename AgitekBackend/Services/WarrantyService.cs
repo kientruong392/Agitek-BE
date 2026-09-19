@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Warranties;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<WarrantyDTO?> GetByIdAsync(int id)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            return warranty == null ? null : _mapper.Map<WarrantyDTO>(warranty);
+            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found.");
+            return _mapper.Map<WarrantyDTO>(warranty);
         }
 
         public async Task<WarrantyDTO> CreateAsync(CreateWarrantyDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<WarrantyDTO?> UpdateAsync(int id, UpdateWarrantyDTO dto)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            if (warranty == null) return null;
+            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found.");
 
             _mapper.Map(dto, warranty);
             warranty.UpdatedAt = DateTime.Now;
@@ -52,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            if (warranty == null) return false;
+            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found.");
 
             _context.Warranties.Remove(warranty);
             await _context.SaveChangesAsync();
@@ -60,5 +62,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

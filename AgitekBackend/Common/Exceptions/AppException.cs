@@ -1,0 +1,14 @@
+namespace AgitekBackend.Common.Exceptions
+{
+    public class AppException : Exception
+    {
+        public int StatusCode { get; }
+        public string ErrorCode { get; }
+
+        public AppException(int statusCode, string message, string errorCode) : base(message)
+        {
+            StatusCode = statusCode;
+            ErrorCode = errorCode;
+        }
+    }
+}

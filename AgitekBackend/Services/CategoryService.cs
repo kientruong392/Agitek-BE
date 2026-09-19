@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Categories;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<CategoryDTO?> GetByIdAsync(int id)
         {
             var category = await _context.Categories.FindAsync(id);
-            return category == null ? null : _mapper.Map<CategoryDTO>(category);
+            if (category == null) throw new NotFoundException($"Category with id {id} not found.");
+            return _mapper.Map<CategoryDTO>(category);
         }
 
         public async Task<CategoryDTO> CreateAsync(CreateCategoryDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<CategoryDTO?> UpdateAsync(int id, UpdateCategoryDTO dto)
         {
             var category = await _context.Categories.FindAsync(id);
-            if (category == null) return null;
+            if (category == null) throw new NotFoundException($"Category with id {id} not found.");
 
             _mapper.Map(dto, category);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var category = await _context.Categories.FindAsync(id);
-            if (category == null) return false;
+            if (category == null) throw new NotFoundException($"Category with id {id} not found.");
 
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

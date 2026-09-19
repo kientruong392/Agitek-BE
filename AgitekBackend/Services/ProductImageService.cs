@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.ProductImages;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<ProductImageDTO?> GetByIdAsync(int id)
         {
             var image = await _context.ProductImages.FindAsync(id);
-            return image == null ? null : _mapper.Map<ProductImageDTO>(image);
+            if (image == null) throw new NotFoundException($"Image with id {id} not found.");
+            return _mapper.Map<ProductImageDTO>(image);
         }
 
         public async Task<ProductImageDTO> CreateAsync(CreateProductImageDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<ProductImageDTO?> UpdateAsync(int id, UpdateProductImageDTO dto)
         {
             var image = await _context.ProductImages.FindAsync(id);
-            if (image == null) return null;
+            if (image == null) throw new NotFoundException($"Image with id {id} not found.");
 
             _mapper.Map(dto, image);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var image = await _context.ProductImages.FindAsync(id);
-            if (image == null) return false;
+            if (image == null) throw new NotFoundException($"Image with id {id} not found.");
 
             _context.ProductImages.Remove(image);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

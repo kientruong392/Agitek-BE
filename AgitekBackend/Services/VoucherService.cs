@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Vouchers;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<VoucherDTO?> GetByIdAsync(int id)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            return voucher == null ? null : _mapper.Map<VoucherDTO>(voucher);
+            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found.");
+            return _mapper.Map<VoucherDTO>(voucher);
         }
 
         public async Task<VoucherDTO> CreateAsync(CreateVoucherDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<VoucherDTO?> UpdateAsync(int id, UpdateVoucherDTO dto)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            if (voucher == null) return null;
+            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found.");
 
             _mapper.Map(dto, voucher);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            if (voucher == null) return false;
+            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found.");
 
             _context.Vouchers.Remove(voucher);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Addresses;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<AddressDTO?> GetByIdAsync(int id)
         {
             var address = await _context.Addresses.FindAsync(id);
-            return address == null ? null : _mapper.Map<AddressDTO>(address);
+            if (address == null) throw new NotFoundException($"Address with id {id} not found.");
+            return _mapper.Map<AddressDTO>(address);
         }
 
         public async Task<AddressDTO> CreateAsync(CreateAddressDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<AddressDTO?> UpdateAsync(int id, UpdateAddressDTO dto)
         {
             var address = await _context.Addresses.FindAsync(id);
-            if (address == null) return null;
+            if (address == null) throw new NotFoundException($"Address with id {id} not found.");
 
             _mapper.Map(dto, address);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var address = await _context.Addresses.FindAsync(id);
-            if (address == null) return false;
+            if (address == null) throw new NotFoundException($"Address with id {id} not found.");
 
             _context.Addresses.Remove(address);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

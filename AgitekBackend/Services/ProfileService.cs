@@ -1,5 +1,6 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Profiles;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,37 +28,20 @@ namespace AgitekBackend.Services
         public async Task<ProfileDTO?> GetByUserIdAsync(int userId)
         {
             var profile = await _context.Profiles.FindAsync(userId);
-            return profile == null ? null : _mapper.Map<ProfileDTO>(profile);
-        }
-
-        public async Task<ProfileDTO> CreateAsync(CreateProfileDTO dto)
-        {
-            var profile = _mapper.Map<ProfileModel>(dto);
-            _context.Profiles.Add(profile);
-            await _context.SaveChangesAsync();
+            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found.");
             return _mapper.Map<ProfileDTO>(profile);
         }
-
         public async Task<ProfileDTO?> UpdateAsync(int userId, UpdateProfileDTO dto)
         {
             var profile = await _context.Profiles.FindAsync(userId);
-            if (profile == null) return null;
+            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found.");
 
             _mapper.Map(dto, profile);
             await _context.SaveChangesAsync();
             return _mapper.Map<ProfileDTO>(profile);
         }
-
-        public async Task<bool> DeleteAsync(int userId)
-        {
-            var profile = await _context.Profiles.FindAsync(userId);
-            if (profile == null) return false;
-
-            _context.Profiles.Remove(profile);
-            await _context.SaveChangesAsync();
-            return true;
-        }
     }
 }
+
 
 

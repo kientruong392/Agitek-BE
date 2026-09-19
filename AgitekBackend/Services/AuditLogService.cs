@@ -1,6 +1,7 @@
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.AuditLogs;
 using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -27,7 +28,8 @@ namespace AgitekBackend.Services
         public async Task<AuditLogDTO?> GetByIdAsync(int id)
         {
             var log = await _context.AuditLogs.FindAsync(id);
-            return log == null ? null : _mapper.Map<AuditLogDTO>(log);
+            if (log == null) throw new NotFoundException($"Log with id {id} not found.");
+            return _mapper.Map<AuditLogDTO>(log);
         }
 
         public async Task<AuditLogDTO> CreateAsync(CreateAuditLogDTO dto)
@@ -41,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<AuditLogDTO?> UpdateAsync(int id, UpdateAuditLogDTO dto)
         {
             var log = await _context.AuditLogs.FindAsync(id);
-            if (log == null) return null;
+            if (log == null) throw new NotFoundException($"Log with id {id} not found.");
 
             _mapper.Map(dto, log);
             await _context.SaveChangesAsync();
@@ -51,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var log = await _context.AuditLogs.FindAsync(id);
-            if (log == null) return false;
+            if (log == null) throw new NotFoundException($"Log with id {id} not found.");
 
             _context.AuditLogs.Remove(log);
             await _context.SaveChangesAsync();
@@ -59,5 +61,7 @@ namespace AgitekBackend.Services
         }
     }
 }
+
+
 
 

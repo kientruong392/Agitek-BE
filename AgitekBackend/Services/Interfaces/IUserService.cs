@@ -1,4 +1,7 @@
+using AgitekBackend.Common;
+using AgitekBackend.DTOs.Auths;
 using AgitekBackend.DTOs.Users;
+using AgitekBackend.Models;
 
 namespace AgitekBackend.Services.Interfaces
 {
@@ -9,7 +12,12 @@ namespace AgitekBackend.Services.Interfaces
         Task<UserDTO> CreateAsync(CreateUserDTO dto);
         Task<UserDTO?> UpdateAsync(int id, UpdateUserDTO dto);
         Task<bool> DeleteAsync(int id);
+
+        Task<User?> GetByUsernameOrEmailAsync(string usernameOrEmail);
+        Task<User?> GetByEmailAsync(string email);
+        Task<User?> GetRawByIdAsync(int id);
+        Task UpdateVerifyStatusAsync(int id, bool isVerified);
+        Task ChangePasswordAsync(int id, string newPassword);
+        Task AddProviderAsync(int id, Provider provider);
     }
 }
-
-
