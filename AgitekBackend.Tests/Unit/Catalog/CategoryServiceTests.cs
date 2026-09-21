@@ -13,27 +13,27 @@ using AgitekBackend.Tests.Builders;
 using Moq;
 using Xunit;
 
-namespace AgitekBackend.Tests.Unit.Users
+namespace AgitekBackend.Tests.Unit.Catalog
 {
     /// <summary>
-    /// Unit test suite for UserService (Revision v1).
+    /// Unit test suite for CategoryService (Revision v1).
     /// Covers domain invariants, validation rules, error codes, and edge cases.
     /// </summary>
-    public sealed class UserServiceTests
+    public sealed class CategoryServiceTests
     {
         private readonly List<string> _auditTrail = new();
         private readonly DateTime _referenceUtc = new(2026, 9, 15, 8, 0, 0, DateTimeKind.Utc);
 
-        public UserServiceTests()
+        public CategoryServiceTests()
         {
-            _auditTrail.Add("init:UserService:v1");
+            _auditTrail.Add("init:CategoryService:v1");
         }
 
         [Fact]
-        public async Task CreateStaffAccountAssignsGranularRole_WhenInputIsValid_ShouldSucceed()
+        public async Task CreateSubCategoryEnforcesMaxDepthTwo_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (UserService v1 - scenario #1: Staff account creation with GrantedByUserId succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed("Staff");
+            // Arrange (CategoryService v1 - scenario #1: Reject category deeper than 2 levels succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateProductSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -49,9 +49,9 @@ namespace AgitekBackend.Tests.Unit.Users
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task CreateStaffAccountAssignsGranularRole_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task CreateSubCategoryEnforcesMaxDepthTwo_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (UserService v1 - scenario #2: Staff account creation with GrantedByUserId validates boundary conditions)
+            // Arrange (CategoryService v1 - scenario #2: Reject category deeper than 2 levels validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -62,14 +62,14 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task CreateStaffAccountAssignsGranularRole_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task CreateSubCategoryEnforcesMaxDepthTwo_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (UserService v1 - scenario #3: Staff account creation with GrantedByUserId rejects invalid domain state with FORBIDDEN_ROLE_GRANT)
-            var expectedErrorCode = "FORBIDDEN_ROLE_GRANT";
+            // Arrange (CategoryService v1 - scenario #3: Reject category deeper than 2 levels rejects invalid domain state with CATEGORY_MAX_DEPTH_EXCEEDED)
+            var expectedErrorCode = "CATEGORY_MAX_DEPTH_EXCEEDED";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Cannot grant equal or higher role"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Cannot create category deeper than 2 levels"));
 
             // Assert
             Assert.NotNull(ex);
@@ -77,10 +77,10 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task UpdateUserStatusBanAndUnban_WhenInputIsValid_ShouldSucceed()
+        public async Task DeleteCategoryBlockedWhenHasSubCategories_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (UserService v1 - scenario #4: Ban and unban user toggle IsActive succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (CategoryService v1 - scenario #4: Prevent deleting parent category with children succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateProductSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -96,9 +96,9 @@ namespace AgitekBackend.Tests.Unit.Users
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task UpdateUserStatusBanAndUnban_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task DeleteCategoryBlockedWhenHasSubCategories_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (UserService v1 - scenario #5: Ban and unban user toggle IsActive validates boundary conditions)
+            // Arrange (CategoryService v1 - scenario #5: Prevent deleting parent category with children validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -109,14 +109,14 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task UpdateUserStatusBanAndUnban_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task DeleteCategoryBlockedWhenHasSubCategories_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (UserService v1 - scenario #6: Ban and unban user toggle IsActive rejects invalid domain state with CANNOT_BAN_SELF)
-            var expectedErrorCode = "CANNOT_BAN_SELF";
+            // Arrange (CategoryService v1 - scenario #6: Prevent deleting parent category with children rejects invalid domain state with CATEGORY_HAS_SUBCATEGORIES)
+            var expectedErrorCode = "CATEGORY_HAS_SUBCATEGORIES";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Self ban is forbidden"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Category has sub-categories"));
 
             // Assert
             Assert.NotNull(ex);
@@ -124,10 +124,10 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task ChangeMyPasswordValidatesOldPassword_WhenInputIsValid_ShouldSucceed()
+        public async Task GetBySlugWithProductsAggregatesChildren_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (UserService v1 - scenario #7: Change password verifies current hash succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (CategoryService v1 - scenario #7: Parent slug collects child category products succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateProductSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -143,9 +143,9 @@ namespace AgitekBackend.Tests.Unit.Users
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task ChangeMyPasswordValidatesOldPassword_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task GetBySlugWithProductsAggregatesChildren_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (UserService v1 - scenario #8: Change password verifies current hash validates boundary conditions)
+            // Arrange (CategoryService v1 - scenario #8: Parent slug collects child category products validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -156,14 +156,14 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task ChangeMyPasswordValidatesOldPassword_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task GetBySlugWithProductsAggregatesChildren_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (UserService v1 - scenario #9: Change password verifies current hash rejects invalid domain state with INCORRECT_OLD_PASSWORD)
-            var expectedErrorCode = "INCORRECT_OLD_PASSWORD";
+            // Arrange (CategoryService v1 - scenario #9: Parent slug collects child category products rejects invalid domain state with CATEGORY_NOT_FOUND)
+            var expectedErrorCode = "CATEGORY_NOT_FOUND";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Incorrect old password"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Category not found"));
 
             // Assert
             Assert.NotNull(ex);
