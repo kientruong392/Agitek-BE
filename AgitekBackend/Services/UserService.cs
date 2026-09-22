@@ -31,48 +31,112 @@ namespace AgitekBackend.Services
             return _mapper.Map<IEnumerable<UserDTO>>(users);
         }
 
-        public async Task<UserDTO?> GetByIdAsync(int id)
+        public async Task<UserDTO> GetByIdAsync(int id)
         {
             var user = await _context.Users
                 .Include(u => u.GrantedByUser)
                 .Include(u => u.Profile)
                 .FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
+            if (user == null) throw new NotFoundException($"User not found");
             return _mapper.Map<UserDTO>(user);
-        }
-
-        public async Task<User?> GetRawByIdAsync(int id)
-        {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
         }
 
         public async Task<User?> GetByUsernameOrEmailAsync(string usernameOrEmail)
         {
-            return await _context.Users
+            var user = await _context.Users
                 .FirstOrDefaultAsync(u =>
                     u.Username == usernameOrEmail ||
                     u.Email == usernameOrEmail);
+            return user;
         }
 
-        public async Task<User?> GetByEmailAsync(string email)
+        public async Task<UserDTO> GetByEmailAsync(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users
+                .Include(u => u.GrantedByUser)
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null) throw new NotFoundException($"User not found");
+            return _mapper.Map<UserDTO>(user);
         }
 
         public async Task<UserDTO> CreateAsync(CreateUserDTO dto)
         {
             var user = _mapper.Map<User>(dto);
-            user.PasswordHash = AuthUtils.HashPassword(dto.Password);
+            user.PasswordHash = string.IsNullOrEmpty(dto.Password) ? null : AuthUtils.HashPassword(dto.Password);
+            user.Profile.FullName = !string.IsNullOrEmpty(user.Profile.FullName) ? user.Profile.FullName : user.Username ?? "Undefined";
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<UserDTO?> UpdateAsync(int id, UpdateUserDTO dto)
+        public async Task<UserDTO> UpdateAsync(int id, UpdateUserDTO dto, RoleName currentRole)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
+            if (user == null) throw new NotFoundException($"User not found");
+
+            // Business logic checks
+            if (user.Role == RoleName.Customer && dto.Role != null && dto.Role != RoleName.Customer)
+            {
+                throw new BadRequestException("Customer role cannot be changed to another role.");
+            }
+
+            if (user.Role == RoleName.Guest && dto.Role != null && dto.Role != RoleName.Guest && dto.Role != RoleName.Customer)
+            {
+                throw new BadRequestException("Guest role can only be upgraded to Customer.");
+            }
+
+            if (currentRole == RoleName.Admin && (dto.Role == RoleName.Admin || dto.Role == RoleName.SuperAdmin))
+            {
+                throw new ForbiddenException("Admin cannot upgrade a user to Admin or SuperAdmin.");
+            }
+
             _mapper.Map(dto, user);
+            user.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        public async Task<UserDTO> UpdateAccountAsync(int id, UpdateMyAccountDTO dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) throw new NotFoundException($"User not found.");
+
+            if (!string.IsNullOrEmpty(dto.Username) && dto.Username != user.Username)
+            {
+                var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
+                if (existingUser != null)
+                {
+                    throw new BadRequestException("Username is already taken.");
+                }
+                user.Username = dto.Username;
+            }
+
+            if (!string.IsNullOrEmpty(dto.Email) && dto.Email != user.Email)
+            {
+                var existingEmail = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
+                if (existingEmail != null)
+                {
+                    throw new BadRequestException("Email is already taken.");
+                }
+                user.Email = dto.Email;
+            }
+
+            if (!string.IsNullOrEmpty(dto.NewPassword))
+            {
+                if (string.IsNullOrEmpty(dto.OldPassword))
+                {
+                    throw new BadRequestException("Old password is required to set a new password.");
+                }
+                
+                if (user.PasswordHash == null || !AuthUtils.VerifyPassword(dto.OldPassword, user.PasswordHash))
+                {
+                    throw new BadRequestException("Incorrect old password.");
+                }
+                
+                user.PasswordHash = AuthUtils.HashPassword(dto.NewPassword);
+            }
+
             user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return _mapper.Map<UserDTO>(user);
@@ -81,7 +145,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
+            if (user == null) throw new NotFoundException($"User not found.");
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;
@@ -90,37 +154,37 @@ namespace AgitekBackend.Services
         public async Task UpdateVerifyStatusAsync(int id, bool isVerified)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
+            if (user == null) throw new NotFoundException($"User not found.");
             user.IsVerified = isVerified;
-            user.UpdatedAt  = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
         }
 
         public async Task ChangePasswordAsync(int id, string newPassword)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
+            if (user == null) throw new NotFoundException($"User not found.");
             user.PasswordHash = AuthUtils.HashPassword(newPassword);
-            user.UpdatedAt    = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
         }
 
         public async Task AddProviderAsync(int id, Provider provider)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User with id {id} not found.");
-            
-            if (user.Providers == null)
-            {
-                user.Providers = new List<Provider>();
-            }
-
+            if (user == null) throw new NotFoundException($"User not found.");
             if (!user.Providers.Contains(provider))
             {
                 user.Providers.Add(provider);
                 user.UpdatedAt = DateTime.Now;
                 await _context.SaveChangesAsync();
             }
+        }
+
+        public async Task<UserDTO?> CheckEmailExists(string email)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            return user == null ? null : _mapper.Map<UserDTO>(user);
         }
     }
 }

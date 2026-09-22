@@ -1,13 +1,16 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.RegularExpressions;
 using AgitekBackend.Common;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Common.Utils;
 using AgitekBackend.DTOs.Auths;
+using AgitekBackend.DTOs.Profiles;
 using AgitekBackend.DTOs.Users;
 using AgitekBackend.Models;
 using AgitekBackend.Services.Interfaces;
+using AutoMapper;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
 
@@ -19,29 +22,64 @@ namespace AgitekBackend.Services
         private readonly IEmailService _emailService;
         private readonly IConfiguration _config;
         private readonly IDatabase _redis;
+        private readonly IMapper _mapper;
 
         public AuthService(
             IUserService userService,
             IEmailService emailService,
             IConfiguration config,
-            IConnectionMultiplexer redis)
+            IConnectionMultiplexer redis,
+            IMapper mapper)
         {
             _userService = userService;
             _emailService = emailService;
             _config = config;
             _redis = redis.GetDatabase();
+            _mapper = mapper;
+        }
+        private async Task<string> GenerateSafeUsernameAsync(string email)
+        {
+            var emailPrefix = email.Split('@')[0].ToLowerInvariant();
+            var cleanPrefix = Regex.Replace(emailPrefix, @"[^a-zA-Z0-9]", "");
+            if (cleanPrefix.Length > 14) cleanPrefix = cleanPrefix[..14];
+            string username;
+            do
+            {
+                var random = Random.Shared.Next(10000, 99999);
+                username = $"{cleanPrefix}_{random}";
+            }
+            while (await _userService.GetByUsernameOrEmailAsync(username) != null);
+            return username;
         }
 
         public async Task<TokenResponseDTO> LoginAsync(SignInDTO dto)
         {
-            var user = await ValidateCredentialsAsync(dto.UsernameOrEmail, dto.Password);
-            await _userService.AddProviderAsync(user.Id, Provider.Credentials);
-            return await CreateTokenPairAsync(user);
+            var userDto = await ValidateCredentialsAsync(dto.UsernameOrEmail, dto.Password);
+            await _userService.AddProviderAsync(userDto.Id, Provider.Credentials);
+            return await CreateTokenPairAsync(userDto);
+        }
+
+        public async Task<UserDTO> CreateGuestUserAsync(CreateGuestUserDTO dto)
+        {
+            var createUserDto = new CreateUserDTO
+            {
+                Username = null,
+                Email = null,
+                Password = null,
+                Role = RoleName.Guest,
+                Profile = new CreateProfileDTO()
+                {
+                    FullName = dto.FullName,
+                    PhoneNumber = dto.PhoneNumber,
+                }
+            };
+            var userDto = await _userService.CreateAsync(createUserDto);
+            return userDto;
         }
 
         public async Task<TokenResponseDTO> RegisterAsync(SignUpDTO dto)
         {
-            var existingByEmail = await _userService.GetByEmailAsync(dto.Email);
+            var existingByEmail = await _userService.GetByUsernameOrEmailAsync(dto.Email);
             if (existingByEmail != null)
                 throw new BadRequestException("Email already in use.", "EMAIL_ALREADY_EXISTS");
 
@@ -49,24 +87,36 @@ namespace AgitekBackend.Services
             if (existingByUsername != null)
                 throw new BadRequestException("Username already taken.", "USERNAME_ALREADY_EXISTS");
 
-            var createUserDto = new CreateUserDTO
-            {
-                Username = dto.Username,
-                Email = dto.Email,
-                Password = dto.Password,
-                Role = RoleName.Customer,
-                Profile = dto.Profile ?? new DTOs.Profiles.CreateProfileDTO { FullName = dto.Username }
-            };
+            var createUserDto = _mapper.Map<CreateUserDTO>(dto);
 
             var userDto = await _userService.CreateAsync(createUserDto);
-            var user = await _userService.GetRawByIdAsync(userDto.Id) 
-                ?? throw new NotFoundException("User not found after creation.");
 
-            await _userService.AddProviderAsync(user.Id, Provider.Credentials);
+            await _userService.AddProviderAsync(userDto.Id, Provider.Credentials);
 
-            _ = SendVerificationEmailAsync(user);
+            await SendVerificationEmailAsync(userDto);
 
-            return await CreateTokenPairAsync(user);
+            return await CreateTokenPairAsync(userDto);
+        }
+
+        public async Task<UserDTO> CreateStaffAsync(CreateStaffDTO dto, int grantedByUserId)
+        {
+            var existingByEmail = await _userService.GetByUsernameOrEmailAsync(dto.Email);
+            if (existingByEmail != null)
+                throw new BadRequestException("Email already in use", "EMAIL_ALREADY_EXISTS");
+
+            var existingByUsername = await _userService.GetByUsernameOrEmailAsync(dto.Username);
+            if (existingByUsername != null)
+                throw new BadRequestException("Username already taken", "USERNAME_ALREADY_EXISTS");
+
+            var createUserDto = _mapper.Map<CreateUserDTO>(dto);
+
+            var userDto = await _userService.CreateAsync(createUserDto);
+
+            await _userService.AddProviderAsync(userDto.Id, Provider.Credentials);
+
+            await SendVerificationEmailAsync(userDto);
+
+            return userDto;
         }
 
         public async Task<TokenResponseDTO> VerifyAccountAsync(string token, string userId)
@@ -78,7 +128,7 @@ namespace AgitekBackend.Services
             await _userService.UpdateVerifyStatusAsync(int.Parse(userId), true);
             await _redis.KeyDeleteAsync($"verify:{token}");
 
-            var user = await _userService.GetRawByIdAsync(int.Parse(userId))
+            var user = await _userService.GetByIdAsync(int.Parse(userId))
                 ?? throw new NotFoundException("User not found.");
 
             return await CreateTokenPairAsync(user);
@@ -86,33 +136,30 @@ namespace AgitekBackend.Services
 
         public async Task ResendVerifyCodeAsync(string userId)
         {
-            var user = await _userService.GetRawByIdAsync(int.Parse(userId))
-                ?? throw new NotFoundException("User not found.", "USER_NOT_FOUND");
-
-            await SendVerificationEmailAsync(user);
+            var userDto = await _userService.GetByIdAsync(int.Parse(userId));
+            await SendVerificationEmailAsync(userDto);
         }
 
         public async Task ForgotPasswordAsync(string email)
         {
-            var user = await _userService.GetByEmailAsync(email)
-                ?? throw new NotFoundException("User with this email does not exist.", "USER_NOT_FOUND");
+            var userDto = await _userService.GetByEmailAsync(email);
 
-            var oldToken = await _redis.StringGetAsync($"forgot-password-user:{user.Id}");
+            var oldToken = await _redis.StringGetAsync($"forgot-password-user:{userDto.Id}");
             if (oldToken.HasValue)
             {
                 await _redis.KeyDeleteAsync($"forgot-password:{oldToken}");
-                await _redis.KeyDeleteAsync($"forgot-password-user:{user.Id}");
+                await _redis.KeyDeleteAsync($"forgot-password-user:{userDto.Id}");
             }
 
             var token = AuthUtils.GenerateUuid();
-            var frontendUrl = _config["Frontend:Url"] ?? "http://localhost:3000";
+            var frontendUrl = _config["Frontend:Url"];
             var resetLink = $"{frontendUrl}/reset-password?token={token}";
             var ttl = TimeSpan.FromSeconds(300);
 
-            await _redis.StringSetAsync($"forgot-password:{token}", user.Id.ToString(), ttl);
-            await _redis.StringSetAsync($"forgot-password-user:{user.Id}", token, ttl);
+            await _redis.StringSetAsync($"forgot-password:{token}", userDto.Id.ToString(), ttl);
+            await _redis.StringSetAsync($"forgot-password-user:{userDto.Id}", token, ttl);
 
-            await _emailService.SendForgotPasswordEmailAsync(user.Email, user.Username, resetLink);
+            await _emailService.SendForgotPasswordEmailAsync(userDto.Email, userDto.Username, resetLink);
         }
 
         public async Task ResetPasswordAsync(ResetPasswordDTO dto)
@@ -137,7 +184,7 @@ namespace AgitekBackend.Services
             if (!storedUserId.HasValue)
                 throw new UnauthorizedException("Invalid or expired refresh token.", "REFRESH_TOKEN_INVALID");
 
-            var user = await _userService.GetRawByIdAsync(int.Parse(storedUserId.ToString()));
+            var user = await _userService.GetByIdAsync(int.Parse(storedUserId.ToString()));
             if (user == null || !user.IsActive)
                 throw new UnauthorizedException("This account has been locked or not found.", "ACCOUNT_LOCKED");
 
@@ -153,46 +200,45 @@ namespace AgitekBackend.Services
 
         public async Task<TokenResponseDTO> HandleGoogleLoginAsync(string email, string name)
         {
-            var user = await _userService.GetByEmailAsync(email);
-            if (user == null)
+            var userDto = await _userService.CheckEmailExists(email);
+            if (userDto == null)
             {
-                var safeUsername = await GenerateSafeUsernameAsync(name);
+                var safeUsername = await GenerateSafeUsernameAsync(email);
                 var createUserDto = new CreateUserDTO
                 {
                     Username = safeUsername,
                     Email = email,
-                    Password = AuthUtils.GenerateUuid(),
+                    Password = null,
                     Role = RoleName.Customer,
-                    Profile = new DTOs.Profiles.CreateProfileDTO { FullName = name }
+                    Profile = new CreateProfileDTO()
+                    {
+                        FullName = name
+                    }
                 };
 
-                var userDto = await _userService.CreateAsync(createUserDto);
+                userDto = await _userService.CreateAsync(createUserDto);
                 await _userService.UpdateVerifyStatusAsync(userDto.Id, true);
-                user = await _userService.GetRawByIdAsync(userDto.Id);
             }
+            await _userService.AddProviderAsync(userDto.Id, Provider.Google);
 
-            if (user != null)
-            {
-                await _userService.AddProviderAsync(user.Id, Provider.Google);
-            }
-
-            return await CreateTokenPairAsync(user!);
+            return await CreateTokenPairAsync(userDto);
         }
 
-        private async Task<User> ValidateCredentialsAsync(string usernameOrEmail, string password)
+        private async Task<UserDTO> ValidateCredentialsAsync(string usernameOrEmail, string password)
         {
             var user = await _userService.GetByUsernameOrEmailAsync(usernameOrEmail);
-
+            if(user.PasswordHash == null)
+                throw new UnauthorizedException("This account is invalid.", "INVALID_ACCOUNT");
             if (user == null || !AuthUtils.VerifyPassword(password, user.PasswordHash))
                 throw new UnauthorizedException("Invalid credentials.", "INVALID_CREDENTIALS");
 
             if (!user.IsActive)
                 throw new UnauthorizedException("This account has been deactivated.", "ACCOUNT_LOCKED");
 
-            return user;
+            return _mapper.Map<UserDTO>(user);
         }
 
-        private async Task<TokenResponseDTO> CreateTokenPairAsync(User user)
+        private async Task<TokenResponseDTO> CreateTokenPairAsync(UserDTO userDto)
         {
             var secretKey = _config["JwtSettings:SecretKey"]!;
             var issuer = _config["JwtSettings:Issuer"]!;
@@ -204,11 +250,14 @@ namespace AgitekBackend.Services
 
             var claims = new[]
             {
-                new Claim(JwtRegisteredClaimNames.Sub, user.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("isVerified", user.IsVerified.ToString()),
-                new Claim("isActive", user.IsActive.ToString()),
-                new Claim(ClaimTypes.Role, user.Role.ToString()),
+                new Claim(JwtRegisteredClaimNames.Sub, userDto.Id.ToString()),
+                new Claim(JwtRegisteredClaimNames.Email, userDto.Email),
+                new Claim(JwtRegisteredClaimNames.UniqueName, userDto.Username),
+                new Claim(JwtRegisteredClaimNames.Name, userDto.Profile?.FullName ?? userDto.Username),
+                new Claim("avatarUrl", userDto.Profile?.AvatarUrl ?? string.Empty),
+                new Claim("isVerified", userDto.IsVerified.ToString()),
+                new Claim("isActive", userDto.IsActive.ToString()),
+                new Claim(ClaimTypes.Role, userDto.Role.ToString()),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
             };
 
@@ -225,7 +274,7 @@ namespace AgitekBackend.Services
             
             await _redis.StringSetAsync(
                 $"refresh:{refreshToken}",
-                user.Id.ToString(),
+                userDto.Id.ToString(),
                 TimeSpan.FromSeconds(refreshTtlSeconds));
 
             return new TokenResponseDTO
@@ -235,32 +284,11 @@ namespace AgitekBackend.Services
             };
         }
 
-        private async Task SendVerificationEmailAsync(User user)
+        private async Task SendVerificationEmailAsync(UserDTO userDto)
         {
             var token = AuthUtils.GenerateUuid();
-            await _redis.StringSetAsync($"verify:{token}", user.Id.ToString(), TimeSpan.FromSeconds(300));
-            await _emailService.SendVerificationEmailAsync(user.Email, user.Username, token);
-        }
-
-        private async Task<string> GenerateSafeUsernameAsync(string displayName)
-        {
-            var baseUsername = new string(
-                displayName.ToLowerInvariant()
-                           .Replace(" ", "_")
-                           .Where(c => char.IsLetterOrDigit(c) || c == '_')
-                           .ToArray());
-
-            if (baseUsername.Length < 6)
-                baseUsername = baseUsername.PadRight(6, '_');
-            if (baseUsername.Length > 16)
-                baseUsername = baseUsername[..16];
-
-            var candidate = baseUsername;
-            var existing = await _userService.GetByUsernameOrEmailAsync(candidate);
-            if (existing != null)
-                candidate = $"{baseUsername}_{new Random().Next(1000, 9999)}";
-
-            return candidate;
+            await _redis.StringSetAsync($"verify:{token}", userDto.Id.ToString(), TimeSpan.FromSeconds(300));
+            await _emailService.SendVerificationEmailAsync(userDto.Email, userDto.Username, token);
         }
     }
 }

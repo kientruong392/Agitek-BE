@@ -18,6 +18,7 @@ namespace AgitekBackend.Services
             var templatesPath = Path.Combine(AppContext.BaseDirectory, "Templates", "Emails");
             _razor = new RazorLightEngineBuilder()
                 .UseFileSystemProject(templatesPath)
+                .SetOperatingAssembly(typeof(Program).Assembly)
                 .UseMemoryCachingProvider()
                 .Build();
         }

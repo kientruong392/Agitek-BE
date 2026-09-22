@@ -22,7 +22,7 @@ namespace AgitekBackend.DTOs.Users
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
         public GrantedByUserDTO? GrantedByUser { get; set; }
-        public ProfileDTO? Profile { get; set; }
+        public ProfileDTO Profile { get; set; } = new ProfileDTO();
     }
 }
 

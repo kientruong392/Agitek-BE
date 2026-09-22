@@ -4,7 +4,6 @@ using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
-using ProfileModel = AgitekBackend.Models.Profile;
 
 namespace AgitekBackend.Services
 {
@@ -12,11 +11,13 @@ namespace AgitekBackend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IUserService _userService;
 
-        public ProfileService(AppDbContext context, IMapper mapper)
+        public ProfileService(AppDbContext context, IMapper mapper, IUserService userService)
         {
             _context = context;
             _mapper = mapper;
+            _userService = userService;
         }
 
         public async Task<IEnumerable<ProfileDTO>> GetAllAsync()
@@ -35,8 +36,12 @@ namespace AgitekBackend.Services
         {
             var profile = await _context.Profiles.FindAsync(userId);
             if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found.");
-
             _mapper.Map(dto, profile);
+            if (string.IsNullOrEmpty(profile.FullName))
+            {
+                var user = await _userService.GetByIdAsync(profile.UserId);
+                profile.FullName = user != null ? user.Username : "Deleted_User";
+            }
             await _context.SaveChangesAsync();
             return _mapper.Map<ProfileDTO>(profile);
         }
