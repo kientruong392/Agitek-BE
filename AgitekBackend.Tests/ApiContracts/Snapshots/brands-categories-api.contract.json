@@ -1,0 +1,937 @@
+{
+  "suite": "AgitekBackend.Tests.brands-categories-api",
+  "revision": "v1",
+  "totalBaselines": 62,
+  "baselines": [
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0001",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1001",
+        "amountVnd": 387000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #1 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0002",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1002",
+        "amountVnd": 524000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #2 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0003",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1003",
+        "amountVnd": 661000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #3 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0004",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1004",
+        "amountVnd": 798000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #4 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0005",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1005",
+        "amountVnd": 935000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #5 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0006",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1006",
+        "amountVnd": 1072000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #6 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0007",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1007",
+        "amountVnd": 1209000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #7 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0008",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1008",
+        "amountVnd": 1346000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #8 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0009",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1009",
+        "amountVnd": 1483000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #9 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0010",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1010",
+        "amountVnd": 1620000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #10 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0011",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1011",
+        "amountVnd": 1757000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #11 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0012",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1012",
+        "amountVnd": 1894000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #12 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0013",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1013",
+        "amountVnd": 2031000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #13 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0014",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1014",
+        "amountVnd": 2168000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #14 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0015",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1015",
+        "amountVnd": 2305000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #15 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0016",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1016",
+        "amountVnd": 2442000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #16 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0017",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1017",
+        "amountVnd": 2579000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #17 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0018",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1018",
+        "amountVnd": 2716000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #18 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0019",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1019",
+        "amountVnd": 2853000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #19 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0020",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1020",
+        "amountVnd": 2990000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #20 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0021",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1021",
+        "amountVnd": 3127000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #21 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0022",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1022",
+        "amountVnd": 3264000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #22 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0023",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1023",
+        "amountVnd": 3401000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #23 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0024",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1024",
+        "amountVnd": 3538000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #24 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0025",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1025",
+        "amountVnd": 3675000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #25 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0026",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1026",
+        "amountVnd": 3812000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #26 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0027",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1027",
+        "amountVnd": 3949000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #27 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0028",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1028",
+        "amountVnd": 4086000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #28 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0029",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1029",
+        "amountVnd": 4223000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #29 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0030",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1030",
+        "amountVnd": 4360000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #30 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0031",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1031",
+        "amountVnd": 4497000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #31 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0032",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1032",
+        "amountVnd": 4634000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #32 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0033",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1033",
+        "amountVnd": 4771000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #33 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0034",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1034",
+        "amountVnd": 4908000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #34 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0035",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1035",
+        "amountVnd": 5045000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #35 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0036",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1036",
+        "amountVnd": 5182000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #36 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0037",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1037",
+        "amountVnd": 5319000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #37 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0038",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1038",
+        "amountVnd": 5456000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #38 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0039",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1039",
+        "amountVnd": 5593000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #39 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0040",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1040",
+        "amountVnd": 5730000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #40 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0041",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1041",
+        "amountVnd": 5867000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #41 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0042",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1042",
+        "amountVnd": 6004000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #42 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0043",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1043",
+        "amountVnd": 6141000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #43 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0044",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1044",
+        "amountVnd": 6278000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #44 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0045",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1045",
+        "amountVnd": 6415000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #45 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0046",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1046",
+        "amountVnd": 6552000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #46 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0047",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1047",
+        "amountVnd": 6689000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #47 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0048",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1048",
+        "amountVnd": 6826000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #48 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0049",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1049",
+        "amountVnd": 6963000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #49 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0050",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1050",
+        "amountVnd": 7100000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #50 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0051",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1051",
+        "amountVnd": 7237000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #51 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0052",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1052",
+        "amountVnd": 7374000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #52 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0053",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1053",
+        "amountVnd": 7511000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #53 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0054",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1054",
+        "amountVnd": 7648000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #54 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0055",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1055",
+        "amountVnd": 7785000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #55 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0056",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1056",
+        "amountVnd": 7922000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #56 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0057",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1057",
+        "amountVnd": 8059000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #57 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0058",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1058",
+        "amountVnd": 8196000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #58 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0059",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1059",
+        "amountVnd": 8333000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #59 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0060",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1060",
+        "amountVnd": 8470000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #60 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0061",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1061",
+        "amountVnd": 8607000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #61 for brands-categories-api"
+    },
+    {
+      "caseId": "BRANDS-CATEGORIES-API-V1-0062",
+      "domainModule": "brands-categories-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-BRA-1062",
+        "amountVnd": 8744000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #62 for brands-categories-api"
+    }
+  ]
+}
