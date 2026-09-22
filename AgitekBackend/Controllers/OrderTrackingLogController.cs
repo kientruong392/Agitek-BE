@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdLog.Id }, createdLog);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<OrderTrackingLogDTO>> Update(int id, [FromBody] UpdateOrderTrackingLogDTO dto)
         {
             var updatedLog = await _orderTrackingLogService.UpdateAsync(id, dto);

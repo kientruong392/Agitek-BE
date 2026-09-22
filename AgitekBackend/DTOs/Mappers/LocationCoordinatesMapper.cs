@@ -10,7 +10,7 @@ namespace AgitekBackend.DTOs.Mappers
         public LocationCoordinatesMapper()
         {
             CreateMap<CreateLocationCoordinatesDTO, LocationCoordinates>();
-            CreateMap<UpdateLocationCoordinatesDTO, LocationCoordinates>();
+            CreateMap<UpdateLocationCoordinatesDTO, LocationCoordinates>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<LocationCoordinates, LocationCoordinatesDTO>();
         }
     }

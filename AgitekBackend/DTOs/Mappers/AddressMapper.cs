@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public AddressMapper()
         {
             CreateMap<CreateAddressDTO, Address>();
-            CreateMap<UpdateAddressDTO, Address>();
+            CreateMap<UpdateAddressDTO, Address>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Address, AddressDTO>();
         }
     }

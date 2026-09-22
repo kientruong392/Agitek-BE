@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdReview.Id }, createdReview);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<ReviewDTO>> Update(int id, [FromBody] UpdateReviewDTO dto)
         {
             var updatedReview = await _reviewService.UpdateAsync(id, dto);

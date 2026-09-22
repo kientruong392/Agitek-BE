@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdImage.Id }, createdImage);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<ProductImageDTO>> Update(int id, [FromBody] UpdateProductImageDTO dto)
         {
             var updatedImage = await _productImageService.UpdateAsync(id, dto);

@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public OrderDetailMapper()
         {
             CreateMap<CreateOrderDetailDTO, OrderDetail>();
-            CreateMap<UpdateOrderDetailDTO, OrderDetail>();
+            CreateMap<UpdateOrderDetailDTO, OrderDetail>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<OrderDetail, OrderDetailDTO>();
         }
     }

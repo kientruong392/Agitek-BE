@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdMedia.Id }, createdMedia);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<MediaDTO>> Update(int id, [FromBody] UpdateMediaDTO dto)
         {
             var updatedMedia = await _mediaService.UpdateAsync(id, dto);

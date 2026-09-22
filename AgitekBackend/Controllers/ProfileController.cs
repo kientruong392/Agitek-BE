@@ -33,7 +33,7 @@ namespace AgitekBackend.Controllers
             return Ok(profile);
         }
 
-        [HttpPut("{userId}")]
+        [HttpPatch("{userId}")]
         public async Task<ActionResult<ProfileDTO>> Update(int userId, [FromBody] UpdateProfileDTO dto)
         {
             var updatedProfile = await _profileService.UpdateAsync(userId, dto);

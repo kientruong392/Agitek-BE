@@ -37,11 +37,13 @@ namespace AgitekBackend.Controllers
         }
 
         [HttpPost("verify-account")]
-        [AllowAnonymous]
-        public async Task<ActionResult<TokenResponseDTO>> VerifyAccount(
-            [FromBody] VerifyAccountRequest body)
+        public async Task<ActionResult<TokenResponseDTO>> VerifyAccount([FromQuery] string token)
         {
-            var result = await _authService.VerifyAccountAsync(body.Token, body.UserId);
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("sub")
+                ?? throw new UnauthorizedAccessException("User ID not found in token.");
+
+            var result = await _authService.VerifyAccountAsync(token, userId);
             return Ok(result);
         }
 
@@ -74,14 +76,14 @@ namespace AgitekBackend.Controllers
 
         [HttpPost("refresh")]
         [AllowAnonymous]
-        public async Task<ActionResult<TokenResponseDTO>> Refresh([FromBody] RefreshTokenRequest body)
+        public async Task<ActionResult<TokenResponseDTO>> Refresh([FromBody] TokenResponseDTO body)
         {
             var result = await _authService.RefreshTokenAsync(body.RefreshToken);
             return Ok(result);
         }
 
         [HttpPost("logout")]
-        public async Task<IActionResult> Logout([FromBody] RefreshTokenRequest body)
+        public async Task<IActionResult> Logout([FromBody] TokenResponseDTO body)
         {
             await _authService.LogoutAsync(body.RefreshToken);
             return Ok();
@@ -124,7 +126,4 @@ namespace AgitekBackend.Controllers
                 $"{frontendUrl}/login/success?accessToken={tokens.AccessToken}&refreshToken={tokens.RefreshToken}");
         }
     }
-
-    public record VerifyAccountRequest(string Token, string UserId);
-    public record RefreshTokenRequest(string RefreshToken);
 }

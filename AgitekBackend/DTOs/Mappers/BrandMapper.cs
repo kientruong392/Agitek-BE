@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public BrandMapper()
         {
             CreateMap<CreateBrandDTO, Brand>();
-            CreateMap<UpdateBrandDTO, Brand>();
+            CreateMap<UpdateBrandDTO, Brand>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Brand, BrandDTO>();
         }
     }

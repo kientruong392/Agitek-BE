@@ -12,7 +12,7 @@ namespace AgitekBackend.DTOs.Mappers
             CreateMap<CreateProductDTO, Product>();
 
             // UpdateDTO -> Model
-            CreateMap<UpdateProductDTO, Product>();
+            CreateMap<UpdateProductDTO, Product>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
 
             // Model -> ViewDTO
             CreateMap<Product, ProductDTO>();

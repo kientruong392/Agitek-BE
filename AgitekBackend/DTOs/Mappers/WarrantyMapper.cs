@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public WarrantyMapper()
         {
             CreateMap<CreateWarrantyDTO, Warranty>();
-            CreateMap<UpdateWarrantyDTO, Warranty>();
+            CreateMap<UpdateWarrantyDTO, Warranty>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Warranty, WarrantyDTO>();
         }
     }

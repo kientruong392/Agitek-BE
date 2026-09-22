@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdWarranty.Id }, createdWarranty);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<WarrantyDTO>> Update(int id, [FromBody] UpdateWarrantyDTO dto)
         {
             var updatedWarranty = await _warrantyService.UpdateAsync(id, dto);

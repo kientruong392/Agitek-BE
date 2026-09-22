@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public ProductSpecificationMapper()
         {
             CreateMap<CreateProductSpecificationDTO, ProductSpecification>();
-            CreateMap<UpdateProductSpecificationDTO, ProductSpecification>();
+            CreateMap<UpdateProductSpecificationDTO, ProductSpecification>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<ProductSpecification, ProductSpecificationDTO>();
         }
     }

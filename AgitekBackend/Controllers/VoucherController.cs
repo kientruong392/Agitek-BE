@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdVoucher.Id }, createdVoucher);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<VoucherDTO>> Update(int id, [FromBody] UpdateVoucherDTO dto)
         {
             var updatedVoucher = await _voucherService.UpdateAsync(id, dto);

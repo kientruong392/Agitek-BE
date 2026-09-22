@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public ReviewMapper()
         {
             CreateMap<CreateReviewDTO, Review>();
-            CreateMap<UpdateReviewDTO, Review>();
+            CreateMap<UpdateReviewDTO, Review>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Review, ReviewDTO>();
         }
     }

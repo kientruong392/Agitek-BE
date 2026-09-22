@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public CategoryMapper()
         {
             CreateMap<CreateCategoryDTO, Category>();
-            CreateMap<UpdateCategoryDTO, Category>();
+            CreateMap<UpdateCategoryDTO, Category>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Category, CategoryDTO>();
         }
     }

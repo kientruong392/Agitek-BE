@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public ProductImageMapper()
         {
             CreateMap<CreateProductImageDTO, ProductImage>();
-            CreateMap<UpdateProductImageDTO, ProductImage>();
+            CreateMap<UpdateProductImageDTO, ProductImage>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<ProductImage, ProductImageDTO>();
         }
     }

@@ -9,7 +9,7 @@
             public ProfileMapper()
             {
                 CreateMap<CreateProfileDTO, Profile>();
-                CreateMap<UpdateProfileDTO, Profile>();
+                CreateMap<UpdateProfileDTO, Profile>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
                 CreateMap<Profile, ProfileDTO>();
             }
         }

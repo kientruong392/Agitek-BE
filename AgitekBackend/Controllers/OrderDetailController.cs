@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { orderId = createdOrderDetail.OrderId, productId = createdOrderDetail.ProductId }, createdOrderDetail);
         }
 
-        [HttpPut("{orderId}/{productId}")]
+        [HttpPatch("{orderId}/{productId}")]
         public async Task<ActionResult<OrderDetailDTO>> Update(int orderId, int productId, [FromBody] UpdateOrderDetailDTO dto)
         {
             var updatedOrderDetail = await _orderDetailService.UpdateAsync(orderId, productId, dto);

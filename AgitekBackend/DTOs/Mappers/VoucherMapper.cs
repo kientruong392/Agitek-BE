@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public VoucherMapper()
         {
             CreateMap<CreateVoucherDTO, Voucher>();
-            CreateMap<UpdateVoucherDTO, Voucher>();
+            CreateMap<UpdateVoucherDTO, Voucher>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Voucher, VoucherDTO>();
         }
     }

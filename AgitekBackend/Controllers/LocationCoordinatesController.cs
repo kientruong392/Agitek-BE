@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdLocation.Id }, createdLocation);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<LocationCoordinatesDTO>> Update(int id, [FromBody] UpdateLocationCoordinatesDTO dto)
         {
             var updatedLocation = await _locationCoordinatesService.UpdateAsync(id, dto);

@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public OrderTrackingLogMapper()
         {
             CreateMap<CreateOrderTrackingLogDTO, OrderTrackingLog>();
-            CreateMap<UpdateOrderTrackingLogDTO, OrderTrackingLog>();
+            CreateMap<UpdateOrderTrackingLogDTO, OrderTrackingLog>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<OrderTrackingLog, OrderTrackingLogDTO>();
         }
     }

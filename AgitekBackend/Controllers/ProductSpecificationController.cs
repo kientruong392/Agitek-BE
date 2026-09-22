@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdSpec.Id }, createdSpec);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<ProductSpecificationDTO>> Update(int id, [FromBody] UpdateProductSpecificationDTO dto)
         {
             var updatedSpec = await _productSpecificationService.UpdateAsync(id, dto);

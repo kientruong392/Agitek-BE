@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdCategory.Id }, createdCategory);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<CategoryDTO>> Update(int id, [FromBody] UpdateCategoryDTO dto)
         {
             var updatedCategory = await _categoryService.UpdateAsync(id, dto);

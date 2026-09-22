@@ -9,7 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public AuditLogMapper()
         {
             CreateMap<CreateAuditLogDTO, AuditLog>();
-            CreateMap<UpdateAuditLogDTO, AuditLog>();
+            CreateMap<UpdateAuditLogDTO, AuditLog>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<AuditLog, AuditLogDTO>();
         }
     }

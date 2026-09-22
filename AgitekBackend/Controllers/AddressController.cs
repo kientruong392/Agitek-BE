@@ -40,7 +40,7 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdAddress.Id }, createdAddress);
         }
 
-        [HttpPut("{id}")]
+        [HttpPatch("{id}")]
         public async Task<ActionResult<AddressDTO>> Update(int id, [FromBody] UpdateAddressDTO dto)
         {
             var updatedAddress = await _addressService.UpdateAsync(id, dto);
