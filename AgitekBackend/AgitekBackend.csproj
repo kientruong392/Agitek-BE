@@ -4,6 +4,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+	<PreserveCompilationContext>true</PreserveCompilationContext>
   </PropertyGroup>
 
   <ItemGroup>
@@ -33,7 +34,6 @@
     <Folder Include="Common\Utils\" />
     <Folder Include="Controllers\" />
     <Folder Include="Middlewares\" />
-    <Folder Include="DTOs\Mappers\" />
     <Folder Include="Services\Interfaces\" />
   </ItemGroup>
 

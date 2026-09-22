@@ -8,11 +8,13 @@
 
     public enum RoleName
     {
+        SuperAdmin,
         Admin,
         Manager,
         Staff,
         Delivery,
-        Customer
+        Customer,
+        Guest
     }
 
     public enum GenderType

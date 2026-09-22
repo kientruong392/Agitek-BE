@@ -12,6 +12,7 @@ namespace AgitekBackend.DTOs.Auths
         public string Password { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Confirm password cannot be empty")]
+        [Compare("Password", ErrorMessage = "Passwords do not match")]
         public string ConfirmPassword { get; set; } = string.Empty;
     }
 }

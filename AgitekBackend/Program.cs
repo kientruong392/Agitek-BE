@@ -1,9 +1,11 @@
 using System.Text;
+using AgitekBackend.Authorization.Handlers;
 using AgitekBackend.Data;
 using AgitekBackend.Middlewares;
 using AgitekBackend.Services;
 using AgitekBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
@@ -80,6 +82,8 @@ builder.Services
         options.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"]!;
     });
 
+builder.Services.AddSingleton<IAuthorizationHandler, UserManagementHandler>();
+
 builder.Services.AddAuthorization();
 
 builder.Services.AddControllers(options =>
@@ -135,29 +139,50 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options 
 });
 
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(c =>
+{
+    c.SwaggerDoc("v1", new Microsoft.OpenApi.OpenApiInfo { Title = "Agitek API", Version = "v1" });
+
+    c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.OpenApiSecurityScheme
+    {
+        Name         = "Authorization",
+        Type         = Microsoft.OpenApi.SecuritySchemeType.Http,
+        Scheme       = "Bearer",
+        BearerFormat = "JWT",
+        In           = Microsoft.OpenApi.ParameterLocation.Header,
+        Description  = "Enter your JWT token (without 'Bearer ' prefix).",
+    });
+
+    c.AddSecurityRequirement(doc => new Microsoft.OpenApi.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.OpenApiSecuritySchemeReference("Bearer", doc),
+            new System.Collections.Generic.List<string>()
+        }
+    });
+});
 
 builder.Services.AddAutoMapper(cfg => cfg.AddMaps(typeof(Program).Assembly));
 
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IProductService, AgitekBackend.Services.ProductService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IOrderService, AgitekBackend.Services.OrderService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IBrandService, AgitekBackend.Services.BrandService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.ICategoryService, AgitekBackend.Services.CategoryService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IReviewService, AgitekBackend.Services.ReviewService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IVoucherService, AgitekBackend.Services.VoucherService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IWarrantyService, AgitekBackend.Services.WarrantyService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IAddressService, AgitekBackend.Services.AddressService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IProfileService, AgitekBackend.Services.ProfileService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IOrderDetailService, AgitekBackend.Services.OrderDetailService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IOrderTrackingLogService, AgitekBackend.Services.OrderTrackingLogService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IProductImageService, AgitekBackend.Services.ProductImageService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IProductSpecificationService, AgitekBackend.Services.ProductSpecificationService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IMediaService, AgitekBackend.Services.MediaService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.IAuditLogService, AgitekBackend.Services.AuditLogService>();
-builder.Services.AddScoped<AgitekBackend.Services.Interfaces.ILocationCoordinatesService, AgitekBackend.Services.LocationCoordinatesService>();
+builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IBrandService, BrandService>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+builder.Services.AddScoped<IReviewService, ReviewService>();
+builder.Services.AddScoped<IVoucherService, VoucherService>();
+builder.Services.AddScoped<IWarrantyService, WarrantyService>();
+builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<IProfileService, ProfileService>();
+builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
+builder.Services.AddScoped<IOrderTrackingLogService, OrderTrackingLogService>();
+builder.Services.AddScoped<IProductImageService, ProductImageService>();
+builder.Services.AddScoped<IProductSpecificationService, ProductSpecificationService>();
+builder.Services.AddScoped<IMediaService, MediaService>();
+builder.Services.AddScoped<IAuditLogService, AuditLogService>();
+builder.Services.AddScoped<ILocationCoordinatesService, LocationCoordinatesService>();
 
 var app = builder.Build();
 
@@ -179,5 +204,7 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers().RequireAuthorization();
+
+await app.SeedDataAsync();
 
 app.Run();

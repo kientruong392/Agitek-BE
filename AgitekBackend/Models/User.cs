@@ -7,12 +7,11 @@ namespace AgitekBackend.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required, Length(6,20)]
-        public string Username { get; set; } = string.Empty;
-        [Required, MaxLength(50)]
-        public string Email { get; set; } = string.Empty;
-        [Required, Length(6, 100)]
-        public string PasswordHash { get; set; } = string.Empty;
+        [Length(6,20)]
+        public string? Username { get; set; }
+        [MaxLength(320)]
+        public string? Email { get; set; }
+        public string? PasswordHash { get; set; }
         public List<Provider> Providers { get; set; } = new List<Provider>();
         public RoleName Role { get; set; } = RoleName.Customer;
         public int? GrantedByUserId { get; set; }
@@ -23,7 +22,7 @@ namespace AgitekBackend.Models
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public DateTime? DeletedAt { get; set; }
         public User? GrantedByUser { get; set; }
-        public Profile? Profile { get; set; }
+        public Profile Profile { get; set; } = new Profile();
         public ICollection<Address> Addresses { get; set; } = new List<Address>();
         public ICollection<Product> CreatedProducts { get; set; } = new List<Product>();
         public ICollection<Order> Orders { get; set; } = new List<Order>();
