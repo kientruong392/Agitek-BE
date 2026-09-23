@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<MediaDTO>> GetById(int id)
         {
             var media = await _mediaService.GetByIdAsync(id);
-            if (media == null)
-            {
-                return NotFound();
-            }
             return Ok(media);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<MediaDTO>> Update(int id, [FromBody] UpdateMediaDTO dto)
         {
             var updatedMedia = await _mediaService.UpdateAsync(id, dto);
-            if (updatedMedia == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedMedia);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _mediaService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _mediaService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

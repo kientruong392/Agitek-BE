@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<OrderDTO>> GetById(int id)
         {
             var order = await _orderService.GetByIdAsync(id);
-            if (order == null)
-            {
-                return NotFound();
-            }
             return Ok(order);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<OrderDTO>> Update(int id, [FromBody] UpdateOrderDTO dto)
         {
             var updatedOrder = await _orderService.UpdateAsync(id, dto);
-            if (updatedOrder == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedOrder);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _orderService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _orderService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<WarrantyDTO>> GetById(int id)
         {
             var warranty = await _warrantyService.GetByIdAsync(id);
-            if (warranty == null)
-            {
-                return NotFound();
-            }
             return Ok(warranty);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<WarrantyDTO>> Update(int id, [FromBody] UpdateWarrantyDTO dto)
         {
             var updatedWarranty = await _warrantyService.UpdateAsync(id, dto);
-            if (updatedWarranty == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedWarranty);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _warrantyService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _warrantyService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

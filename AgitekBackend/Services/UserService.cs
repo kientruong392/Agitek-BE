@@ -70,7 +70,7 @@ namespace AgitekBackend.Services
             return _mapper.Map<UserDTO>(user);
         }
 
-        public async Task<UserDTO> UpdateAsync(int id, UpdateUserDTO dto, RoleName currentRole)
+        public async Task<UserDTO> UpdateAsync(int id, UpdateUserDTO dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null) throw new NotFoundException($"User not found");
@@ -78,18 +78,14 @@ namespace AgitekBackend.Services
             // Business logic checks
             if (user.Role == RoleName.Customer && dto.Role != null && dto.Role != RoleName.Customer)
             {
-                throw new BadRequestException("Customer role cannot be changed to another role.");
+                throw new BadRequestException("Customer role cannot be changed to another role");
             }
 
             if (user.Role == RoleName.Guest && dto.Role != null && dto.Role != RoleName.Guest && dto.Role != RoleName.Customer)
             {
-                throw new BadRequestException("Guest role can only be upgraded to Customer.");
+                throw new BadRequestException("Guest role can only be upgraded to Customer");
             }
 
-            if (currentRole == RoleName.Admin && (dto.Role == RoleName.Admin || dto.Role == RoleName.SuperAdmin))
-            {
-                throw new ForbiddenException("Admin cannot upgrade a user to Admin or SuperAdmin.");
-            }
 
             _mapper.Map(dto, user);
             user.UpdatedAt = DateTime.Now;
@@ -100,14 +96,14 @@ namespace AgitekBackend.Services
         public async Task<UserDTO> UpdateAccountAsync(int id, UpdateMyAccountDTO dto)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) throw new NotFoundException($"User not found.");
+            if (user == null) throw new NotFoundException($"User not found");
 
             if (!string.IsNullOrEmpty(dto.Username) && dto.Username != user.Username)
             {
                 var existingUser = await _context.Users.FirstOrDefaultAsync(u => u.Username == dto.Username);
                 if (existingUser != null)
                 {
-                    throw new BadRequestException("Username is already taken.");
+                    throw new BadRequestException("Username is already taken");
                 }
                 user.Username = dto.Username;
             }
@@ -117,7 +113,7 @@ namespace AgitekBackend.Services
                 var existingEmail = await _context.Users.FirstOrDefaultAsync(u => u.Email == dto.Email);
                 if (existingEmail != null)
                 {
-                    throw new BadRequestException("Email is already taken.");
+                    throw new BadRequestException("Email is already taken");
                 }
                 user.Email = dto.Email;
             }
@@ -126,12 +122,12 @@ namespace AgitekBackend.Services
             {
                 if (string.IsNullOrEmpty(dto.OldPassword))
                 {
-                    throw new BadRequestException("Old password is required to set a new password.");
+                    throw new BadRequestException("Old password is required to set a new password");
                 }
                 
                 if (user.PasswordHash == null || !AuthUtils.VerifyPassword(dto.OldPassword, user.PasswordHash))
                 {
-                    throw new BadRequestException("Incorrect old password.");
+                    throw new BadRequestException("Incorrect old password");
                 }
                 
                 user.PasswordHash = AuthUtils.HashPassword(dto.NewPassword);
@@ -145,7 +141,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
-            if (user == null) throw new NotFoundException($"User not found.");
+            if (user == null) throw new NotFoundException($"User not found");
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;
@@ -154,7 +150,7 @@ namespace AgitekBackend.Services
         public async Task UpdateVerifyStatusAsync(int id, bool isVerified)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User not found.");
+            if (user == null) throw new NotFoundException($"User not found");
             user.IsVerified = isVerified;
             user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
@@ -163,7 +159,7 @@ namespace AgitekBackend.Services
         public async Task ChangePasswordAsync(int id, string newPassword)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User not found.");
+            if (user == null) throw new NotFoundException($"User not found");
             user.PasswordHash = AuthUtils.HashPassword(newPassword);
             user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
@@ -172,7 +168,7 @@ namespace AgitekBackend.Services
         public async Task AddProviderAsync(int id, Provider provider)
         {
             var user = await _context.Users.FindAsync(id);
-            if (user == null) throw new NotFoundException($"User not found.");
+            if (user == null) throw new NotFoundException($"User not found");
             if (!user.Providers.Contains(provider))
             {
                 user.Providers.Add(provider);

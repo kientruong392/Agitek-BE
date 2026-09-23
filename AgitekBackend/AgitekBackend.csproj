@@ -31,7 +31,6 @@
   <ItemGroup>
     <Folder Include="Common\Exceptions\" />
     <Folder Include="Common\Constants\" />
-    <Folder Include="Common\Utils\" />
     <Folder Include="Controllers\" />
     <Folder Include="Middlewares\" />
     <Folder Include="Services\Interfaces\" />

@@ -33,8 +33,6 @@ namespace AgitekBackend.Authorization.Handlers
             if (currentUserIdClaim == null || !int.TryParse(currentUserIdClaim, out var currentUserId))
                 return;
 
-            // Prevent users from managing themselves via the administrative API
-            // They should use the my-account endpoint for self-management.
             int? targetUserIdInitial = resource as int?;
             if (targetUserIdInitial == null && resource is User targetUserObjInit)
             {
@@ -67,13 +65,12 @@ namespace AgitekBackend.Authorization.Handlers
                 if (resource is RoleName targetRole)
                 {
                     if (targetRole == RoleName.SuperAdmin || targetRole == RoleName.Admin)
-                        return; // Admins cannot create other admins or superadmins
+                        return;
                 }
                 context.Succeed(requirement);
                 return;
             }
 
-            // For Update and Delete operations
             int? targetUserId = resource as int?;
             
             if (targetUserId == null && resource is User targetUserObj)
@@ -83,17 +80,14 @@ namespace AgitekBackend.Authorization.Handlers
 
             if (targetUserId == null)
             {
-                // If no specific target is provided, we can't authorize the operation
                 return;
             }
 
             if (targetUserId == currentUserId)
             {
-                // This shouldn't be reached because of the check above, but just in case:
                 return;
             }
 
-            // Target is a different user, need to check their role
             RoleName? targetUserRole = null;
 
             if (resource is User userModel)
@@ -107,7 +101,6 @@ namespace AgitekBackend.Authorization.Handlers
                 var dbUser = await userService.GetByIdAsync(targetUserId.Value);
                 if (dbUser == null)
                 {
-                    // User not found, allow it to pass so controller can return 404
                     context.Succeed(requirement);
                     return;
                 }
@@ -115,7 +108,7 @@ namespace AgitekBackend.Authorization.Handlers
             }
 
             if (targetUserRole == RoleName.SuperAdmin || targetUserRole == RoleName.Admin)
-                return; // Admin cannot update/delete other admins or superadmins
+                return;
 
             context.Succeed(requirement);
         }

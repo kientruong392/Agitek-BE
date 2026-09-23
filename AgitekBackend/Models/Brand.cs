@@ -6,7 +6,7 @@ namespace AgitekBackend.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required,Length(3, 6)]
+        [Required, Length(3, 6)]
         public string Code { get; set; } = string.Empty;
 
         [Required, MaxLength(50)]

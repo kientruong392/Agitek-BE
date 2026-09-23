@@ -1,4 +1,5 @@
 using AgitekBackend.Authorization.Requirements;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.DTOs.Auths;
 using AgitekBackend.DTOs.Users;
 using AgitekBackend.Services.Interfaces;
@@ -11,7 +12,7 @@ namespace AgitekBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize] // Require authentication by default
+    [Authorize]
     public class UserController : ControllerBase
     {
         private readonly IUserService _userService;
@@ -32,7 +33,7 @@ namespace AgitekBackend.Controllers
                 User, null, new UserManagementRequirement(UserOperation.Read));
             
             if (!authResult.Succeeded)
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
             var users = await _userService.GetAllAsync();
             return Ok(users);
@@ -45,13 +46,9 @@ namespace AgitekBackend.Controllers
                 User, null, new UserManagementRequirement(UserOperation.Read));
             
             if (!authResult.Succeeded)
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
             var user = await _userService.GetByIdAsync(id);
-            if (user == null)
-            {
-                return NotFound();
-            }
             return Ok(user);
         }
 
@@ -62,7 +59,7 @@ namespace AgitekBackend.Controllers
                 User, dto.Role, new UserManagementRequirement(UserOperation.Create));
             
             if (!authResult.Succeeded)
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
             var currentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub") ?? User.FindFirstValue("id");
             if (!int.TryParse(currentUserIdStr, out var currentUserId))
@@ -75,22 +72,22 @@ namespace AgitekBackend.Controllers
         [HttpPatch("{id}")]
         public async Task<ActionResult<UserDTO>> Update(int id, [FromBody] UpdateUserDTO dto)
         {
-            // Pass the target user ID as the resource for dynamic authorization
             var authResult = await _authorizationService.AuthorizeAsync(
                 User, id, new UserManagementRequirement(UserOperation.Update));
             
             if (!authResult.Succeeded)
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
             var currentRoleClaim = User.FindFirstValue(ClaimTypes.Role) ?? User.FindFirstValue("role");
             if (!Enum.TryParse<RoleName>(currentRoleClaim, out var currentRole))
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
-            var updatedUser = await _userService.UpdateAsync(id, dto, currentRole);
-            if (updatedUser == null)
+            if (currentRole == RoleName.Admin && (dto.Role == RoleName.Admin || dto.Role == RoleName.SuperAdmin))
             {
-                return NotFound();
+                throw new ForbiddenException("You do not have permission to access this resource");
             }
+
+            var updatedUser = await _userService.UpdateAsync(id, dto);
             return Ok(updatedUser);
         }
 
@@ -108,19 +105,14 @@ namespace AgitekBackend.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            // Pass the target user ID as the resource for dynamic authorization
             var authResult = await _authorizationService.AuthorizeAsync(
                 User, id, new UserManagementRequirement(UserOperation.Delete));
             
             if (!authResult.Succeeded)
-                return Forbid();
+                throw new ForbiddenException("You do not have permission to access this resource");
 
-            var success = await _userService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _userService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

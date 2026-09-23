@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProfileDTO>> GetById(int userId)
         {
             var profile = await _profileService.GetByUserIdAsync(userId);
-            if (profile == null)
-            {
-                return NotFound();
-            }
             return Ok(profile);
         }
 
@@ -37,10 +33,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProfileDTO>> Update(int userId, [FromBody] UpdateProfileDTO dto)
         {
             var updatedProfile = await _profileService.UpdateAsync(userId, dto);
-            if (updatedProfile == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedProfile);
         }
     }

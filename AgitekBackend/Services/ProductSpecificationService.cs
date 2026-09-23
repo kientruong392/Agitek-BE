@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<ProductSpecificationDTO?> GetByIdAsync(int id)
         {
             var spec = await _context.ProductSpecifications.FindAsync(id);
-            if (spec == null) throw new NotFoundException($"Spec with id {id} not found.");
+            if (spec == null) throw new NotFoundException($"Spec with id {id} not found");
             return _mapper.Map<ProductSpecificationDTO>(spec);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<ProductSpecificationDTO?> UpdateAsync(int id, UpdateProductSpecificationDTO dto)
         {
             var spec = await _context.ProductSpecifications.FindAsync(id);
-            if (spec == null) throw new NotFoundException($"Spec with id {id} not found.");
+            if (spec == null) throw new NotFoundException($"Spec with id {id} not found");
 
             _mapper.Map(dto, spec);
             await _context.SaveChangesAsync();
@@ -53,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var spec = await _context.ProductSpecifications.FindAsync(id);
-            if (spec == null) throw new NotFoundException($"Spec with id {id} not found.");
+            if (spec == null) throw new NotFoundException($"Spec with id {id} not found");
 
             _context.ProductSpecifications.Remove(spec);
             await _context.SaveChangesAsync();

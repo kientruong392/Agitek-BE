@@ -13,11 +13,11 @@ using StackExchange.Redis;
 var builder = WebApplication.CreateBuilder(args);
 
 var connectionString = builder.Configuration.GetConnectionString("AgitekConnection")
-    ?? throw new InvalidOperationException("Connection string 'AgitekConnection' not found.");
+    ?? throw new InvalidOperationException("Connection string 'AgitekConnection' not found");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
 
 var redisConnectionString = builder.Configuration["Redis:ConnectionString"]
-    ?? throw new InvalidOperationException("Redis:ConnectionString not configured.");
+    ?? throw new InvalidOperationException("Redis:ConnectionString not configured");
 builder.Services.AddSingleton<IConnectionMultiplexer>(
     ConnectionMultiplexer.Connect(redisConnectionString));
 
@@ -57,7 +57,7 @@ builder.Services
                     success    = false,
                     statusCode = 401,
                     errorCode  = "UNAUTHORIZED",
-                    message    = "Authentication required. Please provide a valid Bearer token.",
+                    message    = "Authentication required. Please provide a valid Bearer token",
                     timestamp  = DateTime.UtcNow,
                 });
             },
@@ -70,7 +70,7 @@ builder.Services
                     success    = false,
                     statusCode = 403,
                     errorCode  = "FORBIDDEN",
-                    message    = "You do not have permission to access this resource.",
+                    message    = "You do not have permission to access this resource",
                     timestamp  = DateTime.UtcNow,
                 });
             },
@@ -83,6 +83,8 @@ builder.Services
     });
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, BrandManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CategoryManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -109,7 +111,7 @@ builder.Services.Configure<Microsoft.AspNetCore.Mvc.ApiBehaviorOptions>(options 
                 success    = false,
                 statusCode = Microsoft.AspNetCore.Http.StatusCodes.Status400BadRequest,
                 errorCode  = "INVALID_REQUEST_BODY",
-                message    = "Request body contains invalid data. Please check the field types and format.",
+                message    = "Request body contains invalid data. Please check the field types and format",
                 timestamp  = DateTime.Now
             };
             return new Microsoft.AspNetCore.Mvc.BadRequestObjectResult(response);
@@ -150,7 +152,7 @@ builder.Services.AddSwaggerGen(c =>
         Scheme       = "Bearer",
         BearerFormat = "JWT",
         In           = Microsoft.OpenApi.ParameterLocation.Header,
-        Description  = "Enter your JWT token (without 'Bearer ' prefix).",
+        Description  = "Enter your JWT token (without 'Bearer ' prefix)",
     });
 
     c.AddSecurityRequirement(doc => new Microsoft.OpenApi.OpenApiSecurityRequirement

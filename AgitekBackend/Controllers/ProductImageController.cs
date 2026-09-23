@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductImageDTO>> GetById(int id)
         {
             var image = await _productImageService.GetByIdAsync(id);
-            if (image == null)
-            {
-                return NotFound();
-            }
             return Ok(image);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductImageDTO>> Update(int id, [FromBody] UpdateProductImageDTO dto)
         {
             var updatedImage = await _productImageService.UpdateAsync(id, dto);
-            if (updatedImage == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedImage);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _productImageService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _productImageService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

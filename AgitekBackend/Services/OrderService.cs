@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<OrderDTO?> GetByIdAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
+            if (order == null) throw new NotFoundException($"Order with id {id} not found");
             return _mapper.Map<OrderDTO>(order);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<OrderDTO?> UpdateAsync(int id, UpdateOrderDTO dto)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
+            if (order == null) throw new NotFoundException($"Order with id {id} not found");
 
             _mapper.Map(dto, order);
             order.UpdatedAt = DateTime.Now;
@@ -54,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var order = await _context.Orders.FindAsync(id);
-            if (order == null) throw new NotFoundException($"Order with id {id} not found.");
+            if (order == null) throw new NotFoundException($"Order with id {id} not found");
 
             _context.Orders.Remove(order);
             await _context.SaveChangesAsync();

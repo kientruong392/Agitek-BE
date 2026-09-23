@@ -29,13 +29,13 @@ namespace AgitekBackend.Services
         public async Task<ProfileDTO?> GetByUserIdAsync(int userId)
         {
             var profile = await _context.Profiles.FindAsync(userId);
-            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found.");
+            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found");
             return _mapper.Map<ProfileDTO>(profile);
         }
         public async Task<ProfileDTO?> UpdateAsync(int userId, UpdateProfileDTO dto)
         {
             var profile = await _context.Profiles.FindAsync(userId);
-            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found.");
+            if (profile == null) throw new NotFoundException($"Profile with userId {userId} not found");
             _mapper.Map(dto, profile);
             if (string.IsNullOrEmpty(profile.FullName))
             {

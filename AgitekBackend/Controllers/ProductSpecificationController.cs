@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductSpecificationDTO>> GetById(int id)
         {
             var spec = await _productSpecificationService.GetByIdAsync(id);
-            if (spec == null)
-            {
-                return NotFound();
-            }
             return Ok(spec);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductSpecificationDTO>> Update(int id, [FromBody] UpdateProductSpecificationDTO dto)
         {
             var updatedSpec = await _productSpecificationService.UpdateAsync(id, dto);
-            if (updatedSpec == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedSpec);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _productSpecificationService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _productSpecificationService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

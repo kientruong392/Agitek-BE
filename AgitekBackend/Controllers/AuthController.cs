@@ -41,7 +41,7 @@ namespace AgitekBackend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue("sub")
-                ?? throw new UnauthorizedAccessException("User ID not found in token.");
+                ?? throw new UnauthorizedAccessException("User ID not found in token");
 
             var result = await _authService.VerifyAccountAsync(token, userId);
             return Ok(result);
@@ -52,7 +52,7 @@ namespace AgitekBackend.Controllers
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue("sub")
-                ?? throw new UnauthorizedAccessException("User ID not found in token.");
+                ?? throw new UnauthorizedAccessException("User ID not found in token");
 
             await _authService.ResendVerifyCodeAsync(userId);
             return Ok();
@@ -116,7 +116,7 @@ namespace AgitekBackend.Controllers
                 return Unauthorized();
 
             var email = result.Principal.FindFirstValue(ClaimTypes.Email)
-                ?? throw new InvalidOperationException("Google did not return an email.");
+                ?? throw new InvalidOperationException("Google did not return an email");
             var name = result.Principal.FindFirstValue(ClaimTypes.Name) ?? email;
 
             var tokens = await _authService.HandleGoogleLoginAsync(email, name);

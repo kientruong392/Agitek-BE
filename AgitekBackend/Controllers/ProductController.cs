@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductDTO>> GetById(int id)
         {
             var product = await _productService.GetByIdAsync(id);
-            if (product == null)
-            {
-                return NotFound();
-            }
             return Ok(product);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<ProductDTO>> Update(int id, [FromBody] UpdateProductDTO dto)
         {
             var updatedProduct = await _productService.UpdateAsync(id, dto);
-            if (updatedProduct == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedProduct);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _productService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _productService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

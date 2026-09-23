@@ -47,7 +47,6 @@ namespace AgitekBackend.Middlewares
                     errorCode = appEx.ErrorCode;
                     break;
 
-                // Malformed JSON body (e.g. invalid JSON syntax)
                 case BadHttpRequestException badReq:
                     statusCode = StatusCodes.Status400BadRequest;
                     message = "Invalid request body";
@@ -60,7 +59,6 @@ namespace AgitekBackend.Middlewares
                     errorCode = "INVALID_JSON_FORMAT";
                     break;
 
-                // All other unhandled exceptions — hide internal details
                 default:
                     _logger.LogError(exception, "Unhandled exception occurred");
                     statusCode = StatusCodes.Status500InternalServerError;

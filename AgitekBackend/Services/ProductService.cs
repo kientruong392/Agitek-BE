@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<ProductDTO?> GetByIdAsync(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found.");
+            if (product == null) throw new NotFoundException($"Product with id {id} not found");
             return _mapper.Map<ProductDTO>(product);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<ProductDTO?> UpdateAsync(int id, UpdateProductDTO dto)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found.");
+            if (product == null) throw new NotFoundException($"Product with id {id} not found");
 
             _mapper.Map(dto, product);
             product.UpdatedAt = DateTime.Now;
@@ -54,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found.");
+            if (product == null) throw new NotFoundException($"Product with id {id} not found");
 
             _context.Products.Remove(product);
             await _context.SaveChangesAsync();

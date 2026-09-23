@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<AuditLogDTO>> GetById(int id)
         {
             var log = await _auditLogService.GetByIdAsync(id);
-            if (log == null)
-            {
-                return NotFound();
-            }
             return Ok(log);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<AuditLogDTO>> Update(int id, [FromBody] UpdateAuditLogDTO dto)
         {
             var updatedLog = await _auditLogService.UpdateAsync(id, dto);
-            if (updatedLog == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedLog);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _auditLogService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _auditLogService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

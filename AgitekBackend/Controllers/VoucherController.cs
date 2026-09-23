@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<VoucherDTO>> GetById(int id)
         {
             var voucher = await _voucherService.GetByIdAsync(id);
-            if (voucher == null)
-            {
-                return NotFound();
-            }
             return Ok(voucher);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<VoucherDTO>> Update(int id, [FromBody] UpdateVoucherDTO dto)
         {
             var updatedVoucher = await _voucherService.UpdateAsync(id, dto);
-            if (updatedVoucher == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedVoucher);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _voucherService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _voucherService.DeleteAsync(id);
+            return Ok();
         }
     }
 }

@@ -29,7 +29,7 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found");
             return _mapper.Map<OrderDetailDTO>(orderDetail);
         }
 
@@ -45,7 +45,7 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found");
 
             _mapper.Map(dto, orderDetail);
             await _context.SaveChangesAsync();
@@ -56,7 +56,7 @@ namespace AgitekBackend.Services
         {
             var orderDetail = await _context.OrderDetails
                 .FirstOrDefaultAsync(od => od.OrderId == orderId && od.ProductId == productId);
-            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found.");
+            if (orderDetail == null) throw new NotFoundException($"OrderDetail with orderId {orderId} and productId {productId} not found");
 
             _context.OrderDetails.Remove(orderDetail);
             await _context.SaveChangesAsync();

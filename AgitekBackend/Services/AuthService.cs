@@ -81,11 +81,11 @@ namespace AgitekBackend.Services
         {
             var existingByEmail = await _userService.GetByUsernameOrEmailAsync(dto.Email);
             if (existingByEmail != null)
-                throw new BadRequestException("Email already in use.", "EMAIL_ALREADY_EXISTS");
+                throw new BadRequestException("Email already in use", "EMAIL_ALREADY_EXISTS");
 
             var existingByUsername = await _userService.GetByUsernameOrEmailAsync(dto.Username);
             if (existingByUsername != null)
-                throw new BadRequestException("Username already taken.", "USERNAME_ALREADY_EXISTS");
+                throw new BadRequestException("Username already taken", "USERNAME_ALREADY_EXISTS");
 
             var createUserDto = _mapper.Map<CreateUserDTO>(dto);
 
@@ -123,13 +123,13 @@ namespace AgitekBackend.Services
         {
             var storedUserId = await _redis.StringGetAsync($"verify:{token}");
             if (!storedUserId.HasValue || storedUserId.ToString() != userId)
-                throw new UnauthorizedException("Invalid or expired verification token.", "INVALID_TOKEN");
+                throw new UnauthorizedException("Invalid or expired verification token", "INVALID_TOKEN");
 
             await _userService.UpdateVerifyStatusAsync(int.Parse(userId), true);
             await _redis.KeyDeleteAsync($"verify:{token}");
 
             var user = await _userService.GetByIdAsync(int.Parse(userId))
-                ?? throw new NotFoundException("User not found.");
+                ?? throw new NotFoundException("User not found");
 
             return await CreateTokenPairAsync(user);
         }
@@ -165,11 +165,11 @@ namespace AgitekBackend.Services
         public async Task ResetPasswordAsync(ResetPasswordDTO dto)
         {
             if (dto.Password != dto.ConfirmPassword)
-                throw new BadRequestException("Passwords do not match.", "PASSWORD_MISMATCH");
+                throw new BadRequestException("Passwords do not match", "PASSWORD_MISMATCH");
 
             var storedUserId = await _redis.StringGetAsync($"forgot-password:{dto.Token}");
             if (!storedUserId.HasValue)
-                throw new UnauthorizedException("Invalid or expired reset token.", "INVALID_TOKEN");
+                throw new UnauthorizedException("Invalid or expired reset token", "INVALID_TOKEN");
 
             var userId = int.Parse(storedUserId.ToString());
             await _userService.ChangePasswordAsync(userId, dto.Password);
@@ -182,11 +182,11 @@ namespace AgitekBackend.Services
         {
             var storedUserId = await _redis.StringGetAsync($"refresh:{refreshToken}");
             if (!storedUserId.HasValue)
-                throw new UnauthorizedException("Invalid or expired refresh token.", "REFRESH_TOKEN_INVALID");
+                throw new UnauthorizedException("Invalid or expired refresh token", "REFRESH_TOKEN_INVALID");
 
             var user = await _userService.GetByIdAsync(int.Parse(storedUserId.ToString()));
             if (user == null || !user.IsActive)
-                throw new UnauthorizedException("This account has been locked or not found.", "ACCOUNT_LOCKED");
+                throw new UnauthorizedException("This account has been locked or not found", "ACCOUNT_LOCKED");
 
             await _redis.KeyDeleteAsync($"refresh:{refreshToken}");
             return await CreateTokenPairAsync(user);
@@ -228,12 +228,12 @@ namespace AgitekBackend.Services
         {
             var user = await _userService.GetByUsernameOrEmailAsync(usernameOrEmail);
             if(user.PasswordHash == null)
-                throw new UnauthorizedException("This account is invalid.", "INVALID_ACCOUNT");
+                throw new UnauthorizedException("This account is invalid", "INVALID_ACCOUNT");
             if (user == null || !AuthUtils.VerifyPassword(password, user.PasswordHash))
-                throw new UnauthorizedException("Invalid credentials.", "INVALID_CREDENTIALS");
+                throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
 
             if (!user.IsActive)
-                throw new UnauthorizedException("This account has been deactivated.", "ACCOUNT_LOCKED");
+                throw new UnauthorizedException("This account has been deactivated", "ACCOUNT_LOCKED");
 
             return _mapper.Map<UserDTO>(user);
         }

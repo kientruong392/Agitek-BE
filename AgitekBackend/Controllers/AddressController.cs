@@ -26,10 +26,6 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<AddressDTO>> GetById(int id)
         {
             var address = await _addressService.GetByIdAsync(id);
-            if (address == null)
-            {
-                return NotFound();
-            }
             return Ok(address);
         }
 
@@ -44,22 +40,14 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<AddressDTO>> Update(int id, [FromBody] UpdateAddressDTO dto)
         {
             var updatedAddress = await _addressService.UpdateAsync(id, dto);
-            if (updatedAddress == null)
-            {
-                return NotFound();
-            }
             return Ok(updatedAddress);
         }
 
         [HttpDelete("{id}")]
         public async Task<ActionResult> Delete(int id)
         {
-            var success = await _addressService.DeleteAsync(id);
-            if (!success)
-            {
-                return NotFound();
-            }
-            return NoContent();
+            await _addressService.DeleteAsync(id);
+            return Ok();
         }
     }
 }
