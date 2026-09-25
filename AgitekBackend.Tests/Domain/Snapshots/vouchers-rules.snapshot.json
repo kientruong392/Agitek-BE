@@ -1,0 +1,742 @@
+{
+  "suite": "AgitekBackend.Tests.vouchers-rules",
+  "revision": "v1",
+  "totalBaselines": 49,
+  "baselines": [
+    {
+      "caseId": "VOUCHERS-RULES-V1-0001",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1001",
+        "amountVnd": 387000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #1 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0002",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1002",
+        "amountVnd": 524000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #2 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0003",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1003",
+        "amountVnd": 661000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #3 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0004",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1004",
+        "amountVnd": 798000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #4 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0005",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1005",
+        "amountVnd": 935000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #5 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0006",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1006",
+        "amountVnd": 1072000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #6 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0007",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1007",
+        "amountVnd": 1209000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #7 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0008",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1008",
+        "amountVnd": 1346000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #8 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0009",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1009",
+        "amountVnd": 1483000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #9 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0010",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1010",
+        "amountVnd": 1620000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #10 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0011",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1011",
+        "amountVnd": 1757000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #11 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0012",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1012",
+        "amountVnd": 1894000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #12 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0013",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1013",
+        "amountVnd": 2031000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #13 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0014",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1014",
+        "amountVnd": 2168000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #14 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0015",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1015",
+        "amountVnd": 2305000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #15 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0016",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1016",
+        "amountVnd": 2442000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #16 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0017",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1017",
+        "amountVnd": 2579000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #17 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0018",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1018",
+        "amountVnd": 2716000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #18 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0019",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1019",
+        "amountVnd": 2853000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #19 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0020",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1020",
+        "amountVnd": 2990000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #20 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0021",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1021",
+        "amountVnd": 3127000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #21 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0022",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1022",
+        "amountVnd": 3264000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #22 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0023",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1023",
+        "amountVnd": 3401000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #23 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0024",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1024",
+        "amountVnd": 3538000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #24 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0025",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1025",
+        "amountVnd": 3675000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #25 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0026",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1026",
+        "amountVnd": 3812000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #26 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0027",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1027",
+        "amountVnd": 3949000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #27 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0028",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1028",
+        "amountVnd": 4086000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #28 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0029",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1029",
+        "amountVnd": 4223000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #29 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0030",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1030",
+        "amountVnd": 4360000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #30 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0031",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1031",
+        "amountVnd": 4497000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #31 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0032",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1032",
+        "amountVnd": 4634000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #32 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0033",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1033",
+        "amountVnd": 4771000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #33 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0034",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1034",
+        "amountVnd": 4908000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #34 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0035",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1035",
+        "amountVnd": 5045000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #35 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0036",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1036",
+        "amountVnd": 5182000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #36 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0037",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1037",
+        "amountVnd": 5319000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #37 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0038",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1038",
+        "amountVnd": 5456000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #38 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0039",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1039",
+        "amountVnd": 5593000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #39 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0040",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1040",
+        "amountVnd": 5730000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #40 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0041",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1041",
+        "amountVnd": 5867000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #41 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0042",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1042",
+        "amountVnd": 6004000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #42 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0043",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1043",
+        "amountVnd": 6141000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #43 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0044",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1044",
+        "amountVnd": 6278000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #44 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0045",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1045",
+        "amountVnd": 6415000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #45 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0046",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1046",
+        "amountVnd": 6552000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #46 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0047",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1047",
+        "amountVnd": 6689000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #47 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0048",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1048",
+        "amountVnd": 6826000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #48 for vouchers-rules"
+    },
+    {
+      "caseId": "VOUCHERS-RULES-V1-0049",
+      "domainModule": "vouchers-rules",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-VOU-1049",
+        "amountVnd": 6963000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #49 for vouchers-rules"
+    }
+  ]
+}
