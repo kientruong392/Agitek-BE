@@ -98,26 +98,6 @@ namespace AgitekBackend.Services
             return await CreateTokenPairAsync(userDto);
         }
 
-        public async Task<UserDTO> CreateStaffAsync(CreateStaffDTO dto, int grantedByUserId)
-        {
-            var existingByEmail = await _userService.GetByUsernameOrEmailAsync(dto.Email);
-            if (existingByEmail != null)
-                throw new BadRequestException("Email already in use", "EMAIL_ALREADY_EXISTS");
-
-            var existingByUsername = await _userService.GetByUsernameOrEmailAsync(dto.Username);
-            if (existingByUsername != null)
-                throw new BadRequestException("Username already taken", "USERNAME_ALREADY_EXISTS");
-
-            var createUserDto = _mapper.Map<CreateUserDTO>(dto);
-
-            var userDto = await _userService.CreateAsync(createUserDto);
-
-            await _userService.AddProviderAsync(userDto.Id, Provider.Credentials);
-
-            await SendVerificationEmailAsync(userDto);
-
-            return userDto;
-        }
 
         public async Task<TokenResponseDTO> VerifyAccountAsync(string token, string userId)
         {

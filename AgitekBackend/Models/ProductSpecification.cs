@@ -8,10 +8,10 @@ namespace AgitekBackend.Models
         public int Id { get; set; }
         public int ProductId { get; set; }
 
-        [Required, MaxLength(100)]
+        [Required, MaxLength(50)]
         public string SpecName { get; set; } = string.Empty;
 
-        [Required, MaxLength(255)]
+        [Required, MaxLength(200)]
         public string SpecValue { get; set; } = string.Empty;
 
         public Product? Product { get; set; }

@@ -65,7 +65,7 @@ namespace AgitekBackend.Controllers
             if (!int.TryParse(currentUserIdStr, out var currentUserId))
                 return Unauthorized();
 
-            var createdUser = await _authService.CreateStaffAsync(dto, currentUserId);
+            var createdUser = await _userService.CreateStaffAsync(dto, currentUserId);
             return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
         }
 

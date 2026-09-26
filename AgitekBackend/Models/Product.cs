@@ -10,15 +10,17 @@ namespace AgitekBackend.Models
         public int Id { get; set; }
         [Required, MaxLength(30)]
         public string SKU { get; set; } = string.Empty;
-        [Required, MaxLength(200)]
-        public string Name { get; set; } = string.Empty;
+        [Required, MaxLength(100)]
+        public string ProductName { get; set; } = string.Empty;
         [Required, MaxLength(200)]
         public string Slug { get; set; } = string.Empty;    
         [Column(TypeName = "decimal(18,2)")]
         public decimal OriginalPrice { get; set; }
         [Column(TypeName = "decimal(18,2)")]
         public decimal? DiscountPrice { get; set; }
+        public int InitialQuantity { get; set; }
         public int StockQuantity { get; set; }
+        public int SoldQuantity { get; set; } = 0;
         public string? Description { get; set; }
         public ProductStatus Status { get; set; } = ProductStatus.Pending;
         public int WarrantyPeriod { get; set; }

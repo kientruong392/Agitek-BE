@@ -7,7 +7,6 @@ namespace AgitekBackend.Services.Interfaces
     {
         Task<TokenResponseDTO> LoginAsync(SignInDTO dto);
         Task<TokenResponseDTO> RegisterAsync(SignUpDTO dto);
-        Task<UserDTO> CreateStaffAsync(CreateStaffDTO dto, int grantedByUserId);
         Task<TokenResponseDTO> VerifyAccountAsync(string token, string userId);
         Task ResendVerifyCodeAsync(string userId);
         Task ForgotPasswordAsync(string email);

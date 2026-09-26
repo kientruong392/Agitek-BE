@@ -5,6 +5,8 @@ using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
+using AgitekBackend.Common.Utils;
+using AgitekBackend.Common;
 
 namespace AgitekBackend.Services
 {
@@ -19,50 +21,244 @@ namespace AgitekBackend.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<ProductDTO>> GetAllAsync()
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync(CurrentUser? currentUser)
         {
-            var products = await _context.Products.ToListAsync();
+            var query = _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .AsQueryable();
+                
+            var userRole = currentUser?.Role;
+            if (userRole != RoleName.SuperAdmin && userRole != RoleName.Admin && userRole != RoleName.Manager && userRole != RoleName.Staff)
+            {
+                query = query.Where(p => p.Status != ProductStatus.Pending && p.Status != ProductStatus.Deleted && p.Status != ProductStatus.Hidden);
+            }
+
+            var products = await query.ToListAsync();
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
         }
 
-        public async Task<ProductDTO?> GetByIdAsync(int id)
+        public async Task<ProductDTO> GetByIdAsync(int id)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found");
+            var product = await _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .FirstOrDefaultAsync(p => p.Id == id);
+            if (product == null) throw new NotFoundException("Product not found");
             return _mapper.Map<ProductDTO>(product);
         }
 
-        public async Task<ProductDTO> CreateAsync(CreateProductDTO dto)
+        public async Task<ProductDTO> CreateAsync(CreateProductDTO dto, int currentUserId)
         {
-            var product = _mapper.Map<Product>(dto);
-            _context.Products.Add(product);
-            await _context.SaveChangesAsync();
-            return _mapper.Map<ProductDTO>(product);
+            if (dto.Images == null || !dto.Images.Any())
+                throw new BadRequestException("Product must have at least one image");
+
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var product = _mapper.Map<Product>(dto);
+                product.UserId = currentUserId;
+                product.Slug = Helpers.GenerateSlug(product.ProductName);
+                product.Status = ProductStatus.Pending;
+                product.StockQuantity = product.InitialQuantity;
+
+                if (product.Images.Any())
+                {
+                    foreach (var img in product.Images) img.IsPrimary = false;
+                    var primaryImg = product.Images.OrderBy(i => i.SortOrder).First();
+                    primaryImg.IsPrimary = true;
+                }
+
+                _context.Products.Add(product);
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return await GetByIdAsync(product.Id);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
         }
 
-        public async Task<ProductDTO?> UpdateAsync(int id, UpdateProductDTO dto)
+        public async Task<ProductDTO> UpdateAsync(int id, UpdateProductDTO dto)
         {
-            var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found");
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var product = await _context.Products
+                    .Include(p => p.Images)
+                    .Include(p => p.Specifications)
+                    .FirstOrDefaultAsync(p => p.Id == id);
 
-            _mapper.Map(dto, product);
+                if (product == null) throw new NotFoundException("Product not found");
+                _mapper.Map(dto, product);
+                if (dto.ProductName != null) product.Slug = Helpers.GenerateSlug(dto.ProductName);
+
+                product.Status = GetStatus(product);
+
+                product.UpdatedAt = DateTime.Now;
+
+                if (dto.Specifications != null)
+                {
+                    _context.ProductSpecifications.RemoveRange(product.Specifications);
+                    var newSpecs = _mapper.Map<List<ProductSpecification>>(dto.Specifications);
+                    foreach (var s in newSpecs) s.ProductId = product.Id;
+                    _context.ProductSpecifications.AddRange(newSpecs);
+                }
+
+                if (dto.Images != null)
+                {
+                    if (!dto.Images.Any()) throw new BadRequestException("Product must have at least one image");
+                    _context.ProductImages.RemoveRange(product.Images);
+                    var newImages = _mapper.Map<List<ProductImage>>(dto.Images);
+                    foreach (var img in newImages)
+                    {
+                        img.ProductId = product.Id;
+                        img.IsPrimary = false;
+                    }
+                    var primaryImg = newImages.OrderBy(i => i.SortOrder).First();
+                    primaryImg.IsPrimary = true;
+                    _context.ProductImages.AddRange(newImages);
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+
+                return await GetByIdAsync(product.Id);
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        public async Task<bool> ChangeStatusAsync(int id, ProductStatus newStatus)
+        {
+            if (newStatus == ProductStatus.Deleted || newStatus == ProductStatus.Pending || newStatus == ProductStatus.OutOfStock)
+                throw new BadRequestException("Invalid status change");
+
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) throw new NotFoundException("Product not found");
+
+            product.Status = newStatus;
             product.UpdatedAt = DateTime.Now;
+            
             await _context.SaveChangesAsync();
-            return _mapper.Map<ProductDTO>(product);
-        }
+            return true;
+        }   
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> UpdateQuantityAsync(int id, int quantity)
         {
+            if(quantity < 0) throw new BadRequestException("Quantity cannot be negative");
             var product = await _context.Products.FindAsync(id);
-            if (product == null) throw new NotFoundException($"Product with id {id} not found");
+            if (product == null) throw new NotFoundException("Product not found");
 
-            _context.Products.Remove(product);
+            product.InitialQuantity += quantity;
+            product.StockQuantity += quantity;
+
+            product.Status = GetStatus(product);
+
+            product.UpdatedAt = DateTime.Now;
+
             await _context.SaveChangesAsync();
             return true;
         }
+        public async Task<bool> UpdateInitialQuantityAsync(int id, int initialQuantity)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) throw new NotFoundException("Product not found");
+
+            if (product.Status != ProductStatus.Pending) throw new BadRequestException("Product must be in pending status to update initial quantity");
+
+            product.InitialQuantity = initialQuantity;
+            product.StockQuantity = initialQuantity;
+
+            product.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+        public async Task<bool> UpdateStockQuantityAsync(int id, int stockQuantity)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) throw new NotFoundException("Product not found");
+
+            if (product.InitialQuantity < stockQuantity)
+                throw new BadRequestException("Initial quantity cannot be less than stock quantity");
+
+            product.StockQuantity = stockQuantity;
+
+            product.Status = GetStatus(product);
+
+            product.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> SoftDeleteAsync(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+
+            if (product == null) throw new NotFoundException("Product not found");
+
+            product.Status = ProductStatus.Deleted;
+            product.DeletedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
+        }
+
+        public async Task<bool> HardDeleteAsync(int id)
+        {
+            using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                var product = await _context.Products
+                    .Include(p => p.Images)
+                    .Include(p => p.Specifications)
+                    .FirstOrDefaultAsync(p => p.Id == id);
+
+                if (product == null) throw new NotFoundException("Product not found");
+
+                _context.ProductImages.RemoveRange(product.Images);
+                _context.ProductSpecifications.RemoveRange(product.Specifications);
+
+                _context.Products.Remove(product);
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+                return true;
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        }
+
+        public ProductStatus GetStatus(Product product)
+        {
+            double stockPercentage = ((double)product.StockQuantity / product.InitialQuantity) * 100;
+            if(product.Status == ProductStatus.InStock || product.Status == ProductStatus.LowStock || product.Status == ProductStatus.OutOfStock)
+            {
+                if (stockPercentage <= 20 && product.StockQuantity > 0)
+                {
+                    return ProductStatus.LowStock;
+                }
+                else if (product.StockQuantity > 0)
+                {
+                    return ProductStatus.InStock;
+                }
+                else if (product.StockQuantity == 0)
+                {
+                    return ProductStatus.OutOfStock;
+                }
+            }
+            return product.Status;
+        }
     }
 }
-
-
-
-

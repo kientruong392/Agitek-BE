@@ -85,6 +85,7 @@ builder.Services
 builder.Services.AddSingleton<IAuthorizationHandler, UserManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, BrandManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CategoryManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, ProductManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -180,8 +181,6 @@ builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
 builder.Services.AddScoped<IOrderTrackingLogService, OrderTrackingLogService>();
-builder.Services.AddScoped<IProductImageService, ProductImageService>();
-builder.Services.AddScoped<IProductSpecificationService, ProductSpecificationService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<ILocationCoordinatesService, LocationCoordinatesService>();
