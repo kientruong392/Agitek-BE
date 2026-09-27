@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<LocationDTO?> GetByIdAsync(int id)
         {
             var location = await _context.Locations.FindAsync(id);
-            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+            if (location == null) throw new NotFoundException("Location not found");
             return _mapper.Map<LocationDTO>(location);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<LocationDTO?> UpdateAsync(int id, UpdateLocationDTO dto)
         {
             var location = await _context.Locations.FindAsync(id);
-            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+            if (location == null) throw new NotFoundException($"Location not found");
 
             _mapper.Map(dto, location);
             await _context.SaveChangesAsync();
@@ -53,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var location = await _context.Locations.FindAsync(id);
-            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+            if (location == null) throw new NotFoundException($"Location not found");
 
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync();
