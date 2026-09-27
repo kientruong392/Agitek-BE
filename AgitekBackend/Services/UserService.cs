@@ -71,7 +71,7 @@ namespace AgitekBackend.Services
             }
             if (user.Role != RoleName.Customer && user.Role != RoleName.Guest)
             {
-                user.isVerified = true;
+                user.IsVerified = true;
             }
             _context.Users.Add(user);
             await _context.SaveChangesAsync();
@@ -83,15 +83,16 @@ namespace AgitekBackend.Services
             if (dto.Role != RoleName.Manager && dto.Role != RoleName.Staff && dto.Role != RoleName.Delivery)
                 throw new BadRequestException("Invalid role assignment");
 
-            var userExists = await GetByUsernameOrEmailAsync(dto.Username);
-            if (userExists != null)
+            var usernameExists = await GetByUsernameOrEmailAsync(dto.Username);
+            var emailExists = await GetByUsernameOrEmailAsync(dto.Email);
+            if (usernameExists != null || emailExists != null)
                 throw new BadRequestException("Username or Email already exists");
 
             var createUserDto = _mapper.Map<CreateUserDTO>(dto);
 
+            var userDto = await CreateAsync(createUserDto, currentUserId);
             await AddProviderAsync(userDto.Id, Provider.Credentials);
-
-            return await CreateAsync(createUserDto, currentUserId);
+            return userDto;
         }
 
         public async Task<UserDTO> UpdateAsync(int id, UpdateUserDTO dto)
