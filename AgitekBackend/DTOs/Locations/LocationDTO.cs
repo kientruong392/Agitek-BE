@@ -5,8 +5,12 @@ namespace AgitekBackend.DTOs.Locations
         public int Id { get; set; }
         public string LocationCode { get; set; } = string.Empty;
         public string LocationName { get; set; } = string.Empty;
-        public double Latitude { get; set; }
-        public double Longitude { get; set; }
+        public decimal Latitude { get; set; }
+        public decimal Longitude { get; set; }
+        public int? ParentId { get; set; }
         public bool IsWarehouse { get; set; }
+        public string? AddressLine { get; set; }
+        public LocationDTO? Parent { get; set; }
+        public ICollection<LocationDTO>? Children { get; set; }
     }
 }

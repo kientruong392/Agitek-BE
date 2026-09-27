@@ -7,14 +7,19 @@ namespace AgitekBackend.Models
     {
         [Key]
         public int Id { get; set; }
-        [Required, MaxLength(3)]
+        [Required, MaxLength(30)]
         public string LocationCode { get; set; } = string.Empty;
-        [MaxLength(50)]
+        [Required, MaxLength(30)]
         public string LocationName { get; set; } = string.Empty;
         [Column(TypeName = "decimal(10, 8)")]
-        public double Latitude { get; set; }
+        public decimal Latitude { get; set; }
         [Column(TypeName = "decimal(11, 8)")]
-        public double Longitude { get; set; }
+        public decimal Longitude { get; set; }
+        public int? ParentId { get; set; }
+        public Location? Parent { get; set; }
         public bool IsWarehouse { get; set; } = false;
+        [MaxLength(255)]
+        public string? AddressLine { get; set; }
+        public ICollection<Location>? Children { get; set; } = new List<Location>();
     }
 }

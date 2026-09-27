@@ -9,6 +9,11 @@ namespace AgitekBackend.Data.Configurations
         public void Configure(EntityTypeBuilder<Location> builder)
         {
             builder.HasIndex(c => c.LocationCode).IsUnique();
+
+            builder.HasOne(l => l.Parent)
+                   .WithMany(p => p.Children)
+                   .HasForeignKey(l => l.ParentId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

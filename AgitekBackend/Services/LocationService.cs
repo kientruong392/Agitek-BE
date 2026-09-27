@@ -1,3 +1,4 @@
+using AgitekBackend.Common;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Locations;
 using AgitekBackend.Models;
@@ -25,35 +26,66 @@ namespace AgitekBackend.Services
             return _mapper.Map<IEnumerable<LocationDTO>>(locations);
         }
 
-        public async Task<LocationDTO?> GetByIdAsync(int id)
+        public async Task<LocationDTO> GetByIdAsync(int id)
         {
-            var location = await _context.Locations.FindAsync(id);
+            var location = await _context.Locations
+                .Include(l => l.Parent)
+                .FirstOrDefaultAsync(l => l.Id == id);
             if (location == null) throw new NotFoundException("Location not found");
             return _mapper.Map<LocationDTO>(location);
         }
 
-        public async Task<LocationDTO> CreateAsync(CreateLocationDTO dto)
+        public async Task<LocationDTO> GetByIdWithChildrensAsync(int id)
         {
+            var location = await _context.Locations
+                .Include(l => l.Children)
+                .FirstOrDefaultAsync(l => l.Id == id);
+            if (location == null) throw new NotFoundException("Location not found");
+            return _mapper.Map<LocationDTO>(location);
+        }
+
+        public async Task<LocationDTO> CreateAsync(CreateLocationDTO dto, CurrentUser? currentUser)
+        {
+            if (currentUser?.Role == RoleName.Manager && !dto.IsWarehouse)
+            {
+                throw new BadRequestException("Cannot create non-warehouse location");
+            }
+
             var location = _mapper.Map<Location>(dto);
             _context.Locations.Add(location);
             await _context.SaveChangesAsync();
-            return _mapper.Map<LocationDTO>(location);
+            return await GetByIdAsync(location.Id) ?? _mapper.Map<LocationDTO>(location);
         }
 
-        public async Task<LocationDTO?> UpdateAsync(int id, UpdateLocationDTO dto)
+        public async Task<LocationDTO> UpdateAsync(int id, UpdateLocationDTO dto, CurrentUser? currentUser)
         {
             var location = await _context.Locations.FindAsync(id);
-            if (location == null) throw new NotFoundException($"Location not found");
+            if (location == null) throw new NotFoundException("Location not found");
+
+            if (currentUser?.Role == RoleName.Manager && !location.IsWarehouse)
+            {
+                throw new BadRequestException("Cannot update non-warehouse location");
+            }
+
+            if (currentUser?.Role == RoleName.Manager && dto.IsWarehouse == false)
+            {
+                throw new BadRequestException("Cannot change a warehouse location to a non-warehouse location");
+            }
 
             _mapper.Map(dto, location);
             await _context.SaveChangesAsync();
-            return _mapper.Map<LocationDTO>(location);
+            return await GetByIdAsync(location.Id);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task<bool> DeleteAsync(int id, CurrentUser? currentUser)
         {
             var location = await _context.Locations.FindAsync(id);
-            if (location == null) throw new NotFoundException($"Location not found");
+            if (location == null) throw new NotFoundException("Location not found");
+
+            if (currentUser?.Role == RoleName.Manager && !location.IsWarehouse)
+            {
+                throw new BadRequestException("Cannot delete non-warehouse location");
+            }
 
             _context.Locations.Remove(location);
             await _context.SaveChangesAsync();
