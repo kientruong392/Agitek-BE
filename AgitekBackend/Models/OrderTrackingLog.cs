@@ -7,11 +7,11 @@ namespace AgitekBackend.Models
         [Key]
         public int Id { get; set; }
         public int OrderId { get; set; }
-        public int? LocationCoordinatesId { get; set; }
+        public int? LocationId { get; set; }
         [MaxLength(255)]
         public string Description { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; } = DateTime.Now;
         public Order Order { get; set; } = null!;
-        public LocationCoordinates? LocationCoordinates { get; set; }
+        public Location? Location { get; set; }
     }
 }

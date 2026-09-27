@@ -2,7 +2,7 @@
 
 namespace AgitekBackend.Models
 {
-    public class LocationCoordinates
+    public class Location
     {
         [Key]
         public int Id { get; set; }

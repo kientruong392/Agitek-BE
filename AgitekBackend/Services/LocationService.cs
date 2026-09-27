@@ -1,0 +1,63 @@
+using AgitekBackend.Data;
+using AgitekBackend.DTOs.Locations;
+using AgitekBackend.Models;
+using AgitekBackend.Common.Exceptions;
+using AgitekBackend.Services.Interfaces;
+using AutoMapper;
+using Microsoft.EntityFrameworkCore;
+
+namespace AgitekBackend.Services
+{
+    public class LocationService : ILocationService
+    {
+        private readonly AppDbContext _context;
+        private readonly IMapper _mapper;
+
+        public LocationService(AppDbContext context, IMapper mapper)
+        {
+            _context = context;
+            _mapper = mapper;
+        }
+
+        public async Task<IEnumerable<LocationDTO>> GetAllAsync()
+        {
+            var locations = await _context.Locations.ToListAsync();
+            return _mapper.Map<IEnumerable<LocationDTO>>(locations);
+        }
+
+        public async Task<LocationDTO?> GetByIdAsync(int id)
+        {
+            var location = await _context.Locations.FindAsync(id);
+            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+            return _mapper.Map<LocationDTO>(location);
+        }
+
+        public async Task<LocationDTO> CreateAsync(CreateLocationDTO dto)
+        {
+            var location = _mapper.Map<Location>(dto);
+            _context.Locations.Add(location);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<LocationDTO>(location);
+        }
+
+        public async Task<LocationDTO?> UpdateAsync(int id, UpdateLocationDTO dto)
+        {
+            var location = await _context.Locations.FindAsync(id);
+            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+
+            _mapper.Map(dto, location);
+            await _context.SaveChangesAsync();
+            return _mapper.Map<LocationDTO>(location);
+        }
+
+        public async Task<bool> DeleteAsync(int id)
+        {
+            var location = await _context.Locations.FindAsync(id);
+            if (location == null) throw new NotFoundException($"Location with id {id} not found");
+
+            _context.Locations.Remove(location);
+            await _context.SaveChangesAsync();
+            return true;
+        }
+    }
+}

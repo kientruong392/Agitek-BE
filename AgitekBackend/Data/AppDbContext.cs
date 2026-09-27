@@ -15,7 +15,7 @@ namespace AgitekBackend.Data
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
         public DbSet<OrderTrackingLog> OrderTrackingLogs { get; set; }
-        public DbSet<LocationCoordinates> LocationCoordinates { get; set; }
+        public DbSet<Location> Locations { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<Review> Reviews { get; set; }

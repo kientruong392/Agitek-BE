@@ -14,6 +14,7 @@ namespace AgitekBackend.Models
         public int? ApprovedByUserId { get; set; }
         public int? DeliveredByUserId { get; set; }
         public int? VoucherId { get; set; }
+        [Required, MaxLength(500)]
         public string Address { get; set; } = string.Empty;
         [Column(TypeName = "decimal(18, 2)")]
         public decimal SubtotalPrice { get; set; }

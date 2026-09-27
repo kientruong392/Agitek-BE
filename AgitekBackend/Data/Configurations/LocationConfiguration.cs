@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace AgitekBackend.Data.Configurations
 {
-    public class LocationCoordinatesConfiguration : IEntityTypeConfiguration<LocationCoordinates>
+    public class LocationConfiguration : IEntityTypeConfiguration<Location>
     {
-        public void Configure(EntityTypeBuilder<LocationCoordinates> builder)
+        public void Configure(EntityTypeBuilder<Location> builder)
         {
             builder.HasIndex(c => c.LocationCode).IsUnique();
         }

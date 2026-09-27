@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20260925120632_update_db")]
+    [Migration("20260927024904_update_db")]
     partial class update_db
     {
         /// <inheritdoc />
@@ -176,7 +176,7 @@ namespace AgitekBackend.Migrations
                     b.ToTable("Categories");
                 });
 
-            modelBuilder.Entity("AgitekBackend.Models.LocationCoordinates", b =>
+            modelBuilder.Entity("AgitekBackend.Models.Location", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -208,7 +208,7 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("LocationCode")
                         .IsUnique();
 
-                    b.ToTable("LocationCoordinates");
+                    b.ToTable("Locations");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Media", b =>
@@ -252,7 +252,8 @@ namespace AgitekBackend.Migrations
 
                     b.Property<string>("Address")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int?>("ApprovedByUserId")
                         .HasColumnType("int");
@@ -359,7 +360,7 @@ namespace AgitekBackend.Migrations
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<int?>("LocationCoordinatesId")
+                    b.Property<int?>("LocationId")
                         .HasColumnType("int");
 
                     b.Property<int>("OrderId")
@@ -370,7 +371,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("LocationCoordinatesId");
+                    b.HasIndex("LocationId");
 
                     b.HasIndex("OrderId");
 
@@ -667,7 +668,8 @@ namespace AgitekBackend.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Description")
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
                     b.Property<int>("DiscountType")
                         .HasColumnType("int");
@@ -678,6 +680,9 @@ namespace AgitekBackend.Migrations
                     b.Property<DateTime>("EndDate")
                         .HasColumnType("datetime2");
 
+                    b.Property<int>("InitialQuantity")
+                        .HasColumnType("int");
+
                     b.Property<decimal?>("MaxDiscountValue")
                         .HasColumnType("decimal(18,2)");
 
@@ -686,10 +691,10 @@ namespace AgitekBackend.Migrations
 
                     b.Property<string>("Name")
                         .IsRequired()
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("PerUserLimit")
+                    b.Property<int?>("ProductId")
                         .HasColumnType("int");
 
                     b.Property<int>("Quantity")
@@ -704,10 +709,17 @@ namespace AgitekBackend.Migrations
                     b.Property<int>("UsedCount")
                         .HasColumnType("int");
 
+                    b.Property<int?>("UserId")
+                        .HasColumnType("int");
+
                     b.HasKey("Id");
 
                     b.HasIndex("Code")
                         .IsUnique();
+
+                    b.HasIndex("ProductId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("Vouchers");
                 });
@@ -781,36 +793,6 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("OrderId", "ProductId");
 
                     b.ToTable("Warranties");
-                });
-
-            modelBuilder.Entity("ProductVoucher", b =>
-                {
-                    b.Property<int>("ProductsId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VouchersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("ProductsId", "VouchersId");
-
-                    b.HasIndex("VouchersId");
-
-                    b.ToTable("ProductVoucher");
-                });
-
-            modelBuilder.Entity("UserVoucher", b =>
-                {
-                    b.Property<int>("UsersId")
-                        .HasColumnType("int");
-
-                    b.Property<int>("VouchersId")
-                        .HasColumnType("int");
-
-                    b.HasKey("UsersId", "VouchersId");
-
-                    b.HasIndex("VouchersId");
-
-                    b.ToTable("UserVoucher");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Address", b =>
@@ -912,9 +894,9 @@ namespace AgitekBackend.Migrations
 
             modelBuilder.Entity("AgitekBackend.Models.OrderTrackingLog", b =>
                 {
-                    b.HasOne("AgitekBackend.Models.LocationCoordinates", "LocationCoordinates")
+                    b.HasOne("AgitekBackend.Models.Location", "Location")
                         .WithMany("OrderTrackingLogs")
-                        .HasForeignKey("LocationCoordinatesId")
+                        .HasForeignKey("LocationId")
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AgitekBackend.Models.Order", "Order")
@@ -923,7 +905,7 @@ namespace AgitekBackend.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("LocationCoordinates");
+                    b.Navigation("Location");
 
                     b.Navigation("Order");
                 });
@@ -1023,6 +1005,17 @@ namespace AgitekBackend.Migrations
                     b.Navigation("GrantedByUser");
                 });
 
+            modelBuilder.Entity("AgitekBackend.Models.Voucher", b =>
+                {
+                    b.HasOne("AgitekBackend.Models.Product", null)
+                        .WithMany("Vouchers")
+                        .HasForeignKey("ProductId");
+
+                    b.HasOne("AgitekBackend.Models.User", null)
+                        .WithMany("Vouchers")
+                        .HasForeignKey("UserId");
+                });
+
             modelBuilder.Entity("AgitekBackend.Models.Warranty", b =>
                 {
                     b.HasOne("AgitekBackend.Models.User", "User")
@@ -1042,36 +1035,6 @@ namespace AgitekBackend.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("ProductVoucher", b =>
-                {
-                    b.HasOne("AgitekBackend.Models.Product", null)
-                        .WithMany()
-                        .HasForeignKey("ProductsId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AgitekBackend.Models.Voucher", null)
-                        .WithMany()
-                        .HasForeignKey("VouchersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("UserVoucher", b =>
-                {
-                    b.HasOne("AgitekBackend.Models.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("AgitekBackend.Models.Voucher", null)
-                        .WithMany()
-                        .HasForeignKey("VouchersId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("AgitekBackend.Models.Brand", b =>
                 {
                     b.Navigation("Products");
@@ -1084,7 +1047,7 @@ namespace AgitekBackend.Migrations
                     b.Navigation("SubCategories");
                 });
 
-            modelBuilder.Entity("AgitekBackend.Models.LocationCoordinates", b =>
+            modelBuilder.Entity("AgitekBackend.Models.Location", b =>
                 {
                     b.Navigation("OrderTrackingLogs");
                 });
@@ -1110,6 +1073,8 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Specifications");
+
+                    b.Navigation("Vouchers");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Review", b =>
@@ -1135,6 +1100,8 @@ namespace AgitekBackend.Migrations
                     b.Navigation("RepliedReviews");
 
                     b.Navigation("Reviews");
+
+                    b.Navigation("Vouchers");
 
                     b.Navigation("Warranties");
                 });
