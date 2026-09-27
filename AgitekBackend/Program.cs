@@ -86,6 +86,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, UserManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, BrandManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CategoryManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ProductManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, VoucherManagementHandler>();
 
 builder.Services.AddAuthorization();
 

@@ -1,15 +1,14 @@
+using AgitekBackend.Common;
 using AgitekBackend.DTOs.Vouchers;
 
 namespace AgitekBackend.Services.Interfaces
 {
     public interface IVoucherService
     {
-        Task<IEnumerable<VoucherDTO>> GetAllAsync();
+        Task<IEnumerable<VoucherDTO>> GetAllAsync(CurrentUser? currentUser);
         Task<VoucherDTO?> GetByIdAsync(int id);
         Task<VoucherDTO> CreateAsync(CreateVoucherDTO dto);
         Task<VoucherDTO?> UpdateAsync(int id, UpdateVoucherDTO dto);
-        Task<bool> DeleteAsync(int id);
+        Task DecreaseQuantityAsync(int id);
     }
 }
-
-

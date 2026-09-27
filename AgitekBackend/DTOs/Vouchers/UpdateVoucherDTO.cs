@@ -1,23 +1,17 @@
 using AgitekBackend.Common;
+using System.ComponentModel.DataAnnotations;
 
 namespace AgitekBackend.DTOs.Vouchers
 {
     public class UpdateVoucherDTO
     {
-        public string? Code { get; set; } 
-        public string? Name { get; set; } 
+        [MaxLength(100, ErrorMessage = "Voucher name cannot exceed 100 characters")]
+        public string? Name { get; set; }
+        [MaxLength(500, ErrorMessage = "Voucher description cannot exceed 500 characters")]
         public string? Description { get; set; }
-        public DiscountType? DiscountType { get; set; }
-        public decimal? DiscountValue { get; set; }
-        public decimal? MaxDiscountValue { get; set; }
-        public decimal? MinOrderValue { get; set; }
+        [Range(1, 9999, ErrorMessage = "Quantity must be between 1 and 9999")]
         public int? Quantity { get; set; }
-        public int? UsedCount { get; set; }
-        public int? PerUserLimit { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? EndDate { get; set; }
         public VoucherStatus? Status { get; set; }
+        public DateTime? EndDate { get; set; }
     }
 }
-
-

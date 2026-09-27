@@ -78,6 +78,7 @@
         Active,
         Inactive,
         Expired,
+        LowStock,
         OutOfStock
     }
 

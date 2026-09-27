@@ -1,7 +1,8 @@
+using AgitekBackend.Common;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Vouchers;
 using AgitekBackend.Models;
-using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Services.Interfaces;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
@@ -19,22 +20,45 @@ namespace AgitekBackend.Services
             _mapper = mapper;
         }
 
-        public async Task<IEnumerable<VoucherDTO>> GetAllAsync()
+        public async Task<IEnumerable<VoucherDTO>> GetAllAsync(CurrentUser? currentUser)
         {
-            var vouchers = await _context.Vouchers.ToListAsync();
+            var query = _context.Vouchers.AsQueryable();
+            if (!IsManagementRole(currentUser?.Role))
+            {
+                query = query.Where(v => v.Status != VoucherStatus.Inactive);
+            }
+
+            var vouchers = await query.ToListAsync();
             return _mapper.Map<IEnumerable<VoucherDTO>>(vouchers);
         }
 
         public async Task<VoucherDTO?> GetByIdAsync(int id)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found");
+            if (voucher == null) throw new NotFoundException($"Voucher not found");
             return _mapper.Map<VoucherDTO>(voucher);
         }
 
         public async Task<VoucherDTO> CreateAsync(CreateVoucherDTO dto)
         {
+            ValidateDiscount(dto.DiscountType, dto.DiscountValue, dto.MaxDiscountValue);
+            ValidateStatus(dto.Status);
+            ValidateDates(dto.StartDate, dto.EndDate);
+
+            var code = string.IsNullOrWhiteSpace(dto.Code)
+                ? Guid.NewGuid().ToString("N")
+                : dto.Code.Trim();
+
+            if (await _context.Vouchers.AnyAsync(v => v.Code == code))
+            {
+                throw new BadRequestException("Voucher code already exists");
+            }
+
             var voucher = _mapper.Map<Voucher>(dto);
+            voucher.Code = code;
+            voucher.UsedCount = 0;
+            voucher.Quantity = voucher.InitialQuantity;
+
             _context.Vouchers.Add(voucher);
             await _context.SaveChangesAsync();
             return _mapper.Map<VoucherDTO>(voucher);
@@ -43,25 +67,147 @@ namespace AgitekBackend.Services
         public async Task<VoucherDTO?> UpdateAsync(int id, UpdateVoucherDTO dto)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found");
+            if (voucher == null) throw new NotFoundException($"Voucher not found");
+
+            if (dto.Status.HasValue)
+            {
+                ValidateStatus(dto.Status.Value);
+            }
+
+            if (dto.Quantity.HasValue)
+            {
+                if (dto.Quantity.Value < 1 || dto.Quantity.Value > 9999)
+                {
+                    throw new BadRequestException("Quantity must be between 1 and 9999");
+                }
+
+                if (dto.Quantity.Value < voucher.UsedCount)
+                {
+                    throw new BadRequestException("Quantity cannot be less than used count");
+                }
+
+                ApplyQuantityUpdate(voucher, dto.Quantity.Value);
+            }
+
+            if (dto.EndDate.HasValue && dto.EndDate.Value < voucher.StartDate)
+            {
+                throw new BadRequestException("End date cannot be before start date");
+            }
 
             _mapper.Map(dto, voucher);
+            CheckVoucherStatus(voucher);
             await _context.SaveChangesAsync();
+
             return _mapper.Map<VoucherDTO>(voucher);
         }
 
-        public async Task<bool> DeleteAsync(int id)
+        public async Task DecreaseQuantityAsync(int id)
         {
             var voucher = await _context.Vouchers.FindAsync(id);
-            if (voucher == null) throw new NotFoundException($"Voucher with id {id} not found");
+            if (voucher == null) throw new NotFoundException($"Voucher not found");
 
-            _context.Vouchers.Remove(voucher);
+            if (voucher.Quantity <= 0)
+            {
+                throw new BadRequestException("Voucher is out of stock");
+            }
+
+            voucher.Quantity -= 1;
+            voucher.UsedCount += 1;
+
+            CheckVoucherStatus(voucher);
             await _context.SaveChangesAsync();
-            return true;
+        }
+
+        private bool IsManagementRole(RoleName? role)
+        {
+            return role == RoleName.Manager ||
+                   role == RoleName.Admin ||
+                   role == RoleName.SuperAdmin;
+        }
+
+        private void ApplyQuantityUpdate(Voucher voucher, int newQuantity)
+        {
+            voucher.InitialQuantity += newQuantity - voucher.Quantity;
+            voucher.Quantity = newQuantity;
+        }
+
+        private void CheckVoucherStatus(Voucher voucher)
+        {
+            if (voucher.Status == VoucherStatus.Inactive || voucher.Status == VoucherStatus.Expired)
+            {
+                return;
+            }
+
+            if (voucher.Quantity == 0)
+            {
+                voucher.Status = VoucherStatus.OutOfStock;
+            }
+            else if (voucher.InitialQuantity > 0 && (decimal)voucher.Quantity / voucher.InitialQuantity * 100 <= 20)
+            {
+                voucher.Status = VoucherStatus.LowStock;
+            }
+            else
+            {
+                voucher.Status = VoucherStatus.Active;
+            }
+        }
+
+        private void ValidateDiscount(
+            DiscountType discountType,
+            decimal discountValue,
+            decimal? maxDiscountValue)
+        {
+            if (!Enum.IsDefined(discountType))
+            {
+                throw new BadRequestException("Invalid discount type");
+            }
+
+            if (discountType == DiscountType.Percentage)
+            {
+                if (discountValue < 0 || discountValue > 100)
+                {
+                    throw new BadRequestException("Percentage discount must be between 0 and 100");
+                }
+
+                if (maxDiscountValue.HasValue && maxDiscountValue.Value < 0)
+                {
+                    throw new BadRequestException("Max discount value cannot be negative");
+                }
+            }
+            else if (discountType == DiscountType.FixedAmount)
+            {
+                if (discountValue < 0 || discountValue > 10_000_000)
+                {
+                    throw new BadRequestException("Fixed amount discount must be between 0 and 10000000");
+                }
+
+                if (maxDiscountValue.HasValue)
+                {
+                    throw new BadRequestException("Max discount value is only allowed for percentage discounts");
+                }
+            }
+        }
+
+        private void ValidateStatus(VoucherStatus status)
+        {
+            if (status != VoucherStatus.Active && status != VoucherStatus.Inactive)
+            {
+                throw new BadRequestException("Voucher status can only be Active or Inactive");
+            }
+        }
+
+        private void ValidateDates(DateTime startDate, DateTime endDate)
+        {
+            var now = DateTime.Now;
+            if (startDate < now)
+            {
+                throw new BadRequestException("Start date cannot be before the current time");
+            }
+
+            if (endDate < startDate)
+            {
+                throw new BadRequestException("End date cannot be before start date");
+            }
         }
     }
 }
-
-
-
-
