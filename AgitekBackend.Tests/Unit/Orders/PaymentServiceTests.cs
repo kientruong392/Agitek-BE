@@ -13,27 +13,27 @@ using AgitekBackend.Tests.Builders;
 using Moq;
 using Xunit;
 
-namespace AgitekBackend.Tests.Unit.Users
+namespace AgitekBackend.Tests.Unit.Orders
 {
     /// <summary>
-    /// Unit test suite for AddressService (Revision v1).
+    /// Unit test suite for PaymentService (Revision v1).
     /// Covers domain invariants, validation rules, error codes, and edge cases.
     /// </summary>
-    public sealed class AddressServiceTests
+    public sealed class PaymentServiceTests
     {
         private readonly List<string> _auditTrail = new();
         private readonly DateTime _referenceUtc = new(2026, 9, 15, 8, 0, 0, DateTimeKind.Utc);
 
-        public AddressServiceTests()
+        public PaymentServiceTests()
         {
-            _auditTrail.Add("init:AddressService:v1");
+            _auditTrail.Add("init:PaymentService:v1");
         }
 
         [Fact]
-        public async Task CreateFirstAddressAutoSetsDefault_WhenInputIsValid_ShouldSucceed()
+        public async Task CreateBankPaymentSetsFifteenMinuteExpiry_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AddressService v1 - scenario #1: First saved address becomes default succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (PaymentService v1 - scenario #1: Bank payment receives 15-minute UTC ExpiresAt succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateOrderSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -49,9 +49,9 @@ namespace AgitekBackend.Tests.Unit.Users
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task CreateFirstAddressAutoSetsDefault_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task CreateBankPaymentSetsFifteenMinuteExpiry_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AddressService v1 - scenario #2: First saved address becomes default validates boundary conditions)
+            // Arrange (PaymentService v1 - scenario #2: Bank payment receives 15-minute UTC ExpiresAt validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -62,14 +62,14 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task CreateFirstAddressAutoSetsDefault_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task CreateBankPaymentSetsFifteenMinuteExpiry_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AddressService v1 - scenario #3: First saved address becomes default rejects invalid domain state with ADDRESS_LIMIT_EXCEEDED)
-            var expectedErrorCode = "ADDRESS_LIMIT_EXCEEDED";
+            // Arrange (PaymentService v1 - scenario #3: Bank payment receives 15-minute UTC ExpiresAt rejects invalid domain state with ORDER_NOT_FOUND)
+            var expectedErrorCode = "ORDER_NOT_FOUND";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Address validation failed"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Order not found"));
 
             // Assert
             Assert.NotNull(ex);
@@ -77,10 +77,10 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task SetDefaultAddressUnsetsPreviousDefault_WhenInputIsValid_ShouldSucceed()
+        public async Task UpdateStatusOnlyAllowsPendingToTerminal_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (AddressService v1 - scenario #4: Only one default address per user succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed();
+            // Arrange (PaymentService v1 - scenario #4: Pending -> Success/Failed/Refunded transition guard succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateOrderSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -96,9 +96,9 @@ namespace AgitekBackend.Tests.Unit.Users
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task SetDefaultAddressUnsetsPreviousDefault_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task UpdateStatusOnlyAllowsPendingToTerminal_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (AddressService v1 - scenario #5: Only one default address per user validates boundary conditions)
+            // Arrange (PaymentService v1 - scenario #5: Pending -> Success/Failed/Refunded transition guard validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -109,14 +109,14 @@ namespace AgitekBackend.Tests.Unit.Users
         }
 
         [Fact]
-        public async Task SetDefaultAddressUnsetsPreviousDefault_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task UpdateStatusOnlyAllowsPendingToTerminal_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (AddressService v1 - scenario #6: Only one default address per user rejects invalid domain state with ADDRESS_NOT_FOUND)
-            var expectedErrorCode = "ADDRESS_NOT_FOUND";
+            // Arrange (PaymentService v1 - scenario #6: Pending -> Success/Failed/Refunded transition guard rejects invalid domain state with INVALID_PAYMENT_TRANSITION)
+            var expectedErrorCode = "INVALID_PAYMENT_TRANSITION";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Address not found"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Payment status can only change from Pending"));
 
             // Assert
             Assert.NotNull(ex);

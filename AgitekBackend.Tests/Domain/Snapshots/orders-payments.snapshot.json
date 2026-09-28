@@ -1,0 +1,1867 @@
+{
+  "suite": "AgitekBackend.Tests.orders-payments",
+  "revision": "v1",
+  "totalBaselines": 124,
+  "baselines": [
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0001",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1001",
+        "amountVnd": 387000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #1 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0002",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1002",
+        "amountVnd": 524000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #2 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0003",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1003",
+        "amountVnd": 661000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #3 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0004",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1004",
+        "amountVnd": 798000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #4 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0005",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1005",
+        "amountVnd": 935000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #5 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0006",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1006",
+        "amountVnd": 1072000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #6 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0007",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1007",
+        "amountVnd": 1209000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #7 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0008",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1008",
+        "amountVnd": 1346000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #8 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0009",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1009",
+        "amountVnd": 1483000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #9 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0010",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1010",
+        "amountVnd": 1620000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #10 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0011",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1011",
+        "amountVnd": 1757000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #11 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0012",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1012",
+        "amountVnd": 1894000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #12 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0013",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1013",
+        "amountVnd": 2031000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #13 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0014",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1014",
+        "amountVnd": 2168000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #14 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0015",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1015",
+        "amountVnd": 2305000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #15 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0016",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1016",
+        "amountVnd": 2442000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #16 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0017",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1017",
+        "amountVnd": 2579000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #17 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0018",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1018",
+        "amountVnd": 2716000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #18 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0019",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1019",
+        "amountVnd": 2853000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #19 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0020",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1020",
+        "amountVnd": 2990000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #20 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0021",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1021",
+        "amountVnd": 3127000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #21 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0022",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1022",
+        "amountVnd": 3264000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #22 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0023",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1023",
+        "amountVnd": 3401000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #23 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0024",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1024",
+        "amountVnd": 3538000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #24 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0025",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1025",
+        "amountVnd": 3675000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #25 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0026",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1026",
+        "amountVnd": 3812000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #26 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0027",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1027",
+        "amountVnd": 3949000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #27 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0028",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1028",
+        "amountVnd": 4086000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #28 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0029",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1029",
+        "amountVnd": 4223000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #29 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0030",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1030",
+        "amountVnd": 4360000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #30 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0031",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1031",
+        "amountVnd": 4497000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #31 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0032",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1032",
+        "amountVnd": 4634000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #32 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0033",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1033",
+        "amountVnd": 4771000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #33 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0034",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1034",
+        "amountVnd": 4908000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #34 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0035",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1035",
+        "amountVnd": 5045000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #35 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0036",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1036",
+        "amountVnd": 5182000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #36 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0037",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1037",
+        "amountVnd": 5319000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #37 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0038",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1038",
+        "amountVnd": 5456000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #38 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0039",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1039",
+        "amountVnd": 5593000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #39 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0040",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1040",
+        "amountVnd": 5730000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #40 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0041",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1041",
+        "amountVnd": 5867000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #41 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0042",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1042",
+        "amountVnd": 6004000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #42 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0043",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1043",
+        "amountVnd": 6141000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #43 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0044",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1044",
+        "amountVnd": 6278000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #44 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0045",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1045",
+        "amountVnd": 6415000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #45 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0046",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1046",
+        "amountVnd": 6552000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #46 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0047",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1047",
+        "amountVnd": 6689000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #47 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0048",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1048",
+        "amountVnd": 6826000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #48 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0049",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1049",
+        "amountVnd": 6963000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #49 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0050",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1050",
+        "amountVnd": 7100000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #50 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0051",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1051",
+        "amountVnd": 7237000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #51 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0052",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1052",
+        "amountVnd": 7374000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #52 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0053",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1053",
+        "amountVnd": 7511000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #53 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0054",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1054",
+        "amountVnd": 7648000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #54 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0055",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1055",
+        "amountVnd": 7785000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #55 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0056",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1056",
+        "amountVnd": 7922000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #56 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0057",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1057",
+        "amountVnd": 8059000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #57 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0058",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1058",
+        "amountVnd": 8196000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #58 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0059",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1059",
+        "amountVnd": 8333000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #59 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0060",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1060",
+        "amountVnd": 8470000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #60 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0061",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1061",
+        "amountVnd": 8607000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #61 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0062",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1062",
+        "amountVnd": 8744000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #62 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0063",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1063",
+        "amountVnd": 8881000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #63 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0064",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1064",
+        "amountVnd": 9018000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #64 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0065",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1065",
+        "amountVnd": 9155000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #65 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0066",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1066",
+        "amountVnd": 9292000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #66 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0067",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1067",
+        "amountVnd": 9429000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #67 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0068",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1068",
+        "amountVnd": 9566000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #68 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0069",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1069",
+        "amountVnd": 9703000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #69 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0070",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1070",
+        "amountVnd": 9840000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #70 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0071",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1071",
+        "amountVnd": 9977000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #71 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0072",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1072",
+        "amountVnd": 10114000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #72 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0073",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1073",
+        "amountVnd": 10251000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #73 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0074",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1074",
+        "amountVnd": 10388000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #74 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0075",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1075",
+        "amountVnd": 10525000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #75 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0076",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1076",
+        "amountVnd": 10662000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #76 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0077",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1077",
+        "amountVnd": 10799000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #77 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0078",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1078",
+        "amountVnd": 10936000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #78 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0079",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1079",
+        "amountVnd": 11073000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #79 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0080",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1080",
+        "amountVnd": 11210000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #80 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0081",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1081",
+        "amountVnd": 11347000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #81 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0082",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1082",
+        "amountVnd": 11484000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #82 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0083",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1083",
+        "amountVnd": 11621000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #83 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0084",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1084",
+        "amountVnd": 11758000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #84 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0085",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1085",
+        "amountVnd": 11895000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #85 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0086",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1086",
+        "amountVnd": 12032000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #86 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0087",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1087",
+        "amountVnd": 12169000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #87 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0088",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1088",
+        "amountVnd": 12306000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #88 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0089",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1089",
+        "amountVnd": 12443000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #89 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0090",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1090",
+        "amountVnd": 12580000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #90 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0091",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1091",
+        "amountVnd": 12717000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #91 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0092",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1092",
+        "amountVnd": 12854000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #92 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0093",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1093",
+        "amountVnd": 12991000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #93 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0094",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1094",
+        "amountVnd": 13128000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #94 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0095",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1095",
+        "amountVnd": 13265000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #95 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0096",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1096",
+        "amountVnd": 13402000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #96 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0097",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1097",
+        "amountVnd": 13539000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #97 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0098",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1098",
+        "amountVnd": 13676000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #98 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0099",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1099",
+        "amountVnd": 13813000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #99 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0100",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1100",
+        "amountVnd": 13950000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #100 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0101",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1101",
+        "amountVnd": 14087000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #101 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0102",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1102",
+        "amountVnd": 14224000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #102 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0103",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1103",
+        "amountVnd": 14361000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #103 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0104",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1104",
+        "amountVnd": 14498000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #104 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0105",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1105",
+        "amountVnd": 14635000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #105 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0106",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1106",
+        "amountVnd": 14772000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #106 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0107",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1107",
+        "amountVnd": 14909000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #107 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0108",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1108",
+        "amountVnd": 15046000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #108 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0109",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1109",
+        "amountVnd": 15183000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #109 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0110",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1110",
+        "amountVnd": 15320000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #110 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0111",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1111",
+        "amountVnd": 15457000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #111 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0112",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1112",
+        "amountVnd": 15594000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #112 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0113",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1113",
+        "amountVnd": 15731000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #113 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0114",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1114",
+        "amountVnd": 15868000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #114 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0115",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1115",
+        "amountVnd": 16005000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #115 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0116",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1116",
+        "amountVnd": 16142000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #116 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0117",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1117",
+        "amountVnd": 16279000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #117 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0118",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1118",
+        "amountVnd": 16416000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #118 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0119",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1119",
+        "amountVnd": 16553000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #119 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0120",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1120",
+        "amountVnd": 16690000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #120 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0121",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1121",
+        "amountVnd": 16827000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #121 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0122",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1122",
+        "amountVnd": 16964000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #122 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0123",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1123",
+        "amountVnd": 17101000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #123 for orders-payments"
+    },
+    {
+      "caseId": "ORDERS-PAYMENTS-V1-0124",
+      "domainModule": "orders-payments",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-ORD-1124",
+        "amountVnd": 17238000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #124 for orders-payments"
+    }
+  ]
+}
