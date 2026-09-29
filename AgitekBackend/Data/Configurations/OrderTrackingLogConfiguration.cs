@@ -9,7 +9,7 @@ namespace AgitekBackend.Data.Configurations
         public void Configure(EntityTypeBuilder<OrderTrackingLog> builder)
         {
             builder.HasOne(t => t.Location)
-                   .WithMany(l => l.OrderTrackingLogs)
+                   .WithMany()
                    .HasForeignKey(t => t.LocationId)
                    .OnDelete(DeleteBehavior.SetNull);
         }

@@ -89,6 +89,8 @@ builder.Services.AddSingleton<IAuthorizationHandler, ProductManagementHandler>()
 builder.Services.AddSingleton<IAuthorizationHandler, VoucherManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, LocationManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, AddressManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, OrderManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, PaymentManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -175,6 +177,7 @@ builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
@@ -182,8 +185,6 @@ builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
-builder.Services.AddScoped<IOrderDetailService, OrderDetailService>();
-builder.Services.AddScoped<IOrderTrackingLogService, OrderTrackingLogService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<ILocationService, LocationService>();

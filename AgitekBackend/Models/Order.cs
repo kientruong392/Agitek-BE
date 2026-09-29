@@ -14,6 +14,9 @@ namespace AgitekBackend.Models
         public int? ApprovedByUserId { get; set; }
         public int? DeliveredByUserId { get; set; }
         public int? VoucherId { get; set; }
+        public int? FromLocationId { get; set; }
+        public int ToLocationId { get; set; }
+        public int? AddressId { get; set; }
         [Required, MaxLength(500)]
         public string Address { get; set; } = string.Empty;
         [Column(TypeName = "decimal(18, 2)")]
@@ -25,8 +28,6 @@ namespace AgitekBackend.Models
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Ordered;
-        public PaymentMethod PaymentMethod { get; set; } = PaymentMethod.COD;
-        public PaymentStatus PaymentStatus { get; set; } = PaymentStatus.Unpaid;
         [MaxLength(50)]
         public string? TransactionId { get; set; }
         [MaxLength(255)]
@@ -37,6 +38,9 @@ namespace AgitekBackend.Models
         public User? ApprovedByUser { get; set; }
         public User? DeliveredByUser { get; set; }
         public Voucher? Voucher { get; set; }
+        public Location? FromLocation { get; set; }
+        public Location? ToLocation { get; set; }
+        public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public ICollection<OrderTrackingLog> OrderTrackingLogs { get; set; } = new List<OrderTrackingLog>();
     }

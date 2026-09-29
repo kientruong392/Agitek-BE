@@ -14,6 +14,7 @@ namespace AgitekBackend.Data
         public DbSet<Brand> Brands { get; set; }
         public DbSet<Category> Categories { get; set; }
         public DbSet<Order> Orders { get; set; }
+        public DbSet<Payment> Payments { get; set; }
         public DbSet<OrderTrackingLog> OrderTrackingLogs { get; set; }
         public DbSet<Location> Locations { get; set; }
         public DbSet<OrderDetail> OrderDetails { get; set; }

@@ -57,8 +57,9 @@
 
     public enum PaymentStatus
     {
-        Unpaid,
-        Paid
+        Pending,
+        Success,
+        Failed,
     }
 
     public enum MediaType

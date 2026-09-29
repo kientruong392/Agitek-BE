@@ -4,22 +4,7 @@ namespace AgitekBackend.DTOs.Orders
 {
     public class UpdateOrderDTO
     {
-        public string? TrackingNumber { get; set; } 
-        public int? UserId { get; set; }
-        public int? ApprovedByUserId { get; set; }
-        public int? DeliveredByUserId { get; set; }
-        public int? VoucherId { get; set; }
-        public string? Address { get; set; } 
-        public decimal? SubtotalPrice { get; set; }
-        public decimal? ShippingFee { get; set; }
-        public decimal? DiscountAmount { get; set; }
-        public decimal? TotalPrice { get; set; }
-        public OrderStatus? Status { get; set; }
-        public PaymentMethod? PaymentMethod { get; set; }
-        public PaymentStatus? PaymentStatus { get; set; }
-        public string? TransactionId { get; set; }
+        public int? AddressId { get; set; }
         public string? Note { get; set; }
     }
 }
-
-
