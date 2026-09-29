@@ -1,0 +1,54 @@
+# ============================================================================
+# Agitek API Smoke Suite: Auth & Profile Flows
+# ============================================================================
+@baseUrl = http://localhost:5106/api
+@adminToken = REPLACE_WITH_ADMIN_JWT
+@staffToken = REPLACE_WITH_STAFF_JWT
+@deliveryToken = REPLACE_WITH_DELIVERY_JWT
+@customerToken = REPLACE_WITH_CUSTOMER_JWT
+
+### 1. Login Admin
+# Expected: HTTP 200
+POST {{baseUrl}}/Auth/login
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+{
+  "usernameOrEmail": "admin",
+  "password": "Password123!"
+}
+
+### 2. Register Customer
+# Expected: HTTP 200
+POST {{baseUrl}}/Auth/register
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+{
+  "username": "qa_buyer01",
+  "email": "qa_buyer01@agitek.vn",
+  "password": "Password123!",
+  "confirmPassword": "Password123!"
+}
+
+### 3. Get Current Account Profile
+# Expected: HTTP 200
+GET {{baseUrl}}/User/me
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+
+
+### 4. Refresh Token
+# Expected: HTTP 200
+POST {{baseUrl}}/Auth/refresh
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+{
+  "accessToken": "",
+  "refreshToken": "REPLACE_REFRESH_TOKEN"
+}

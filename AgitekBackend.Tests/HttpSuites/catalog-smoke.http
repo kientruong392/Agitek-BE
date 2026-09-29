@@ -1,0 +1,53 @@
+# ============================================================================
+# Agitek API Smoke Suite: Catalog & Products
+# ============================================================================
+@baseUrl = http://localhost:5106/api
+@adminToken = REPLACE_WITH_ADMIN_JWT
+@staffToken = REPLACE_WITH_STAFF_JWT
+@deliveryToken = REPLACE_WITH_DELIVERY_JWT
+@customerToken = REPLACE_WITH_CUSTOMER_JWT
+
+### 1. List Categories With SubCategories
+# Expected: HTTP 200
+GET {{baseUrl}}/Category/with-subcategories
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 2. Get Featured Products
+# Expected: HTTP 200
+GET {{baseUrl}}/Product/featured?count=4
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 3. Get Newest Products
+# Expected: HTTP 200
+GET {{baseUrl}}/Product/newest?count=4
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 4. Get Category Products By Slug
+# Expected: HTTP 200
+GET {{baseUrl}}/Category/slug/pc-gaming/products
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 5. Create Brand As Staff
+# Expected: HTTP 200
+POST {{baseUrl}}/Brand
+Content-Type: application/json
+Authorization: Bearer {{staffToken}}
+
+
+{
+  "code": "MSI",
+  "name": "MSI Gaming",
+  "logoUrl": "https://res.cloudinary.com/demo/msi.png"
+}
