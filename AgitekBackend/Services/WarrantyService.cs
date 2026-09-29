@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<WarrantyDTO?> GetByIdAsync(int id)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found");
+            if (warranty == null) throw new NotFoundException("Warranty not found");
             return _mapper.Map<WarrantyDTO>(warranty);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<WarrantyDTO?> UpdateAsync(int id, UpdateWarrantyDTO dto)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found");
+            if (warranty == null) throw new NotFoundException("Warranty not found");
 
             _mapper.Map(dto, warranty);
             warranty.UpdatedAt = DateTime.Now;
@@ -54,7 +54,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var warranty = await _context.Warranties.FindAsync(id);
-            if (warranty == null) throw new NotFoundException($"Warranty with id {id} not found");
+            if (warranty == null) throw new NotFoundException("Warranty not found");
 
             _context.Warranties.Remove(warranty);
             await _context.SaveChangesAsync();

@@ -98,7 +98,6 @@ namespace AgitekBackend.Services
             return await CreateTokenPairAsync(userDto);
         }
 
-
         public async Task<TokenResponseDTO> VerifyAccountAsync(string token, string userId)
         {
             var storedUserId = await _redis.StringGetAsync($"verify:{token}");
@@ -141,7 +140,7 @@ namespace AgitekBackend.Services
 
             await _emailService.SendForgotPasswordEmailAsync(userDto.Email, userDto.Username, resetLink);
         }
-
+        
         public async Task ResetPasswordAsync(ResetPasswordDTO dto)
         {
             if (dto.Password != dto.ConfirmPassword)

@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
         public async Task<MediaDTO?> GetByIdAsync(int id)
         {
             var media = await _context.Medias.FindAsync(id);
-            if (media == null) throw new NotFoundException($"Media with id {id} not found");
+            if (media == null) throw new NotFoundException("Media not found");
             return _mapper.Map<MediaDTO>(media);
         }
 
@@ -43,7 +43,7 @@ namespace AgitekBackend.Services
         public async Task<MediaDTO?> UpdateAsync(int id, UpdateMediaDTO dto)
         {
             var media = await _context.Medias.FindAsync(id);
-            if (media == null) throw new NotFoundException($"Media with id {id} not found");
+            if (media == null) throw new NotFoundException("Media not found");
 
             _mapper.Map(dto, media);
             await _context.SaveChangesAsync();
@@ -53,7 +53,7 @@ namespace AgitekBackend.Services
         public async Task<bool> DeleteAsync(int id)
         {
             var media = await _context.Medias.FindAsync(id);
-            if (media == null) throw new NotFoundException($"Media with id {id} not found");
+            if (media == null) throw new NotFoundException("Media not found");
 
             _context.Medias.Remove(media);
             await _context.SaveChangesAsync();
