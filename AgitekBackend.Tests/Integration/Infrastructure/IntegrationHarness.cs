@@ -80,3 +80,15 @@ namespace AgitekBackend.Tests.Integration.Infrastructure
         }
     }
 }
+
+namespace AgitekBackend.Tests.Integration.Infrastructure
+{
+    public sealed class JwtTestTokenFactory
+    {
+        public string CreateBearer(string role, int userId, bool isVerified = true, bool isActive = true)
+        {
+            var payload = $"{role}:{userId}:v={isVerified}:a={isActive}";
+            return $"Bearer test-jwt-{Convert.ToBase64String(System.Text.Encoding.UTF8.GetBytes(payload))}";
+        }
+    }
+}
