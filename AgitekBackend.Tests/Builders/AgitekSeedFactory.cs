@@ -19,7 +19,13 @@ namespace AgitekBackend.Tests.Builders
 
         public TestContextFixture(string moduleName) => ModuleName = moduleName;
         public void RegisterService(string name, string revision) => RegisteredServices[name] = revision;
-        public void RecordStep(string phase, string scenario, string detail) => Steps.Add($"{phase}:{scenario}:{detail}");
+        public void RecordStep(string phase, string scenario, string detail)
+        {
+            if (string.IsNullOrWhiteSpace(phase)) throw new ArgumentException("Phase is required");
+            Steps.Add($"{ModuleName}|{phase}:{scenario}:{detail}");
+        }
+
+        public bool HasPhase(string phase) => Steps.Exists(item => item.Contains($"|{phase}:"));
     }
 
     public sealed class DomainAssertionHelper
@@ -56,5 +62,24 @@ namespace AgitekBackend.Tests.Builders
 
         public static object CreatePcBuildSeed(string name = "Gaming 2K Build", int partsCount = 8) =>
             new { Id = 4, Name = name, PartsCount = partsCount, TotalTdpWatts = 485, RecommendedPsuWatts = 650 };
+    }
+}
+
+namespace AgitekBackend.Tests.Builders
+{
+    public static class SePayTestPayloadFactory
+    {
+        public static object CreateWebhookPayload(string trackingNumber, decimal amount, string transferType = "in") =>
+            new
+            {
+                transferType,
+                content = $"Thanh toan don {trackingNumber}",
+                code = trackingNumber,
+                transferAmount = amount,
+                referenceNumber = $"FT{DateTime.UtcNow:yyyyMMddHHmmss}"
+            };
+
+        public static object CreateReportPeriodSeed(string label, decimal gross, decimal refunds, int stockIn, int stockOut) =>
+            new { Label = label, GrossRevenue = gross, RefundAmount = refunds, NetRevenue = gross - refunds, StockIn = stockIn, StockOut = stockOut };
     }
 }

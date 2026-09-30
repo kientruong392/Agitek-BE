@@ -1,0 +1,602 @@
+{
+  "suite": "AgitekBackend.Tests.dto-mappers",
+  "revision": "v2",
+  "totalBaselines": 35,
+  "baselines": [
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0001",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-1",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:1",
+        "netAmountVnd": 410000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0002",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-2",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:2",
+        "netAmountVnd": 621000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0003",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-3",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:3",
+        "netAmountVnd": 832000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0004",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-4",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:4",
+        "netAmountVnd": 1043000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0005",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-5",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:5",
+        "netAmountVnd": 1254000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0006",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-6",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:6",
+        "netAmountVnd": 1465000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0007",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-dto-mappers-7",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:7",
+        "netAmountVnd": 1676000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0008",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-8",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:8",
+        "netAmountVnd": 1887000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0009",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-9",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:9",
+        "netAmountVnd": 2098000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0010",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-10",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:10",
+        "netAmountVnd": 2309000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0011",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-11",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:11",
+        "netAmountVnd": 2520000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0012",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-12",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:12",
+        "netAmountVnd": 2731000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0013",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-13",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:13",
+        "netAmountVnd": 2942000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0014",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-dto-mappers-14",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:14",
+        "netAmountVnd": 3153000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0015",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-15",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:15",
+        "netAmountVnd": 3364000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0016",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-16",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:16",
+        "netAmountVnd": 3575000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0017",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-17",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:17",
+        "netAmountVnd": 3786000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0018",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-18",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:18",
+        "netAmountVnd": 3997000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0019",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-19",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:19",
+        "netAmountVnd": 4208000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0020",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-20",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:20",
+        "netAmountVnd": 4419000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0021",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-dto-mappers-21",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:21",
+        "netAmountVnd": 4630000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0022",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-22",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:22",
+        "netAmountVnd": 4841000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0023",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-23",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:23",
+        "netAmountVnd": 5052000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0024",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-24",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:24",
+        "netAmountVnd": 5263000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0025",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-25",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:25",
+        "netAmountVnd": 5474000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0026",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-26",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:26",
+        "netAmountVnd": 5685000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0027",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-27",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:27",
+        "netAmountVnd": 5896000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0028",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-dto-mappers-28",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:28",
+        "netAmountVnd": 6107000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0029",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-29",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:29",
+        "netAmountVnd": 6318000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0030",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-30",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:30",
+        "netAmountVnd": 6529000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0031",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-31",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:31",
+        "netAmountVnd": 6740000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0032",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-32",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:32",
+        "netAmountVnd": 6951000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0033",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-33",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:33",
+        "netAmountVnd": 7162000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0034",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-dto-mappers-34",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:34",
+        "netAmountVnd": 7373000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DTO-MAPPERS-V2-0035",
+      "boundedContext": "dto-mappers",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-dto-mappers-35",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:dto-mappers:v2:35",
+        "netAmountVnd": 7584000,
+        "rolePolicy": "ManagementOnly"
+      }
+    }
+  ]
+}

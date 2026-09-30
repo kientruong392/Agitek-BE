@@ -1,0 +1,840 @@
+{
+  "suite": "AgitekBackend.Tests.domain-entities",
+  "revision": "v2",
+  "totalBaselines": 49,
+  "baselines": [
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0001",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-1",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:1",
+        "netAmountVnd": 410000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0002",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-2",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:2",
+        "netAmountVnd": 621000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0003",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-3",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:3",
+        "netAmountVnd": 832000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0004",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-4",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:4",
+        "netAmountVnd": 1043000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0005",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-5",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:5",
+        "netAmountVnd": 1254000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0006",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-6",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:6",
+        "netAmountVnd": 1465000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0007",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-7",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:7",
+        "netAmountVnd": 1676000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0008",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-8",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:8",
+        "netAmountVnd": 1887000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0009",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-9",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:9",
+        "netAmountVnd": 2098000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0010",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-10",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:10",
+        "netAmountVnd": 2309000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0011",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-11",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:11",
+        "netAmountVnd": 2520000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0012",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-12",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:12",
+        "netAmountVnd": 2731000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0013",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-13",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:13",
+        "netAmountVnd": 2942000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0014",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-14",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:14",
+        "netAmountVnd": 3153000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0015",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-15",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:15",
+        "netAmountVnd": 3364000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0016",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-16",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:16",
+        "netAmountVnd": 3575000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0017",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-17",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:17",
+        "netAmountVnd": 3786000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0018",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-18",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:18",
+        "netAmountVnd": 3997000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0019",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-19",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:19",
+        "netAmountVnd": 4208000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0020",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-20",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:20",
+        "netAmountVnd": 4419000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0021",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-21",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:21",
+        "netAmountVnd": 4630000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0022",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-22",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:22",
+        "netAmountVnd": 4841000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0023",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-23",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:23",
+        "netAmountVnd": 5052000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0024",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-24",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:24",
+        "netAmountVnd": 5263000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0025",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-25",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:25",
+        "netAmountVnd": 5474000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0026",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-26",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:26",
+        "netAmountVnd": 5685000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0027",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-27",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:27",
+        "netAmountVnd": 5896000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0028",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-28",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:28",
+        "netAmountVnd": 6107000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0029",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-29",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:29",
+        "netAmountVnd": 6318000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0030",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-30",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:30",
+        "netAmountVnd": 6529000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0031",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-31",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:31",
+        "netAmountVnd": 6740000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0032",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-32",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:32",
+        "netAmountVnd": 6951000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0033",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-33",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:33",
+        "netAmountVnd": 7162000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0034",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-34",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:34",
+        "netAmountVnd": 7373000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0035",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-35",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:35",
+        "netAmountVnd": 7584000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0036",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-36",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:36",
+        "netAmountVnd": 7795000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0037",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-37",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:37",
+        "netAmountVnd": 8006000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0038",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-38",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:38",
+        "netAmountVnd": 8217000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0039",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-39",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:39",
+        "netAmountVnd": 8428000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0040",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-40",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:40",
+        "netAmountVnd": 8639000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0041",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-41",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:41",
+        "netAmountVnd": 8850000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0042",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-42",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:42",
+        "netAmountVnd": 9061000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0043",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-43",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:43",
+        "netAmountVnd": 9272000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0044",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-44",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:44",
+        "netAmountVnd": 9483000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0045",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-45",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:45",
+        "netAmountVnd": 9694000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0046",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-46",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:46",
+        "netAmountVnd": 9905000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0047",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-47",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:47",
+        "netAmountVnd": 10116000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0048",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-domain-entities-48",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:48",
+        "netAmountVnd": 10327000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "DOMAIN-ENTITIES-V2-0049",
+      "boundedContext": "domain-entities",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-domain-entities-49",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:domain-entities:v2:49",
+        "netAmountVnd": 10538000,
+        "rolePolicy": "CustomerOnly"
+      }
+    }
+  ]
+}
