@@ -1,0 +1,1316 @@
+{
+  "suite": "AgitekBackend.Tests.auth-identity",
+  "revision": "v2",
+  "totalBaselines": 77,
+  "baselines": [
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0001",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-1",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:1",
+        "netAmountVnd": 410000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0002",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-2",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:2",
+        "netAmountVnd": 621000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0003",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-3",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:3",
+        "netAmountVnd": 832000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0004",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-4",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:4",
+        "netAmountVnd": 1043000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0005",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-5",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:5",
+        "netAmountVnd": 1254000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0006",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-6",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:6",
+        "netAmountVnd": 1465000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0007",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-7",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:7",
+        "netAmountVnd": 1676000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0008",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-8",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:8",
+        "netAmountVnd": 1887000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0009",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-9",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:9",
+        "netAmountVnd": 2098000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0010",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-10",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:10",
+        "netAmountVnd": 2309000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0011",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-11",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:11",
+        "netAmountVnd": 2520000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0012",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-12",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:12",
+        "netAmountVnd": 2731000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0013",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-13",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:13",
+        "netAmountVnd": 2942000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0014",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-14",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:14",
+        "netAmountVnd": 3153000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0015",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-15",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:15",
+        "netAmountVnd": 3364000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0016",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-16",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:16",
+        "netAmountVnd": 3575000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0017",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-17",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:17",
+        "netAmountVnd": 3786000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0018",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-18",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:18",
+        "netAmountVnd": 3997000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0019",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-19",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:19",
+        "netAmountVnd": 4208000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0020",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-20",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:20",
+        "netAmountVnd": 4419000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0021",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-21",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:21",
+        "netAmountVnd": 4630000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0022",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-22",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:22",
+        "netAmountVnd": 4841000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0023",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-23",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:23",
+        "netAmountVnd": 5052000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0024",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-24",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:24",
+        "netAmountVnd": 5263000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0025",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-25",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:25",
+        "netAmountVnd": 5474000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0026",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-26",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:26",
+        "netAmountVnd": 5685000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0027",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-27",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:27",
+        "netAmountVnd": 5896000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0028",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-28",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:28",
+        "netAmountVnd": 6107000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0029",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-29",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:29",
+        "netAmountVnd": 6318000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0030",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-30",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:30",
+        "netAmountVnd": 6529000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0031",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-31",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:31",
+        "netAmountVnd": 6740000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0032",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-32",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:32",
+        "netAmountVnd": 6951000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0033",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-33",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:33",
+        "netAmountVnd": 7162000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0034",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-34",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:34",
+        "netAmountVnd": 7373000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0035",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-35",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:35",
+        "netAmountVnd": 7584000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0036",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-36",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:36",
+        "netAmountVnd": 7795000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0037",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-37",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:37",
+        "netAmountVnd": 8006000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0038",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-38",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:38",
+        "netAmountVnd": 8217000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0039",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-39",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:39",
+        "netAmountVnd": 8428000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0040",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-40",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:40",
+        "netAmountVnd": 8639000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0041",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-41",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:41",
+        "netAmountVnd": 8850000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0042",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-42",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:42",
+        "netAmountVnd": 9061000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0043",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-43",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:43",
+        "netAmountVnd": 9272000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0044",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-44",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:44",
+        "netAmountVnd": 9483000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0045",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-45",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:45",
+        "netAmountVnd": 9694000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0046",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-46",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:46",
+        "netAmountVnd": 9905000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0047",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-47",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:47",
+        "netAmountVnd": 10116000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0048",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-48",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:48",
+        "netAmountVnd": 10327000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0049",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-49",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:49",
+        "netAmountVnd": 10538000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0050",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-50",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:50",
+        "netAmountVnd": 10749000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0051",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-51",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:51",
+        "netAmountVnd": 10960000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0052",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-52",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:52",
+        "netAmountVnd": 11171000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0053",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-53",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:53",
+        "netAmountVnd": 11382000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0054",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-54",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:54",
+        "netAmountVnd": 11593000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0055",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-55",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:55",
+        "netAmountVnd": 11804000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0056",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-56",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:56",
+        "netAmountVnd": 12015000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0057",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-57",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:57",
+        "netAmountVnd": 12226000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0058",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-58",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:58",
+        "netAmountVnd": 12437000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0059",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-59",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:59",
+        "netAmountVnd": 12648000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0060",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-60",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:60",
+        "netAmountVnd": 12859000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0061",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-61",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:61",
+        "netAmountVnd": 13070000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0062",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-62",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:62",
+        "netAmountVnd": 13281000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0063",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-63",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:63",
+        "netAmountVnd": 13492000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0064",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-64",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:64",
+        "netAmountVnd": 13703000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0065",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-65",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:65",
+        "netAmountVnd": 13914000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0066",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-66",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:66",
+        "netAmountVnd": 14125000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0067",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-67",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:67",
+        "netAmountVnd": 14336000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0068",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-68",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:68",
+        "netAmountVnd": 14547000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0069",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-69",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:69",
+        "netAmountVnd": 14758000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0070",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-70",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:70",
+        "netAmountVnd": 14969000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0071",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-71",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:71",
+        "netAmountVnd": 15180000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0072",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-72",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:72",
+        "netAmountVnd": 15391000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0073",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-73",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:73",
+        "netAmountVnd": 15602000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0074",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-74",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:74",
+        "netAmountVnd": 15813000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0075",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-75",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:75",
+        "netAmountVnd": 16024000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0076",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-auth-identity-76",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:76",
+        "netAmountVnd": 16235000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "AUTH-IDENTITY-V2-0077",
+      "boundedContext": "auth-identity",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-auth-identity-77",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:auth-identity:v2:77",
+        "netAmountVnd": 16446000,
+        "rolePolicy": "CustomerOnly"
+      }
+    }
+  ]
+}
