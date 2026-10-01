@@ -20,7 +20,7 @@ namespace AgitekBackend.Models
         public string? TransactionId { get; set; }
         [MaxLength(500)]
         public string? GatewayResponse { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public DateTime? ExpiresAt { get; set; }
         public DateTime? PaidAt { get; set; }
         public Order Order { get; set; } = null!;
     }

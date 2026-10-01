@@ -28,7 +28,7 @@ namespace AgitekBackend.Services
             return _mapper.Map<IEnumerable<AddressDTO>>(addresses);
         }
 
-        public async Task<AddressDTO?> GetByIdAsync(int id)
+        public async Task<AddressDTO> GetByIdAsync(int id)
         {
             var address = await _context.Addresses
                 .Include(a => a.Location)

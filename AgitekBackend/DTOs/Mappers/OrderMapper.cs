@@ -1,4 +1,6 @@
+using AgitekBackend.DTOs.OrderDetails;
 using AgitekBackend.DTOs.Orders;
+using AgitekBackend.DTOs.OrderTrackingLogs;
 using AgitekBackend.Models;
 using AutoMapper;
 
@@ -8,14 +10,20 @@ namespace AgitekBackend.DTOs.Mappers
     {
         public OrderMapper()
         {
-            // CreateDTO -> Model
+            // Order
             CreateMap<CreateOrderDTO, Order>();
-
-            // UpdateDTO -> Model
             CreateMap<UpdateOrderDTO, Order>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
-
-            // Model -> ViewDTO
             CreateMap<Order, OrderDTO>();
+
+            // OrderDetail
+            CreateMap<CreateOrderDetailDTO, OrderDetail>();
+            CreateMap<UpdateOrderDetailDTO, OrderDetail>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<OrderDetail, OrderDetailDTO>();
+
+            // OrderTrackingLog
+            CreateMap<CreateOrderTrackingLogDTO, OrderTrackingLog>();
+            CreateMap<UpdateOrderTrackingLogDTO, OrderTrackingLog>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<OrderTrackingLog, OrderTrackingLogDTO>();
         }
     }
 }

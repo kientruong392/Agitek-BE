@@ -23,6 +23,7 @@ namespace AgitekBackend.Data
         public DbSet<Warranty> Warranties { get; set; }
         public DbSet<AuditLog> AuditLogs { get; set; }
         public DbSet<Media> Medias { get; set; }
+        public DbSet<Refund> Refunds { get; set; }
         public AppDbContext(DbContextOptions<AppDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

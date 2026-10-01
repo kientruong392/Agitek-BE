@@ -9,11 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         public MediaMapper()
         {
             CreateMap<CreateMediaDTO, Media>();
-            CreateMap<UpdateMediaDTO, Media>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<Media, MediaDTO>();
         }
     }
 }
-
-
-

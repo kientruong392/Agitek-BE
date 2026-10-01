@@ -11,7 +11,7 @@ namespace AgitekBackend.Models
         [MaxLength(255)]
         public string Description { get; set; } = string.Empty;
         public DateTime Timestamp { get; set; } = DateTime.Now;
-        public Order Order { get; set; } = null!;
+        public Order? Order { get; set; }
         public Location? Location { get; set; }
     }
 }

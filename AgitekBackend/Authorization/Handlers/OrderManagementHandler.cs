@@ -13,8 +13,6 @@ namespace AgitekBackend.Authorization.Handlers
             AuthorizationHandlerContext context,
             OrderManagementRequirement requirement)
         {
-            await Task.Yield();
-
             var roleClaim = context.User.FindFirstValue(ClaimTypes.Role) ?? context.User.FindFirstValue("role");
             if (roleClaim == null || !Enum.TryParse<RoleName>(roleClaim, true, out var currentRole))
                 return;
@@ -32,20 +30,16 @@ namespace AgitekBackend.Authorization.Handlers
                 return;
             }
 
-            var targetUserId = context.Resource switch
-            {
-                OrderDTO orderDto => orderDto.UserId,
-                Order order => order.UserId,
-                int userId => userId,
-                _ => (int?)null
-            };
+            var targetOrder = GetOrder(context.Resource);
 
-            if (requirement.Operation == OrderOperation.ReadAll)
+            if (requirement.Operation == OrderOperation.Read)
             {
-                if (targetUserId == currentUserId ||
+                if (currentRole == RoleName.Customer && targetOrder?.UserId == currentUserId ||
+                    currentRole == RoleName.Staff ||
                     currentRole == RoleName.Manager ||
                     currentRole == RoleName.Admin ||
-                    currentRole == RoleName.SuperAdmin)
+                    currentRole == RoleName.SuperAdmin ||
+                    currentRole == RoleName.Delivery && targetOrder?.DeliveredByUserId == currentUserId)
                 {
                     context.Succeed(requirement);
                 }
@@ -53,18 +47,49 @@ namespace AgitekBackend.Authorization.Handlers
                 return;
             }
 
-            if (requirement.Operation == OrderOperation.Read &&
-                (currentRole == RoleName.Staff ||
-                 currentRole == RoleName.Manager ||
-                 currentRole == RoleName.Admin ||
-                 currentRole == RoleName.SuperAdmin))
+            if (requirement.Operation == OrderOperation.Cancel)
             {
-                context.Succeed(requirement);
+                if (targetOrder?.UserId == currentUserId)
+                    context.Succeed(requirement);
                 return;
             }
 
-            if (targetUserId.HasValue && targetUserId.Value == currentUserId)
-                context.Succeed(requirement);
+            if (requirement.Operation == OrderOperation.Confirm)
+            {
+                if (currentRole == RoleName.Manager ||
+                    currentRole == RoleName.Admin ||
+                    currentRole == RoleName.SuperAdmin)
+                {
+                    context.Succeed(requirement);
+                }
+                return;
+            }
+
+            if (requirement.Operation == OrderOperation.Ship)
+            {
+                if (currentRole == RoleName.Admin ||
+                    currentRole == RoleName.SuperAdmin ||
+                    currentRole == RoleName.Delivery && targetOrder?.DeliveredByUserId == currentUserId)
+                {
+                    context.Succeed(requirement);
+                }
+            }
+        }
+
+        private static Order? GetOrder(object? resource)
+        {
+            return resource switch
+            {
+                Order order => order,
+                OrderDTO orderDto => new Order
+                {
+                    Id = orderDto.Id,
+                    UserId = orderDto.UserId,
+                    DeliveredByUserId = orderDto.DeliveredByUserId,
+                    Status = orderDto.Status
+                },
+                _ => null
+            };
         }
     }
 }

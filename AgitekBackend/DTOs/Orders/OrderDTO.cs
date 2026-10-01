@@ -1,5 +1,6 @@
 using AgitekBackend.Common;
 using AgitekBackend.DTOs.Locations;
+using AgitekBackend.DTOs.Medias;
 using AgitekBackend.DTOs.OrderDetails;
 using AgitekBackend.DTOs.OrderTrackingLogs;
 using AgitekBackend.DTOs.Payments;
@@ -31,5 +32,6 @@ namespace AgitekBackend.DTOs.Orders
         public List<PaymentDTO> Payments { get; set; } = new();
         public List<OrderDetailDTO> OrderDetails { get; set; } = new();
         public List<OrderTrackingLogDTO> OrderTrackingLogs { get; set; } = new();
+        public List<MediaDTO> Medias { get; set; } = new();
     }
 }

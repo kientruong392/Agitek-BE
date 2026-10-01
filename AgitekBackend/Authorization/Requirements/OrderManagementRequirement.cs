@@ -7,7 +7,9 @@ namespace AgitekBackend.Authorization.Requirements
         Read,
         Create,
         Update,
-        ReadAll
+        Cancel,
+        Confirm,
+        Ship
     }
 
     public class OrderManagementRequirement : IAuthorizationRequirement

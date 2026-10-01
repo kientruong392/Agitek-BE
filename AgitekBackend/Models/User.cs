@@ -28,6 +28,8 @@ namespace AgitekBackend.Models
         public ICollection<Order> Orders { get; set; } = new List<Order>();
         public ICollection<Order> ApprovedOrders { get; set; } = new List<Order>();
         public ICollection<Order> DeliveredOrders { get; set; } = new List<Order>();
+        public ICollection<Refund> Refunds { get; set; } = new List<Refund>();
+        public ICollection<Refund> ApprovedRefunds { get; set; } = new List<Refund>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
         public ICollection<Review> RepliedReviews { get; set; } = new List<Review>();
         public ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();

@@ -12,7 +12,7 @@ namespace AgitekBackend.DTOs.Payments
         public PaymentStatus Status { get; set; }
         public string? TransactionId { get; set; }
         public string? GatewayResponse { get; set; }
-        public DateTime ExpiresAt { get; set; }
+        public DateTime? ExpiresAt { get; set; }
         public DateTime? PaidAt { get; set; }
     }
 }

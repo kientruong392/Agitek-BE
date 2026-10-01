@@ -17,6 +17,11 @@ namespace AgitekBackend.Data.Configurations
                    .WithMany(w => w.Media)
                    .HasForeignKey(m => m.WarrantyId)
                    .OnDelete(DeleteBehavior.Cascade);
+
+            builder.HasOne(m => m.Refund)
+                   .WithMany(r => r.Medias)
+                   .HasForeignKey(m => new { m.RefundOrderId, m.RefundProductId })
+                   .OnDelete(DeleteBehavior.Cascade);
         }
     }
 }

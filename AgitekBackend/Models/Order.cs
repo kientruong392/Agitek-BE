@@ -32,6 +32,7 @@ namespace AgitekBackend.Models
         public string? TransactionId { get; set; }
         [MaxLength(255)]
         public string? Note { get; set; }
+        [MaxLength(500)]
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
         public User User { get; set; } = null!;
@@ -40,8 +41,10 @@ namespace AgitekBackend.Models
         public Voucher? Voucher { get; set; }
         public Location? FromLocation { get; set; }
         public Location? ToLocation { get; set; }
+        public ICollection<Refund> Refunds { get; set; } = new List<Refund>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public ICollection<OrderTrackingLog> OrderTrackingLogs { get; set; } = new List<OrderTrackingLog>();
+        public ICollection<Media> Medias { get; set; } = new List<Media>();
     }
 }

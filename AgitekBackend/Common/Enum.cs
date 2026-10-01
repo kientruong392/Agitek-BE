@@ -48,6 +48,13 @@
         Refunded
     }
 
+    public enum RefundStatus
+    {
+        Pending,
+        Approved,
+        Rejected,
+    }
+
     public enum PaymentMethod
     {
         COD,
@@ -60,6 +67,7 @@
         Pending,
         Success,
         Failed,
+        Refunded
     }
 
     public enum MediaType

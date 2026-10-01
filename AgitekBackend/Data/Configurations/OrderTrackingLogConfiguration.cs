@@ -12,6 +12,11 @@ namespace AgitekBackend.Data.Configurations
                    .WithMany()
                    .HasForeignKey(t => t.LocationId)
                    .OnDelete(DeleteBehavior.SetNull);
+
+            builder.HasOne(t => t.Order)
+                   .WithMany()
+                   .HasForeignKey(t => t.OrderId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }
