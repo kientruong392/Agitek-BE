@@ -42,7 +42,7 @@
         Shipped,
         InTransit,
         Delivered,
-        Reviewed,
+        Completed,
         Returned,
         Cancelled,
         Refunded

@@ -124,6 +124,22 @@ namespace AgitekBackend.Controllers
             return Ok(await _orderService.CancelOrderAsync(id));
         }
 
+        [HttpPatch("{id}/complete")]
+        public async Task<ActionResult<OrderDTO>> Complete(int id)
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
+            var order = await _orderService.GetByIdAsync(id);
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, order, new OrderManagementRequirement(OrderOperation.Complete));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("Only the order owner can complete this order");
+
+            return Ok(await _orderService.CompleteOrderAsync(id));
+        }
+
         [HttpPatch("{id}/confirm")]
         public async Task<ActionResult<OrderDTO>> Confirm(int id, [FromBody] ConfirmOrderDTO dto)
         {

@@ -22,24 +22,27 @@ namespace AgitekBackend.Services
             [OrderStatus.Confirmed] = new() { OrderStatus.Shipped },
             [OrderStatus.Shipped] = new() { OrderStatus.InTransit },
             [OrderStatus.InTransit] = new() { OrderStatus.Delivered, OrderStatus.Returned },
-            [OrderStatus.Delivered] = new() { OrderStatus.Reviewed, OrderStatus.Refunded }
+            [OrderStatus.Delivered] = new() { OrderStatus.Completed, OrderStatus.Refunded }
         };
 
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly IPaymentService _paymentService;
         private readonly IAddressService _addressService;
+        private readonly IMediaService _mediaService;
 
         public OrderService(
             AppDbContext context,
             IMapper mapper,
             IPaymentService paymentService,
-            IAddressService addressService)
+            IAddressService addressService,
+            IMediaService mediaService)
         {
             _context = context;
             _mapper = mapper;
             _paymentService = paymentService;
             _addressService = addressService;
+            _mediaService = mediaService;
         }
 
         public async Task<IEnumerable<OrderDTO>> GetAllAsync(int userId, bool assignedToDelivery = false)
@@ -170,6 +173,18 @@ namespace AgitekBackend.Services
             return _mapper.Map<OrderDTO>(order);
         }
 
+        public async Task<OrderDTO> CompleteOrderAsync(int id)
+        {
+            var order = await GetTrackedOrderAsync(id);
+
+            await UpdateOrderStatusAsync(id, OrderStatus.Completed);
+
+            order.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+
+            return _mapper.Map<OrderDTO>(order);
+        }
+
         public async Task<OrderDTO> ConfirmOrderAsync(int id, ConfirmOrderDTO dto)
         {
             var order = await GetTrackedOrderAsync(id);
@@ -200,24 +215,32 @@ namespace AgitekBackend.Services
             if (dto.Status != OrderStatus.Delivered && dto.Status != OrderStatus.Returned)
                 throw new BadRequestException("Ship order can only set status to Delivered or Returned");
 
-            if (dto.Medias == null || !dto.Medias.Any())
+            if (!dto.Medias.Any())
                 throw new BadRequestException("Ship order must have at least one media");
 
-            await UpdateOrderStatusAsync(id, dto.Status);
-            await UpdateCodPaymentStatusAsync(id, dto.Status == OrderStatus.Delivered ? PaymentStatus.Success : PaymentStatus.Failed);
-
-            foreach (var mediaDto in dto.Medias)
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                mediaDto.OrderId = order.Id;
-                mediaDto.ReviewId = null;
-                mediaDto.WarrantyId = null;
-                mediaDto.RefundOrderId = null;
-                mediaDto.RefundProductId = null;
-                order.Medias.Add(_mapper.Map<Media>(mediaDto));
-            }
+                await UpdateOrderStatusAsync(id, dto.Status);
+                await UpdateCodPaymentStatusAsync(id, dto.Status == OrderStatus.Delivered ? PaymentStatus.Success : PaymentStatus.Failed);
 
-            order.UpdatedAt = DateTime.UtcNow;
-            await _context.SaveChangesAsync();
+                foreach (var mediaDto in dto.Medias)
+                {
+                    var media = _mapper.Map<Media>(mediaDto);
+                    media.OrderId = order.Id;
+                    order.Medias.Add(media);
+                    await _mediaService.ValidateMediaType(media);
+                }
+
+                order.UpdatedAt = DateTime.UtcNow;
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
 
             return _mapper.Map<OrderDTO>(order);
         }

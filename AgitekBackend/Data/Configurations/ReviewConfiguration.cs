@@ -8,9 +8,19 @@ namespace AgitekBackend.Data.Configurations
     {
         public void Configure(EntityTypeBuilder<Review> builder)
         {
+            builder.HasOne(r => r.OrderDetail)
+                   .WithMany(od => od.Reviews)
+                   .HasForeignKey(r => new { r.OrderId, r.ProductId })
+                   .OnDelete(DeleteBehavior.Restrict);
+
             builder.HasOne(r => r.User)
                    .WithMany(u => u.Reviews)
                    .HasForeignKey(r => r.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(r => r.ReplyUser)
+                   .WithMany(u => u.RepliedReviews)
+                   .HasForeignKey(r => r.ReplyUserId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(r => r.Product)

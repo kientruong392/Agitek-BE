@@ -16,13 +16,20 @@ namespace AgitekBackend.Services
         private readonly IMapper _mapper;
         private readonly IOrderService _orderService;
         private readonly IPaymentService _paymentService;
+        private readonly IMediaService _mediaService;
 
-        public RefundService(AppDbContext context, IMapper mapper, IOrderService orderService, IPaymentService paymentService)
+        public RefundService(
+            AppDbContext context,
+            IMapper mapper,
+            IOrderService orderService,
+            IPaymentService paymentService,
+            IMediaService mediaService)
         {
             _context = context;
             _mapper = mapper;
             _orderService = orderService;
             _paymentService = paymentService;
+            _mediaService = mediaService;
         }
 
         public async Task<IEnumerable<RefundDTO>> GetAllAsync()
@@ -49,7 +56,7 @@ namespace AgitekBackend.Services
 
         public async Task<RefundDTO> CreateAsync(CreateRefundDTO dto, int currentUserId)
         {
-            if (dto.Medias == null || !dto.Medias.Any())
+            if (!dto.Medias.Any())
                 throw new BadRequestException("Refund must have at least one media");
 
             var order = await _context.Orders
@@ -83,19 +90,18 @@ namespace AgitekBackend.Services
             refund.CreatedAt = DateTime.UtcNow;
             refund.UpdatedAt = DateTime.UtcNow;
 
-            foreach (var media in refund.Medias)
-            {
-                media.RefundOrderId = refund.OrderId;
-                media.RefundProductId = refund.ProductId;
-                media.ReviewId = null;
-                media.WarrantyId = null;
-                media.OrderId = null;
-            }
-
             await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 _context.Refunds.Add(refund);
+
+                foreach (var media in refund.Medias)
+                {
+                    media.RefundOrderId = refund.OrderId;
+                    media.RefundProductId = refund.ProductId;
+                    await _mediaService.ValidateMediaType(media);
+                }
+
                 await _context.SaveChangesAsync();
                 await transaction.CommitAsync();
             }

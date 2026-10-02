@@ -22,6 +22,7 @@ namespace AgitekBackend.Models
         public int StockQuantity { get; set; }
         public int SoldQuantity { get; set; } = 0;
         public string? Description { get; set; }
+        public double AverageRating { get; set; }
         public ProductStatus Status { get; set; } = ProductStatus.Pending;
         public int WarrantyPeriod { get; set; }
         public int CategoryId { get; set; }

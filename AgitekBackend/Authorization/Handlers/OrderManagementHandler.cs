@@ -54,6 +54,13 @@ namespace AgitekBackend.Authorization.Handlers
                 return;
             }
 
+            if (requirement.Operation == OrderOperation.Complete)
+            {
+                if (targetOrder?.UserId == currentUserId)
+                    context.Succeed(requirement);
+                return;
+            }
+
             if (requirement.Operation == OrderOperation.Confirm)
             {
                 if (currentRole == RoleName.Manager ||

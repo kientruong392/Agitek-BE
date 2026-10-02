@@ -8,6 +8,7 @@ namespace AgitekBackend.Authorization.Requirements
         Create,
         Update,
         Cancel,
+        Complete,
         Confirm,
         Ship
     }

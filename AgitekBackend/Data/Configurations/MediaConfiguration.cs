@@ -9,7 +9,7 @@ namespace AgitekBackend.Data.Configurations
         public void Configure(EntityTypeBuilder<Media> builder)
         {
             builder.HasOne(m => m.Review)
-                   .WithMany(r => r.Media)
+                   .WithMany(r => r.Medias)
                    .HasForeignKey(m => m.ReviewId)
                    .OnDelete(DeleteBehavior.Cascade);
 

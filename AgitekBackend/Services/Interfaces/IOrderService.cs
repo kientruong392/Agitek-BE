@@ -10,6 +10,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<OrderDTO> CreateAsync(CreateOrderDTO dto, int currentUserId);
         Task<OrderDTO> UpdateAsync(int id, UpdateOrderDTO dto);
         Task<OrderDTO> CancelOrderAsync(int id);
+        Task<OrderDTO> CompleteOrderAsync(int id);
         Task<OrderDTO> ConfirmOrderAsync(int id, ConfirmOrderDTO dto);
         Task<OrderDTO> ShipOrderAsync(int id, ShipOrderDTO dto);
         Task<OrderDTO> UpdateOrderStatusAsync(int id, OrderStatus status);
