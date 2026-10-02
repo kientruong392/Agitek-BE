@@ -93,6 +93,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, OrderManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, PaymentManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, RefundManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ReviewManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, WarrantyManagementHandler>();
 
 builder.Services.AddAuthorization();
 

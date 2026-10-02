@@ -36,6 +36,7 @@ namespace AgitekBackend.Services
         {
             var refunds = await _context.Refunds
                 .AsNoTracking()
+                .Include(r => r.OrderDetail)
                 .Include(r => r.Medias)
                 .ToListAsync();
 
@@ -46,6 +47,7 @@ namespace AgitekBackend.Services
         {
             var refund = await _context.Refunds
                 .AsNoTracking()
+                .Include(r => r.OrderDetail)
                 .Include(r => r.Medias)
                 .FirstOrDefaultAsync(r => r.OrderId == orderId && r.ProductId == productId);
             if (refund == null)
@@ -59,20 +61,14 @@ namespace AgitekBackend.Services
             if (!dto.Medias.Any())
                 throw new BadRequestException("Refund must have at least one media");
 
-            var order = await _context.Orders
-                .AsNoTracking()
-                .Include(o => o.OrderDetails)
-                .FirstOrDefaultAsync(o => o.Id == dto.OrderId);
-            if (order == null)
-                throw new NotFoundException("Order not found");
-
-            if (order.UserId != currentUserId)
-                throw new BadRequestException("Order does not belong to the current user");
-
-            var orderDetail = order.OrderDetails
-                .FirstOrDefault(od => od.ProductId == dto.ProductId);
+            var orderDetail = await _context.OrderDetails
+                .Include(od => od.Order)
+                .FirstOrDefaultAsync(od => od.OrderId == dto.OrderId && od.ProductId == dto.ProductId);
             if (orderDetail == null)
                 throw new NotFoundException("Order detail not found");
+
+            if (orderDetail.Order.UserId != currentUserId)
+                throw new BadRequestException("Order does not belong to the current user");
 
             if (dto.Quantity > orderDetail.Quantity)
                 throw new BadRequestException("Refund quantity cannot exceed order quantity");
@@ -80,7 +76,7 @@ namespace AgitekBackend.Services
             if (await _context.Refunds.AnyAsync(r =>
                 r.OrderId == dto.OrderId && r.ProductId == dto.ProductId))
             {
-                throw new BadRequestException("Order product already has a refund");
+                throw new BadRequestException("Order detail already has a refund");
             }
 
             var refund = _mapper.Map<Refund>(dto);
@@ -94,6 +90,7 @@ namespace AgitekBackend.Services
             try
             {
                 _context.Refunds.Add(refund);
+                _context.ChangeTracker.DetectChanges();
 
                 foreach (var media in refund.Medias)
                 {

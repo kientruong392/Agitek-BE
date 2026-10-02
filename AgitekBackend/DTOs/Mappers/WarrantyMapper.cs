@@ -1,6 +1,5 @@
 using AgitekBackend.DTOs.Warranties;
 using AgitekBackend.Models;
-using AutoMapper;
 
 namespace AgitekBackend.DTOs.Mappers
 {
@@ -10,6 +9,7 @@ namespace AgitekBackend.DTOs.Mappers
         {
             CreateMap<CreateWarrantyDTO, Warranty>();
             CreateMap<UpdateWarrantyDTO, Warranty>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
+            CreateMap<ApproveWarrantyDTO, Warranty>();
             CreateMap<Warranty, WarrantyDTO>();
         }
     }

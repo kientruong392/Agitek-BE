@@ -22,8 +22,7 @@ namespace AgitekBackend.Models
         public RefundStatus Status { get; set; } = RefundStatus.Pending;
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public Order? Order { get; set; }
-        public Product? Product { get; set; }
+        public OrderDetail OrderDetail { get; set; } = null!;
         public User? User { get; set; }
         public User? ApprovedByUser { get; set; }
         public ICollection<Media> Medias { get; set; } = new List<Media>();

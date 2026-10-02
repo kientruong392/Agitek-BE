@@ -15,6 +15,7 @@ namespace AgitekBackend.Models
         public Order Order { get; set; } = null!;
         public Product Product { get; set; } = null!;
         public ICollection<Warranty> Warranties { get; set; } = new List<Warranty>();
+        public Refund? Refund { get; set; }
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
     }
 }

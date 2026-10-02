@@ -16,5 +16,12 @@ namespace AgitekBackend.Common.Utils
 
             return Regex.Replace(text, @"[^a-z0-9]+", "-").Trim('-');
         }
+
+        public static string GenerateWarrantyCode()
+        {
+            var date = DateTime.Now;
+            var randomPart = new Random().Next(1000, 9999);
+            return $"AGTWR-{date:yyMMdd}-{randomPart}";
+        }
     }
 }

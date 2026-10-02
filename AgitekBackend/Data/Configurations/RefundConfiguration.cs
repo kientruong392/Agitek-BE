@@ -13,14 +13,9 @@ namespace AgitekBackend.Data.Configurations
             builder.Property(r => r.Amount)
                    .HasColumnType("decimal(18, 2)");
 
-            builder.HasOne(r => r.Order)
-                   .WithMany(o => o.Refunds)
-                   .HasForeignKey(r => r.OrderId)
-                   .OnDelete(DeleteBehavior.Restrict);
-
-            builder.HasOne(r => r.Product)
-                   .WithMany(p => p.Refunds)
-                   .HasForeignKey(r => r.ProductId)
+            builder.HasOne(r => r.OrderDetail)
+                   .WithOne(od => od.Refund)
+                   .HasForeignKey<Refund>(r => new { r.OrderId, r.ProductId })
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasOne(r => r.User)

@@ -41,7 +41,6 @@ namespace AgitekBackend.Models
         public Voucher? Voucher { get; set; }
         public Location? FromLocation { get; set; }
         public Location? ToLocation { get; set; }
-        public ICollection<Refund> Refunds { get; set; } = new List<Refund>();
         public ICollection<Payment> Payments { get; set; } = new List<Payment>();
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public ICollection<OrderTrackingLog> OrderTrackingLogs { get; set; } = new List<OrderTrackingLog>();

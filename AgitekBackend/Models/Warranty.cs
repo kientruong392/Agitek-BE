@@ -18,16 +18,17 @@ namespace AgitekBackend.Models
         public string PhoneNumber { get; set; } = string.Empty;
         [Required, MaxLength(500)]
         public string Address { get; set; } = string.Empty;
-        [Required]
+        [Required, MaxLength(1000)]
         public string ProductCondition { get; set; } = string.Empty;
         public WarrantyStatus Status { get; set; } = WarrantyStatus.Pending;
-        public string? RejectReason { get; set; }
-        public DateTime StartDate { get; set; }
-        public DateTime CompletedDate { get; set; }
+        [MaxLength(500)]
+        public string? Response { get; set; }
+        public DateTime? StartDate { get; set; }
+        public DateTime? CompletedDate { get; set; }
         public DateTime CreatedAt { get; set; } = DateTime.Now;
         public DateTime UpdatedAt { get; set; } = DateTime.Now;
-        public OrderDetail OrderDetail { get; set; } = null!;
-        public User User { get; set; } = null!;
+        public OrderDetail? OrderDetail { get; set; }
+        public User? User { get; set; }
         public ICollection<Media> Media { get; set; } = new List<Media>();
     }
 }

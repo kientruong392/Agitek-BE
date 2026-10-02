@@ -15,6 +15,11 @@ namespace AgitekBackend.Data.Configurations
                    .WithMany(od => od.Warranties)
                    .HasForeignKey(w => new { w.OrderId, w.ProductId })
                    .OnDelete(DeleteBehavior.Restrict);
+
+            builder.HasOne(w => w.User)
+                   .WithMany(u => u.Warranties)
+                   .HasForeignKey(w => w.UserId)
+                   .OnDelete(DeleteBehavior.Restrict);
         }
     }
 }

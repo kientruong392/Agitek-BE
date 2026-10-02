@@ -1,22 +1,18 @@
-using AgitekBackend.Common;
+using System.ComponentModel.DataAnnotations;
+using AgitekBackend.DTOs.Medias;
 
 namespace AgitekBackend.DTOs.Warranties
 {
     public class UpdateWarrantyDTO
     {
-        public string? Code { get; set; } 
-        public int? OrderId { get; set; }
-        public int? ProductId { get; set; }
-        public int? UserId { get; set; }
-        public string? FullName { get; set; } 
-        public string? PhoneNumber { get; set; } 
-        public string? Address { get; set; } 
-        public string? ProductCondition { get; set; } 
-        public WarrantyStatus? Status { get; set; }
-        public string? RejectReason { get; set; }
-        public DateTime? StartDate { get; set; }
-        public DateTime? CompletedDate { get; set; }
+        [MaxLength(100, ErrorMessage = "Full name cannot exceed 100 characters")]
+        public string? FullName { get; set; }
+        [MaxLength(20, ErrorMessage = "Phone number cannot exceed 20 characters")]
+        public string? PhoneNumber { get; set; }
+        [MaxLength(500, ErrorMessage = "Address cannot exceed 500 characters")]
+        public string? Address { get; set; }
+        [MaxLength(1000, ErrorMessage = "Product condition cannot exceed 1000 characters")]
+        public string? ProductCondition { get; set; }
+        public List<CreateMediaDTO>? Medias { get; set; }
     }
 }
-
-
