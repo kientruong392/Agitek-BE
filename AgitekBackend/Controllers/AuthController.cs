@@ -37,7 +37,7 @@ namespace AgitekBackend.Controllers
         }
 
         [HttpPost("verify-account")]
-        public async Task<ActionResult<TokenResponseDTO>> VerifyAccount([FromQuery] string token)
+        public async Task<ActionResult<TokenResponseDTO>> VerifyAccount([FromBody] string token)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? User.FindFirstValue("sub")

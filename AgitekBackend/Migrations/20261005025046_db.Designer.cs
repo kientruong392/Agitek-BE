@@ -4,6 +4,7 @@ using AgitekBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20261005025046_db")]
+    partial class db
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -449,6 +452,9 @@ namespace AgitekBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<double>("AverageRating")
+                        .HasColumnType("float");
+
                     b.Property<int>("BrandId")
                         .HasColumnType("int");
 
@@ -650,8 +656,6 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("ApprovedByUserId");
 
-                    b.HasIndex("ProductId");
-
                     b.HasIndex("UserId");
 
                     b.ToTable("Refunds");
@@ -671,6 +675,9 @@ namespace AgitekBackend.Migrations
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
+
+                    b.Property<int>("OrderId")
+                        .HasColumnType("int");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
@@ -701,6 +708,8 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("ReplyUserId");
 
                     b.HasIndex("UserId");
+
+                    b.HasIndex("OrderId", "ProductId");
 
                     b.ToTable("Reviews");
                 });
@@ -854,7 +863,7 @@ namespace AgitekBackend.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
-                    b.Property<DateTime>("CompletedDate")
+                    b.Property<DateTime?>("CompletedDate")
                         .HasColumnType("datetime2");
 
                     b.Property<DateTime>("CreatedAt")
@@ -875,15 +884,17 @@ namespace AgitekBackend.Migrations
 
                     b.Property<string>("ProductCondition")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(1000)
+                        .HasColumnType("nvarchar(1000)");
 
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
-                    b.Property<string>("RejectReason")
-                        .HasColumnType("nvarchar(max)");
+                    b.Property<string>("Response")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
 
-                    b.Property<DateTime>("StartDate")
+                    b.Property<DateTime?>("StartDate")
                         .HasColumnType("datetime2");
 
                     b.Property<int>("Status")
@@ -964,7 +975,7 @@ namespace AgitekBackend.Migrations
                         .HasForeignKey("OrderId");
 
                     b.HasOne("AgitekBackend.Models.Review", "Review")
-                        .WithMany("Media")
+                        .WithMany("Medias")
                         .HasForeignKey("ReviewId")
                         .OnDelete(DeleteBehavior.Cascade);
 
@@ -1149,29 +1160,21 @@ namespace AgitekBackend.Migrations
                         .HasForeignKey("ApprovedByUserId")
                         .OnDelete(DeleteBehavior.Restrict);
 
-                    b.HasOne("AgitekBackend.Models.Order", "Order")
-                        .WithMany("Refunds")
-                        .HasForeignKey("OrderId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.HasOne("AgitekBackend.Models.Product", "Product")
-                        .WithMany("Refunds")
-                        .HasForeignKey("ProductId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("AgitekBackend.Models.User", "User")
                         .WithMany("Refunds")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
+                    b.HasOne("AgitekBackend.Models.OrderDetail", "OrderDetail")
+                        .WithOne("Refund")
+                        .HasForeignKey("AgitekBackend.Models.Refund", "OrderId", "ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.Navigation("ApprovedByUser");
 
-                    b.Navigation("Order");
-
-                    b.Navigation("Product");
+                    b.Navigation("OrderDetail");
 
                     b.Navigation("User");
                 });
@@ -1186,13 +1189,22 @@ namespace AgitekBackend.Migrations
 
                     b.HasOne("AgitekBackend.Models.User", "ReplyUser")
                         .WithMany("RepliedReviews")
-                        .HasForeignKey("ReplyUserId");
+                        .HasForeignKey("ReplyUserId")
+                        .OnDelete(DeleteBehavior.Restrict);
 
                     b.HasOne("AgitekBackend.Models.User", "User")
                         .WithMany("Reviews")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
+
+                    b.HasOne("AgitekBackend.Models.OrderDetail", "OrderDetail")
+                        .WithMany("Reviews")
+                        .HasForeignKey("OrderId", "ProductId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("OrderDetail");
 
                     b.Navigation("Product");
 
@@ -1227,7 +1239,7 @@ namespace AgitekBackend.Migrations
                     b.HasOne("AgitekBackend.Models.User", "User")
                         .WithMany("Warranties")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.HasOne("AgitekBackend.Models.OrderDetail", "OrderDetail")
@@ -1267,12 +1279,14 @@ namespace AgitekBackend.Migrations
                     b.Navigation("OrderTrackingLogs");
 
                     b.Navigation("Payments");
-
-                    b.Navigation("Refunds");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.OrderDetail", b =>
                 {
+                    b.Navigation("Refund");
+
+                    b.Navigation("Reviews");
+
                     b.Navigation("Warranties");
                 });
 
@@ -1281,8 +1295,6 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Images");
 
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("Refunds");
 
                     b.Navigation("Reviews");
 
@@ -1298,7 +1310,7 @@ namespace AgitekBackend.Migrations
 
             modelBuilder.Entity("AgitekBackend.Models.Review", b =>
                 {
-                    b.Navigation("Media");
+                    b.Navigation("Medias");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.User", b =>

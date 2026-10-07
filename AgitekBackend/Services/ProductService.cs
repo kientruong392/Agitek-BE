@@ -21,21 +21,87 @@ namespace AgitekBackend.Services
             _mapper = mapper;
         }
 
+        private IQueryable<Product> ApplyVisibilityFilter(IQueryable<Product> query, CurrentUser? currentUser)
+        {
+            var userRole = currentUser?.Role;
+            if (userRole == RoleName.SuperAdmin || userRole == RoleName.Admin || userRole == RoleName.Manager) 
+                return query;
+            else if (userRole == RoleName.Staff)
+                return query.Where(p => p.Status != ProductStatus.Deleted);
+            return query.Where(p => p.Status != ProductStatus.Pending
+                && p.Status != ProductStatus.Deleted
+                && p.Status != ProductStatus.Hidden);
+        }
+
+        private async Task<IEnumerable<ProductDTO>> GetVisibleProductsAsync(IQueryable<Product> query, CurrentUser? currentUser)
+        {
+            var products = await query.ToListAsync();
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+
         public async Task<IEnumerable<ProductDTO>> GetAllAsync(CurrentUser? currentUser)
         {
             var query = _context.Products
                 .Include(p => p.Images)
                 .Include(p => p.Specifications)
                 .AsQueryable();
-                
-            var userRole = currentUser?.Role;
-            if (userRole != RoleName.SuperAdmin && userRole != RoleName.Admin && userRole != RoleName.Manager && userRole != RoleName.Staff)
-            {
-                query = query.Where(p => p.Status != ProductStatus.Pending && p.Status != ProductStatus.Deleted && p.Status != ProductStatus.Hidden);
-            }
 
-            var products = await query.ToListAsync();
+            query = ApplyVisibilityFilter(query, currentUser);
+
+            return await GetVisibleProductsAsync(query, currentUser);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetFeaturedAsync(int count, CurrentUser? currentUser)
+        {
+            if (count <= 0) return new List<ProductDTO>();
+
+            var query = _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .AsQueryable();
+
+            query = ApplyVisibilityFilter(query, currentUser);
+
+            var products = await query
+                .OrderByDescending(p => p.SoldQuantity)
+                .ThenByDescending(p => p.AverageRating)
+                .Take(count)
+                .ToListAsync();
+
             return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetNewestAsync(int count, CurrentUser? currentUser)
+        {
+            if (count <= 0) return new List<ProductDTO>();
+
+            var query = _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .AsQueryable();
+
+            query = ApplyVisibilityFilter(query, currentUser);
+
+            var products = await query
+                .OrderByDescending(p => p.CreatedAt)
+                .ThenByDescending(p => p.Id)
+                .Take(count)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<ProductDTO>>(products);
+        }
+
+        public async Task<IEnumerable<ProductDTO>> GetByCategoryAsync(int categoryId, CurrentUser? currentUser)
+        {
+            var query = _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .Where(p => p.CategoryId == categoryId)
+                .AsQueryable();
+
+            query = ApplyVisibilityFilter(query, currentUser);
+
+            return await GetVisibleProductsAsync(query, currentUser);
         }
 
         public async Task<ProductDTO> GetByIdAsync(int id)

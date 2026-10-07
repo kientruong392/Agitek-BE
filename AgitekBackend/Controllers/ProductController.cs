@@ -40,22 +40,32 @@ namespace AgitekBackend.Controllers
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ProductDTO>>> GetAll()
         {
-            var currentUser = GetCurrentUser();
-            var products = await _productService.GetAllAsync(currentUser);
-            var authorizedProducts = new List<ProductDTO>();
-            
-            foreach (var p in products)
-            {
-                var authResult = await _authorizationService.AuthorizeAsync(
-                    User, p, new ProductManagementRequirement(ProductOperation.Read));
-                
-                if (authResult.Succeeded)
-                {
-                    authorizedProducts.Add(p);
-                }
-            }
+            var products = await _productService.GetAllAsync(GetCurrentUser());
+            return Ok(products);
+        }
 
-            return Ok(authorizedProducts);
+        [HttpGet("featured")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetFeatured([FromQuery] int count = 4)
+        {
+            var products = await _productService.GetFeaturedAsync(Math.Clamp(count, 1, 24), GetCurrentUser());
+            return Ok(products);
+        }
+
+        [HttpGet("newest")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetNewest([FromQuery] int count = 4)
+        {
+            var products = await _productService.GetNewestAsync(Math.Clamp(count, 1, 24), GetCurrentUser());
+            return Ok(products);
+        }
+
+        [HttpGet("category/{categoryId}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> GetByCategory(int categoryId)
+        {
+            var products = await _productService.GetByCategoryAsync(categoryId, GetCurrentUser());
+            return Ok(products);
         }
 
         [HttpGet("{id}")]

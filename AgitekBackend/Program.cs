@@ -1,3 +1,4 @@
+using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using AgitekBackend.Authorization.Handlers;
 using AgitekBackend.Data;
@@ -33,6 +34,9 @@ builder.Services
     })
     .AddJwtBearer(options =>
     {
+        // Keep JWT claim names as emitted (sub, email, role, isVerified, ...).
+        // Authorization code supports these short names and no URI claim mapping is needed.
+        options.MapInboundClaims = false;
         options.TokenValidationParameters = new TokenValidationParameters
         {
             ValidateIssuer           = true,
@@ -42,6 +46,8 @@ builder.Services
             ValidIssuer              = jwtIssuer,
             ValidAudience            = jwtAud,
             IssuerSigningKey         = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+            NameClaimType            = JwtRegisteredClaimNames.Sub,
+            RoleClaimType            = "role",
             ClockSkew                = TimeSpan.Zero,
         };
 

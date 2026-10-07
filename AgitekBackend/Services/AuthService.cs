@@ -206,11 +206,10 @@ namespace AgitekBackend.Services
         private async Task<UserDTO> ValidateCredentialsAsync(string usernameOrEmail, string password)
         {
             var user = await _userService.GetByUsernameOrEmailAsync(usernameOrEmail);
+            if (user == null || !AuthUtils.VerifyPassword(password, user.PasswordHash!))
+                throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
             if(user.PasswordHash == null)
                 throw new UnauthorizedException("This account is invalid", "INVALID_ACCOUNT");
-            if (user == null || !AuthUtils.VerifyPassword(password, user.PasswordHash))
-                throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
-
             if (!user.IsActive)
                 throw new UnauthorizedException("This account has been deactivated", "ACCOUNT_LOCKED");
 
@@ -227,18 +226,22 @@ namespace AgitekBackend.Services
             var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
-            var claims = new[]
+            var claims = new List<Claim>
             {
-                new Claim(JwtRegisteredClaimNames.Sub, userDto.Id.ToString()),
-                new Claim(JwtRegisteredClaimNames.Email, userDto.Email),
-                new Claim(JwtRegisteredClaimNames.UniqueName, userDto.Username),
-                new Claim(JwtRegisteredClaimNames.Name, userDto.Profile?.FullName ?? userDto.Username),
-                new Claim("avatarUrl", userDto.Profile?.AvatarUrl ?? string.Empty),
-                new Claim("isVerified", userDto.IsVerified.ToString()),
-                new Claim("isActive", userDto.IsActive.ToString()),
-                new Claim(ClaimTypes.Role, userDto.Role.ToString()),
-                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new(JwtRegisteredClaimNames.Sub, userDto.Id.ToString()),
+                new(JwtRegisteredClaimNames.Email, userDto.Email),
+                new("username", userDto.Username),
+                new("fullname", userDto.Profile?.FullName ?? userDto.Username),
+                new(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+                new("isVerified", userDto.IsVerified ? "true" : "false"),
+                new("isActive", userDto.IsActive ? "true" : "false"),
+                new("role", userDto.Role.ToString()),
             };
+
+            if (!string.IsNullOrWhiteSpace(userDto.Profile?.AvatarUrl))
+            {
+                claims.Add(new Claim("avatarUrl", userDto.Profile.AvatarUrl));
+            }
 
             var token = new JwtSecurityToken(
                 issuer: issuer,
