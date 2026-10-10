@@ -43,7 +43,6 @@ namespace AgitekBackend.Services
         {
             var query = _context.Products
                 .Include(p => p.Images)
-                .Include(p => p.Specifications)
                 .AsQueryable();
 
             query = ApplyVisibilityFilter(query, currentUser);
@@ -57,7 +56,6 @@ namespace AgitekBackend.Services
 
             var query = _context.Products
                 .Include(p => p.Images)
-                .Include(p => p.Specifications)
                 .AsQueryable();
 
             query = ApplyVisibilityFilter(query, currentUser);
@@ -77,7 +75,6 @@ namespace AgitekBackend.Services
 
             var query = _context.Products
                 .Include(p => p.Images)
-                .Include(p => p.Specifications)
                 .AsQueryable();
 
             query = ApplyVisibilityFilter(query, currentUser);
@@ -95,7 +92,6 @@ namespace AgitekBackend.Services
         {
             var query = _context.Products
                 .Include(p => p.Images)
-                .Include(p => p.Specifications)
                 .Where(p => p.CategoryId == categoryId)
                 .AsQueryable();
 
@@ -109,6 +105,7 @@ namespace AgitekBackend.Services
             var product = await _context.Products
                 .Include(p => p.Images)
                 .Include(p => p.Specifications)
+                .Include(p => p.Reviews)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (product == null) throw new NotFoundException("Product not found");
             return _mapper.Map<ProductDTO>(product);
@@ -118,11 +115,25 @@ namespace AgitekBackend.Services
         {
             if (dto.Images == null || !dto.Images.Any())
                 throw new BadRequestException("Product must have at least one image");
+            if (dto.Images.Count > 5)
+                throw new BadRequestException("Product cannot have more than 5 images", "PRODUCT_MAX_IMAGES_EXCEEDED");
 
             using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
+                var brand = await _context.Brands.FindAsync(dto.BrandId);
+                if (brand == null) throw new NotFoundException("Brand not found");
+
+                var category = await _context.Categories.FindAsync(dto.CategoryId);
+                if (category == null) throw new NotFoundException("Category not found");
+
+                var generatedSku = $"{brand.Code}-{category.Code}-{dto.ProductCode}";
+                
+                if (await _context.Products.AnyAsync(p => p.SKU == generatedSku))
+                    throw new BadRequestException("Product with this SKU already exists", "PRODUCT_SKU_EXISTS");
+
                 var product = _mapper.Map<Product>(dto);
+                product.SKU = generatedSku;
                 product.UserId = currentUserId;
                 product.Slug = Helpers.GenerateSlug(product.ProductName);
                 product.Status = ProductStatus.Pending;
@@ -159,7 +170,27 @@ namespace AgitekBackend.Services
                     .FirstOrDefaultAsync(p => p.Id == id);
 
                 if (product == null) throw new NotFoundException("Product not found");
+
+                var currentBrandId = dto.BrandId ?? product.BrandId;
+                var currentCategoryId = dto.CategoryId ?? product.CategoryId;
+
+                var brand = await _context.Brands.FindAsync(currentBrandId);
+                if (brand == null) throw new NotFoundException("Brand not found");
+
+                var category = await _context.Categories.FindAsync(currentCategoryId);
+                if (category == null) throw new NotFoundException("Category not found");
+
+                var oldSkuParts = product.SKU.Split('-');
+                var oldProductCode = oldSkuParts.Length == 3 ? oldSkuParts[2] : product.SKU;
+                var productCode = dto.ProductCode ?? oldProductCode;
+                var generatedSku = $"{brand.Code}-{category.Code}-{productCode}";
+
+                if (product.SKU != generatedSku && await _context.Products.AnyAsync(p => p.SKU == generatedSku))
+                    throw new BadRequestException("Product with this SKU already exists", "PRODUCT_SKU_EXISTS");
+
                 _mapper.Map(dto, product);
+                product.SKU = generatedSku;
+                
                 if (dto.ProductName != null) product.Slug = Helpers.GenerateSlug(dto.ProductName);
 
                 product.Status = GetStatus(product);
@@ -177,6 +208,7 @@ namespace AgitekBackend.Services
                 if (dto.Images != null)
                 {
                     if (!dto.Images.Any()) throw new BadRequestException("Product must have at least one image");
+                    if (dto.Images.Count > 5) throw new BadRequestException("Product cannot have more than 5 images", "PRODUCT_MAX_IMAGES_EXCEEDED");
                     _context.ProductImages.RemoveRange(product.Images);
                     var newImages = _mapper.Map<List<ProductImage>>(dto.Images);
                     foreach (var img in newImages)
@@ -304,6 +336,25 @@ namespace AgitekBackend.Services
                 await transaction.RollbackAsync();
                 throw;
             }
+        }
+
+        public async Task<bool> RestoreAsync(int id)
+        {
+            var product = await _context.Products.FindAsync(id);
+            if (product == null) throw new NotFoundException("Product not found");
+            if (product.Status != ProductStatus.Deleted) throw new BadRequestException("Product is not deleted");
+
+            product.DeletedAt = null;
+            product.Status = GetStatus(new Product
+            {
+                InitialQuantity = product.InitialQuantity,
+                StockQuantity = product.StockQuantity,
+                Status = ProductStatus.InStock
+            });
+            product.UpdatedAt = DateTime.Now;
+
+            await _context.SaveChangesAsync();
+            return true;
         }
 
         public ProductStatus GetStatus(Product product)

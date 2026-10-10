@@ -26,8 +26,8 @@ namespace AgitekBackend.Controllers
             _authService = authService;
         }
 
-        [HttpGet]
-        public async Task<ActionResult<IEnumerable<UserDTO>>> GetAll()
+        [HttpGet("customers")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetCustomers()
         {
             var authResult = await _authorizationService.AuthorizeAsync(
                 User, null, new UserManagementRequirement(UserOperation.Read));
@@ -35,7 +35,20 @@ namespace AgitekBackend.Controllers
             if (!authResult.Succeeded)
                 throw new ForbiddenException("You do not have permission to access this resource");
 
-            var users = await _userService.GetAllAsync();
+            var users = await _userService.GetAllCustomersAsync();
+            return Ok(users);
+        }
+
+        [HttpGet("staff")]
+        public async Task<ActionResult<IEnumerable<UserDTO>>> GetStaff()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, null, new UserManagementRequirement(UserOperation.Read));
+            
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access this resource");
+
+            var users = await _userService.GetAllStaffAsync();
             return Ok(users);
         }
 
@@ -69,8 +82,8 @@ namespace AgitekBackend.Controllers
             return CreatedAtAction(nameof(GetById), new { id = createdUser.Id }, createdUser);
         }
 
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<UserDTO>> Update(int id, [FromBody] UpdateUserDTO dto)
+        [HttpPatch("{id}/role")]
+        public async Task<ActionResult<UserDTO>> UpdateRole(int id, [FromBody] UpdateUserRoleDTO dto)
         {
             var authResult = await _authorizationService.AuthorizeAsync(
                 User, id, new UserManagementRequirement(UserOperation.Update));
@@ -78,16 +91,28 @@ namespace AgitekBackend.Controllers
             if (!authResult.Succeeded)
                 throw new ForbiddenException("You do not have permission to access this resource");
 
+            var currentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub") ?? User.FindFirstValue("id");
+            if (!int.TryParse(currentUserIdStr, out var currentUserId))
+                return Unauthorized();
+
             var currentRoleClaim = User.FindFirstValue(ClaimTypes.Role) ?? User.FindFirstValue("role");
             if (!Enum.TryParse<RoleName>(currentRoleClaim, out var currentRole))
                 throw new ForbiddenException("You do not have permission to access this resource");
 
-            if (currentRole == RoleName.Admin && (dto.Role == RoleName.Admin || dto.Role == RoleName.SuperAdmin))
-            {
-                throw new ForbiddenException("You do not have permission to access this resource");
-            }
+            var updatedUser = await _userService.UpdateRoleAsync(id, dto, currentUserId, currentRole);
+            return Ok(updatedUser);
+        }
 
-            var updatedUser = await _userService.UpdateAsync(id, dto);
+        [HttpPatch("{id}/status")]
+        public async Task<ActionResult<UserDTO>> UpdateStatus(int id, [FromBody] UpdateUserStatusDTO dto)
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, id, new UserManagementRequirement(UserOperation.Update));
+            
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access this resource");
+
+            var updatedUser = await _userService.UpdateStatusAsync(id, dto);
             return Ok(updatedUser);
         }
 

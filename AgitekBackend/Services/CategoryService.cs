@@ -79,6 +79,12 @@ namespace AgitekBackend.Services
                 {
                     throw new NotFoundException($"Parent category not found");
                 }
+                if (parentCategory.ParentCategoryId.HasValue)
+                {
+                    throw new BadRequestException(
+                        "Cannot create category deeper than 2 levels. The selected parent is already a sub-category.",
+                        "CATEGORY_MAX_DEPTH_EXCEEDED");
+                }
             }
             _context.Categories.Add(category);
             await _context.SaveChangesAsync();
@@ -91,9 +97,9 @@ namespace AgitekBackend.Services
             if (category == null) throw new NotFoundException($"Category not found");
             _mapper.Map(dto, category);
             category.Slug = Helpers.GenerateSlug(category.CategoryName);
-            if (await IsCategoryExists(category.Slug))
+            if (await IsCategoryExists(category.Slug, id))
             {
-                throw new BadRequestException($"This category already exists");
+                throw new BadRequestException($"This category already exists", "CATEGORY_ALREADY_EXISTS");
             }
             if(category.ParentCategoryId.HasValue)
             {
@@ -114,16 +120,22 @@ namespace AgitekBackend.Services
             var hasProducts = await _context.Products.AnyAsync(p => p.CategoryId == id);
             if (hasProducts)
             {
-                throw new BadRequestException($"Cannot delete this category because it has associated products");
+                throw new BadRequestException($"Cannot delete this category because it has associated products", "CATEGORY_HAS_PRODUCTS");
+            }
+
+            var hasSubCategories = await _context.Categories.AnyAsync(c => c.ParentCategoryId == id);
+            if (hasSubCategories)
+            {
+                throw new BadRequestException($"Cannot delete this category because it has sub-categories", "CATEGORY_HAS_SUBCATEGORIES");
             }
             _context.Categories.Remove(category);
             await _context.SaveChangesAsync();
             return true;
         }
 
-        public async Task<bool> IsCategoryExists(string slug)
+        public async Task<bool> IsCategoryExists(string slug, int? excludeId = null)
         {
-            return await _context.Categories.AnyAsync(c => c.Slug == slug);
+            return await _context.Categories.AnyAsync(c => c.Slug == slug && (!excludeId.HasValue || c.Id != excludeId.Value));
         }
     }
 }

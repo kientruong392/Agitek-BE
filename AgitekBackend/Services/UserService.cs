@@ -41,6 +41,27 @@ namespace AgitekBackend.Services
             return _mapper.Map<UserDTO>(user);
         }
 
+        public async Task<IEnumerable<UserDTO>> GetAllCustomersAsync()
+        {
+            var users = await _context.Users
+                .Include(u => u.Profile)
+                .Where(u => u.Role == RoleName.Customer || u.Role == RoleName.Guest)
+                .OrderByDescending(u => u.CreatedAt)
+                .ToListAsync();
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
+        public async Task<IEnumerable<UserDTO>> GetAllStaffAsync()
+        {
+            var users = await _context.Users
+                .Include(u => u.GrantedByUser)
+                .Include(u => u.Profile)
+                .Where(u => u.Role != RoleName.Customer && u.Role != RoleName.Guest)
+                .OrderByDescending(u => u.CreatedAt)
+                .ToListAsync();
+            return _mapper.Map<IEnumerable<UserDTO>>(users);
+        }
+
         public async Task<User?> GetByUsernameOrEmailAsync(string usernameOrEmail)
         {
             var user = await _context.Users
@@ -95,24 +116,46 @@ namespace AgitekBackend.Services
             return userDto;
         }
 
-        public async Task<UserDTO> UpdateAsync(int id, UpdateUserDTO dto)
+        public async Task<UserDTO> UpdateRoleAsync(int id, UpdateUserRoleDTO dto, int currentUserId, RoleName currentRole)
         {
             var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
             if (user == null) throw new NotFoundException($"User not found");
 
             // Business logic checks
-            if (user.Role == RoleName.Customer && dto.Role != null && dto.Role != RoleName.Customer)
+            if (user.Role == RoleName.Customer && dto.Role != RoleName.Customer)
             {
                 throw new BadRequestException("Customer role cannot be changed to another role");
             }
-
-            if (user.Role == RoleName.Guest && dto.Role != null && dto.Role != RoleName.Guest && dto.Role != RoleName.Customer)
+            if (user.Role == RoleName.Guest && dto.Role != RoleName.Guest && dto.Role != RoleName.Customer)
             {
                 throw new BadRequestException("Guest role can only be upgraded to Customer");
             }
+            if (currentRole == RoleName.Admin && (dto.Role == RoleName.Admin || dto.Role == RoleName.SuperAdmin))
+            {
+                throw new ForbiddenException("You do not have permission to grant this role");
+            }
 
+            user.Role = dto.Role;
+            user.GrantedByUserId = currentUserId;
+            user.RoleGrantedAt = DateTime.Now;
+            user.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+            
+            // Reload with relations to map correctly
+            return await GetByIdAsync(id);
+        }
 
-            _mapper.Map(dto, user);
+        public async Task<UserDTO> UpdateStatusAsync(int id, UpdateUserStatusDTO dto)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) throw new NotFoundException($"User not found");
+
+            if (user.Role == RoleName.SuperAdmin && !dto.IsActive)
+            {
+                throw new BadRequestException("Cannot ban a Super Admin");
+            }
+
+            user.IsActive = dto.IsActive;
             user.UpdatedAt = DateTime.Now;
             await _context.SaveChangesAsync();
             return _mapper.Map<UserDTO>(user);

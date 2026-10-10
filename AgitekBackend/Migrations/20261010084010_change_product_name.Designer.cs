@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261005025046_db")]
-    partial class db
+    [Migration("20261010084010_change_product_name")]
+    partial class change_product_name
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -815,9 +815,6 @@ namespace AgitekBackend.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int?>("ProductId")
-                        .HasColumnType("int");
-
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
 
@@ -837,8 +834,6 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("Code")
                         .IsUnique();
-
-                    b.HasIndex("ProductId");
 
                     b.HasIndex("UserId");
 
@@ -1225,10 +1220,6 @@ namespace AgitekBackend.Migrations
 
             modelBuilder.Entity("AgitekBackend.Models.Voucher", b =>
                 {
-                    b.HasOne("AgitekBackend.Models.Product", null)
-                        .WithMany("Vouchers")
-                        .HasForeignKey("ProductId");
-
                     b.HasOne("AgitekBackend.Models.User", null)
                         .WithMany("Vouchers")
                         .HasForeignKey("UserId");
@@ -1299,8 +1290,6 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Reviews");
 
                     b.Navigation("Specifications");
-
-                    b.Navigation("Vouchers");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Refund", b =>

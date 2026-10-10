@@ -182,5 +182,17 @@ namespace AgitekBackend.Controllers
             await _productService.HardDeleteAsync(id);
             return Ok();
         }
+
+        [HttpPatch("{id}/restore")]
+        public async Task<ActionResult> Restore(int id)
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, id, new ProductManagementRequirement(ProductOperation.SoftDelete));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access this resource");
+
+            await _productService.RestoreAsync(id);
+            return Ok();
+        }
     }
 }

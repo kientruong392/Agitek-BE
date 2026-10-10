@@ -9,7 +9,6 @@ namespace AgitekBackend.DTOs.Mappers
         public UserMapper()
         {
             CreateMap<CreateUserDTO, User>();
-            CreateMap<UpdateUserDTO, User>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<User, UserDTO>();
             CreateMap<User, GrantedByUserDTO>();
         }

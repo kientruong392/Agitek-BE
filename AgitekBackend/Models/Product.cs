@@ -38,6 +38,5 @@ namespace AgitekBackend.Models
         public ICollection<ProductSpecification> Specifications { get; set; } = new List<ProductSpecification>();
         public ICollection<OrderDetail> OrderDetails { get; set; } = new List<OrderDetail>();
         public ICollection<Review> Reviews { get; set; } = new List<Review>();
-        public ICollection<Voucher> Vouchers { get; set; } = new List<Voucher>();
     }
 }

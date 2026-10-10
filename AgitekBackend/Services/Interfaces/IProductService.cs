@@ -18,5 +18,6 @@ namespace AgitekBackend.Services.Interfaces
         Task<bool> UpdateStockQuantityAsync(int id, int stockQuantity);
         Task<bool> SoftDeleteAsync(int id);
         Task<bool> HardDeleteAsync(int id);
+        Task<bool> RestoreAsync(int id);
     }
 }

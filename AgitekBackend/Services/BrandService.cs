@@ -67,9 +67,9 @@ namespace AgitekBackend.Services
 
             _mapper.Map(dto, brand);
             brand.Slug = Helpers.GenerateSlug(brand.Name);
-            if (await IsBrandExists(brand.Slug))
+            if (await IsBrandExists(brand.Slug, id))
             {
-                throw new BadRequestException($"Brand with slug '{brand.Slug}' already exists");
+                throw new BadRequestException($"Brand with slug '{brand.Slug}' already exists", "BRAND_ALREADY_EXISTS");
             }
             await _context.SaveChangesAsync();
             return _mapper.Map<BrandDTO>(brand);
@@ -82,15 +82,15 @@ namespace AgitekBackend.Services
             var hasProducts = await _context.Products.AnyAsync(p => p.BrandId == id);
             if (hasProducts)
             {
-                throw new BadRequestException($"Cannot delete this brand because it has associated products");
+                throw new BadRequestException($"Cannot delete this brand because it has associated products", "BRAND_HAS_PRODUCTS");
             }
             _context.Brands.Remove(brand);
             await _context.SaveChangesAsync();
             return true;
         }
-        public async Task<bool> IsBrandExists(string slug)
+        public async Task<bool> IsBrandExists(string slug, int? excludeId = null)
         {
-            return await _context.Brands.AnyAsync(b => b.Slug == slug);
+            return await _context.Brands.AnyAsync(b => b.Slug == slug && (!excludeId.HasValue || b.Id != excludeId.Value));
         }
     }
 }

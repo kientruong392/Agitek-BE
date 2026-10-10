@@ -67,24 +67,84 @@ namespace AgitekBackend.Data
 
         private static async Task SeedCatalogAsync(AppDbContext context)
         {
-            if (!await context.Categories.AnyAsync())
+            if (await context.Products.AnyAsync())
             {
-                var categoryNames = new[]
-                {
-                    "PC Gaming", "PC Văn phòng", "Linh kiện máy tính", "CPU", "Card đồ họa",
-                    "Bo mạch chủ", "RAM", "Ổ cứng", "Nguồn máy tính", "Phụ kiện máy tính"
-                };
-
-                var categoryEntities = categoryNames.Select((name, index) => new Category
-                {
-                    Code = $"C{index + 1:00}",
-                    CategoryName = name,
-                    Slug = Helpers.GenerateSlug(name)
-                }).ToList();
-
-                await context.Categories.AddRangeAsync(categoryEntities);
+                context.Products.RemoveRange(context.Products);
                 await context.SaveChangesAsync();
             }
+            if (await context.Categories.AnyAsync())
+            {
+                context.Categories.RemoveRange(context.Categories);
+                await context.SaveChangesAsync();
+            }
+
+            var categoryStructure = new[]
+            {
+                new { Name = "Linh kiện PC", Code = "PCPART", Sub = new[] { 
+                    new { Name = "CPU", Code = "CPU" },
+                    new { Name = "Mainboard", Code = "MAIN" },
+                    new { Name = "RAM", Code = "RAM" },
+                    new { Name = "VGA", Code = "VGA" },
+                    new { Name = "Ổ cứng (SSD/HDD)", Code = "DRIVE" },
+                    new { Name = "Nguồn (PSU)", Code = "PSU" },
+                    new { Name = "Vỏ case", Code = "CASE" }
+                }},
+                new { Name = "Bộ PC", Code = "BOPC", Sub = new[] {
+                    new { Name = "PC Gaming", Code = "GAMPC" },
+                    new { Name = "PC Đồ họa", Code = "GRAPC" },
+                    new { Name = "PC Văn phòng", Code = "OFFPC" }
+                }},
+                new { Name = "Laptop", Code = "LAP", Sub = new[] {
+                    new { Name = "Laptop Gaming", Code = "GAMLAP" },
+                    new { Name = "Laptop Đồ họa", Code = "GRALAP" },
+                    new { Name = "Laptop Văn phòng", Code = "OFFLAP" }
+                }},
+                new { Name = "Gaming Gear", Code = "GEAR", Sub = new[] {
+                    new { Name = "Bàn phím", Code = "KBD" },
+                    new { Name = "Chuột", Code = "MOUSE" },
+                    new { Name = "Tai nghe", Code = "HEADP" }
+                }},
+                new { Name = "Thiết bị mạng", Code = "NET", Sub = new[] {
+                    new { Name = "Router", Code = "ROUTER" },
+                    new { Name = "Switch", Code = "SWITCH" },
+                    new { Name = "Kiềm bấm mạng", Code = "KBNET" },
+                    new { Name = "LAN Adapter", Code = "LAN" }
+                }},
+                new { Name = "Phụ kiện", Code = "ACC", Sub = new[] {
+                    new { Name = "USB", Code = "USB" },
+                    new { Name = "Cáp kết nối (HDMI, DisplayPort, Type-C)", Code = "CABLE" },
+                    new { Name = "Hub chuyển đổi", Code = "HUB" },
+                    new { Name = "Đầu đọc thẻ", Code = "CARD" }
+                }}
+            };
+
+            var categoryEntities = new List<Category>();
+
+            foreach (var parent in categoryStructure)
+            {
+                var parentEntity = new Category
+                {
+                    Code = parent.Code,
+                    CategoryName = parent.Name,
+                    Slug = Helpers.GenerateSlug(parent.Name),
+                    SubCategories = new List<Category>()
+                };
+
+                foreach (var child in parent.Sub)
+                {
+                    parentEntity.SubCategories.Add(new Category
+                    {
+                        Code = child.Code,
+                        CategoryName = child.Name,
+                        Slug = Helpers.GenerateSlug(child.Name)
+                    });
+                }
+                
+                categoryEntities.Add(parentEntity);
+            }
+
+            await context.Categories.AddRangeAsync(categoryEntities);
+            await context.SaveChangesAsync();
 
             if (!await context.Brands.AnyAsync())
             {
@@ -106,16 +166,16 @@ namespace AgitekBackend.Data
                 await context.SaveChangesAsync();
             }
 
-            if (await context.Products.AnyAsync()) return;
-
-            var categories = await context.Categories.OrderBy(c => c.Id).Take(10).ToListAsync();
+            var categories = await context.Categories.Where(c => c.ParentCategoryId != null).OrderBy(c => c.Id).Take(10).ToListAsync();
+            if (!categories.Any()) categories = await context.Categories.OrderBy(c => c.Id).Take(10).ToListAsync();
+            
             var brands = await context.Brands.OrderBy(b => b.Id).Take(10).ToListAsync();
             var seedUser = await context.Users
                 .Where(u => u.Role != RoleName.Guest)
                 .OrderBy(u => u.Id)
                 .FirstOrDefaultAsync();
 
-            if (categories.Count < 10 || brands.Count < 10 || seedUser == null) return;
+            if (categories.Count == 0 || brands.Count < 10 || seedUser == null) return;
 
             var random = new Random(20251005);
             var statuses = new[]
@@ -153,11 +213,14 @@ namespace AgitekBackend.Data
                 var hasDiscount = random.Next(0, 100) < 45;
                 var createdAt = DateTime.Now.AddDays(-random.Next(0, 365));
 
+                var brand = brands[(index - 1) % brands.Count];
+                var category = categories[(index - 1) % categories.Count];
+
                 products.Add(new Product
                 {
-                    SKU = $"AGI-{index:000}",
-                    ProductName = $"{brands[(index - 1) % brands.Count].Name} {categories[(index - 1) % categories.Count].CategoryName} Pro {index:00}",
-                    Slug = $"{Helpers.GenerateSlug(brands[(index - 1) % brands.Count].Name)}-{Helpers.GenerateSlug(categories[(index - 1) % categories.Count].CategoryName)}-pro-{index:00}",
+                    SKU = $"{brand.Code}-{category.Code}-PROD{index:000}",
+                    ProductName = $"{brand.Name} {category.CategoryName} Cao Cấp {index:00}",
+                    Slug = $"{Helpers.GenerateSlug(brand.Name)}-{Helpers.GenerateSlug(category.CategoryName)}-cao-cap-{index:00}",
                     OriginalPrice = originalPrice,
                     DiscountPrice = hasDiscount ? Math.Round(originalPrice * (decimal)(random.Next(80, 96) / 100.0), 0) : null,
                     InitialQuantity = initialQuantity,

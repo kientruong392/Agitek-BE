@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgitekBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class db : Migration
+    public partial class change_product_name : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -227,6 +227,37 @@ namespace AgitekBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Vouchers",
+                columns: table => new
+                {
+                    Id = table.Column<int>(type: "int", nullable: false)
+                        .Annotation("SqlServer:Identity", "1, 1"),
+                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DiscountType = table.Column<int>(type: "int", nullable: false),
+                    DiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    MaxDiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
+                    MinOrderValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    InitialQuantity = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    UsedCount = table.Column<int>(type: "int", nullable: false),
+                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Status = table.Column<int>(type: "int", nullable: false),
+                    UserId = table.Column<int>(type: "int", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vouchers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vouchers_Users_UserId",
+                        column: x => x.UserId,
+                        principalTable: "Users",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "ProductImages",
                 columns: table => new
                 {
@@ -267,43 +298,6 @@ namespace AgitekBackend.Migrations
                         principalTable: "Products",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Vouchers",
-                columns: table => new
-                {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
-                    Name = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
-                    DiscountType = table.Column<int>(type: "int", nullable: false),
-                    DiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    MaxDiscountValue = table.Column<decimal>(type: "decimal(18,2)", nullable: true),
-                    MinOrderValue = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
-                    InitialQuantity = table.Column<int>(type: "int", nullable: false),
-                    Quantity = table.Column<int>(type: "int", nullable: false),
-                    UsedCount = table.Column<int>(type: "int", nullable: false),
-                    StartDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    EndDate = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Status = table.Column<int>(type: "int", nullable: false),
-                    ProductId = table.Column<int>(type: "int", nullable: true),
-                    UserId = table.Column<int>(type: "int", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_Vouchers", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Vouchers_Products_ProductId",
-                        column: x => x.ProductId,
-                        principalTable: "Products",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Vouchers_Users_UserId",
-                        column: x => x.UserId,
-                        principalTable: "Users",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -837,11 +831,6 @@ namespace AgitekBackend.Migrations
                 unique: true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_Vouchers_ProductId",
-                table: "Vouchers",
-                column: "ProductId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Vouchers_UserId",
                 table: "Vouchers",
                 column: "UserId");
@@ -906,13 +895,13 @@ namespace AgitekBackend.Migrations
                 name: "Orders");
 
             migrationBuilder.DropTable(
+                name: "Products");
+
+            migrationBuilder.DropTable(
                 name: "Locations");
 
             migrationBuilder.DropTable(
                 name: "Vouchers");
-
-            migrationBuilder.DropTable(
-                name: "Products");
 
             migrationBuilder.DropTable(
                 name: "Brands");

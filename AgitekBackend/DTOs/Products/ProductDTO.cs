@@ -1,6 +1,7 @@
 using AgitekBackend.Common;
 using AgitekBackend.DTOs.ProductImages;
 using AgitekBackend.DTOs.ProductSpecifications;
+using AgitekBackend.DTOs.Reviews;
 
 namespace AgitekBackend.DTOs.Products
 {
@@ -8,7 +9,7 @@ namespace AgitekBackend.DTOs.Products
     {
         public int Id { get; set; }
         public string SKU { get; set; } = string.Empty;
-        public string Name { get; set; } = string.Empty;
+        public string ProductName { get; set; } = string.Empty;
         public string Slug { get; set; } = string.Empty;
         public decimal OriginalPrice { get; set; }
         public decimal? DiscountPrice { get; set; }
@@ -24,8 +25,10 @@ namespace AgitekBackend.DTOs.Products
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }
+        public double AverageRating { get; set; }
         public List<ProductSpecificationDTO> Specifications { get; set; } = new();
         public List<ProductImageDTO> Images { get; set; } = new();
+        public List<ReviewDTO> Reviews { get; set; } = new();
     }
 }
 

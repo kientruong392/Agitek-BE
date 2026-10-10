@@ -3,9 +3,15 @@ using System.ComponentModel.DataAnnotations;
 
 namespace AgitekBackend.DTOs.Users
 {
-    public class UpdateUserDTO
+    public class UpdateUserRoleDTO
     {
-        public RoleName? Role { get; set; }
-        public bool? IsActive { get; set; }
+        [Required]
+        public RoleName Role { get; set; }
+    }
+
+    public class UpdateUserStatusDTO
+    {
+        [Required]
+        public bool IsActive { get; set; }
     }
 }

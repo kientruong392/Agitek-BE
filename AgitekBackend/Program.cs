@@ -100,6 +100,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, PaymentManagementHandler>()
 builder.Services.AddSingleton<IAuthorizationHandler, RefundManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ReviewManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, WarrantyManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, CloudinaryManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -199,6 +200,7 @@ builder.Services.AddScoped<IMediaService, MediaService>();
 builder.Services.AddScoped<IAuditLogService, AuditLogService>();
 builder.Services.AddScoped<ILocationService, LocationService>();
 builder.Services.AddScoped<IRefundService, RefundService>();
+builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
 
