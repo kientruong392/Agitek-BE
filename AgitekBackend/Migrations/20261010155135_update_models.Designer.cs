@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261010084010_change_product_name")]
-    partial class change_product_name
+    [Migration("20261010155135_update_models")]
+    partial class update_models
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -1020,8 +1020,9 @@ namespace AgitekBackend.Migrations
                         .IsRequired();
 
                     b.HasOne("AgitekBackend.Models.Voucher", "Voucher")
-                        .WithMany("Orders")
-                        .HasForeignKey("VoucherId");
+                        .WithMany()
+                        .HasForeignKey("VoucherId")
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.Navigation("ApprovedByUser");
 
@@ -1328,11 +1329,6 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Vouchers");
 
                     b.Navigation("Warranties");
-                });
-
-            modelBuilder.Entity("AgitekBackend.Models.Voucher", b =>
-                {
-                    b.Navigation("Orders");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Warranty", b =>

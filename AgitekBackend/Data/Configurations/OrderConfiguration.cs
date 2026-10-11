@@ -1,4 +1,4 @@
-﻿using AgitekBackend.Models;
+using AgitekBackend.Models;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -22,6 +22,11 @@ namespace AgitekBackend.Data.Configurations
             builder.HasOne(o => o.DeliveredByUser)
                    .WithMany(u => u.DeliveredOrders)
                    .HasForeignKey(o => o.DeliveredByUserId);
+
+            builder.HasOne(o => o.Voucher)
+                   .WithMany()
+                   .HasForeignKey(o => o.VoucherId)
+                   .OnDelete(DeleteBehavior.SetNull);
         }
     }
 }

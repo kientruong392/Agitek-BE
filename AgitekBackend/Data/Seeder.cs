@@ -15,6 +15,7 @@ namespace AgitekBackend.Data
             await context.Database.MigrateAsync();
             await SeedUsersAsync(context);
             await SeedCatalogAsync(context);
+            await SeedVouchersAsync(context);
         }
 
         private static async Task SeedUsersAsync(AppDbContext context)
@@ -239,6 +240,47 @@ namespace AgitekBackend.Data
             }
 
             await context.Products.AddRangeAsync(products);
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task SeedVouchersAsync(AppDbContext context)
+        {
+            if (await context.Vouchers.AnyAsync()) return;
+
+            var random = new Random(20251006);
+            var vouchers = new List<Voucher>();
+
+            for (var index = 1; index <= 20; index++)
+            {
+                var isPercentage = random.Next(0, 2) == 0;
+                var discountType = isPercentage ? DiscountType.Percentage : DiscountType.FixedAmount;
+                var discountValue = isPercentage ? random.Next(5, 51) : random.Next(1, 21) * 10000m;
+                var maxDiscountValue = isPercentage ? random.Next(5, 51) * 10000m : (decimal?)null;
+                var minOrderValue = random.Next(5, 201) * 10000m;
+                var initialQuantity = random.Next(50, 1001);
+                var quantity = random.Next(Math.Max(1, initialQuantity / 2), initialQuantity + 1);
+                var startDate = DateTime.Now.AddDays(-random.Next(0, 10));
+                var endDate = DateTime.Now.AddDays(random.Next(15, 60));
+
+                vouchers.Add(new Voucher
+                {
+                    Code = $"VOUCHER{index:00}-{random.Next(1000, 9999)}",
+                    Name = $"Voucher Khuyến Mãi {index:00}",
+                    Description = $"Mô tả cho voucher khuyến mãi số {index:00}. Giảm ngay {(isPercentage ? $"{discountValue}%" : $"{discountValue:N0}₫")}.",
+                    DiscountType = discountType,
+                    DiscountValue = discountValue,
+                    MaxDiscountValue = maxDiscountValue,
+                    MinOrderValue = minOrderValue,
+                    InitialQuantity = initialQuantity,
+                    Quantity = quantity,
+                    UsedCount = initialQuantity - quantity,
+                    StartDate = startDate,
+                    EndDate = endDate,
+                    Status = VoucherStatus.Active
+                });
+            }
+
+            await context.Vouchers.AddRangeAsync(vouchers);
             await context.SaveChangesAsync();
         }
     }

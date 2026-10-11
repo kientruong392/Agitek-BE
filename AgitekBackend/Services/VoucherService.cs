@@ -199,14 +199,14 @@ namespace AgitekBackend.Services
         private void ValidateDates(DateTime startDate, DateTime endDate)
         {
             var now = DateTime.Now;
-            if (startDate < now)
+            if (startDate < now.AddMinutes(-5))
             {
-                throw new BadRequestException("Start date cannot be before the current time");
+                throw new BadRequestException("INVALID_START_DATE");
             }
 
             if (endDate < startDate)
             {
-                throw new BadRequestException("End date cannot be before start date");
+                throw new BadRequestException("INVALID_END_DATE");
             }
         }
     }

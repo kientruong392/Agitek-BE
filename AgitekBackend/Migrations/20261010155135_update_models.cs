@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgitekBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class change_product_name : Migration
+    public partial class update_models : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -359,7 +359,8 @@ namespace AgitekBackend.Migrations
                         name: "FK_Orders_Vouchers_VoucherId",
                         column: x => x.VoucherId,
                         principalTable: "Vouchers",
-                        principalColumn: "Id");
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

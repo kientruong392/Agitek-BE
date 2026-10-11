@@ -1,5 +1,4 @@
-﻿using AgitekBackend.Common;
-using StackExchange.Redis;
+using AgitekBackend.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -30,6 +29,5 @@ namespace AgitekBackend.Models
         public DateTime StartDate { get; set; } = DateTime.Now;
         public DateTime EndDate { get; set; }
         public VoucherStatus Status { get; set; }
-        public ICollection<Order> Orders { get; set; } = new List<Order>();
     }
 }
