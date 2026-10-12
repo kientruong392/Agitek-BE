@@ -60,8 +60,22 @@ namespace AgitekBackend.Services
 
         public async Task<CategoryDTO> GetBySlugWithProductsAsync(string slug)
         {
-            var category = await _context.Categories.Include(c => c.Products).FirstOrDefaultAsync(c => c.Slug == slug);
+            var category = await _context.Categories.FirstOrDefaultAsync(c => c.Slug == slug);
             if (category == null) throw new NotFoundException($"Category not found");
+            if(category.ParentCategoryId != null)
+            {
+                category.Products = await _context.Products
+                    .Where(p => p.CategoryId == category.Id)
+                    .ToListAsync();
+            }
+            else
+            {
+                var subCategories = await _context.Categories
+                    .Where(c => c.ParentCategoryId == category.Id)
+                    .Include(c => c.Products)
+                    .ToListAsync();
+                category.Products = subCategories.SelectMany(c => c.Products).ToList();
+            }
             return _mapper.Map<CategoryDTO>(category);
         }
         public async Task<CategoryDTO> CreateAsync(CreateCategoryDTO dto)
