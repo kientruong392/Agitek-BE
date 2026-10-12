@@ -85,8 +85,6 @@ namespace AgitekBackend.Services
                 throw new BadRequestException("Order must have at least one order detail");
 
             var address = await _context.Addresses
-                .Include(a => a.Location)
-                    .ThenInclude(l => l!.Parent)
                 .FirstOrDefaultAsync(a => a.Id == dto.AddressId);
 
             if (address == null)
@@ -108,7 +106,7 @@ namespace AgitekBackend.Services
             order.TrackingNumber = await GenerateTrackingNumberAsync();
             order.UserId = currentUserId;
             order.AddressId = address.Id;
-            order.ToLocationId = address.LocationId;
+            order.ToLocationId = null;
             order.Address = BuildAddressSnapshot(_mapper.Map<AddressDTO>(address));
             order.ShippingFee = ShippingFeeAmount;
             order.DiscountAmount = 0;
@@ -294,19 +292,7 @@ namespace AgitekBackend.Services
 
         private string BuildAddressSnapshot(AddressDTO addressDto)
         {
-            var parts = new List<string> { addressDto.AddressLine };
-
-            var child = addressDto.Location;
-            if (child != null)
-            {
-                parts.Add(child.LocationName);
-
-                var parent = child.Parent;
-                if (parent != null)
-                    parts.Add(parent.LocationName);
-            }
-
-            return string.Join(", ", parts);
+            return addressDto.AddressLine;
         }
     }
 }

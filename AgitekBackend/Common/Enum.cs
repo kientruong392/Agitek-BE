@@ -1,4 +1,4 @@
-﻿namespace AgitekBackend.Common
+namespace AgitekBackend.Common
 {
     public enum Provider
     {
@@ -97,5 +97,12 @@
         Processing,
         Completed,
         Rejected
+    }
+
+    public enum LocationStatus
+    {
+        Active,
+        Inactive,
+        Maintenance
     }
 }

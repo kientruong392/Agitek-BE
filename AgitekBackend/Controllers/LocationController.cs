@@ -44,19 +44,19 @@ namespace AgitekBackend.Controllers
             return Ok(locations);
         }
 
+        [HttpGet("warehouses")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<LocationDTO>>> GetAllWarehouses()
+        {
+            var warehouses = await _locationService.GetAllWarehousesAsync();
+            return Ok(warehouses);
+        }
+
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<LocationDTO>> GetById(int id)
         {
             var location = await _locationService.GetByIdAsync(id);
-            return Ok(location);
-        }
-
-        [HttpGet("{id}/children")]
-        [AllowAnonymous]
-        public async Task<ActionResult<LocationDTO>> GetByIdWithChildrens(int id)
-        {
-            var location = await _locationService.GetByIdWithChildrensAsync(id);
             return Ok(location);
         }
 

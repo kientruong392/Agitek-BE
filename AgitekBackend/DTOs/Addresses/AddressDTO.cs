@@ -1,5 +1,3 @@
-using AgitekBackend.DTOs.Locations;
-
 namespace AgitekBackend.DTOs.Addresses
 {
     public class AddressDTO
@@ -9,8 +7,6 @@ namespace AgitekBackend.DTOs.Addresses
         public string ReceiverName { get; set; } = string.Empty;
         public string PhoneNumber { get; set; } = string.Empty;
         public string AddressLine { get; set; } = string.Empty;
-        public int LocationId { get; set; }
-        public LocationDTO? Location { get; set; }
         public bool IsDefault { get; set; }
     }
 }

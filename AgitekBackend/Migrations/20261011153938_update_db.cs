@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace AgitekBackend.Migrations
 {
     /// <inheritdoc />
-    public partial class update_models : Migration
+    public partial class update_db : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -56,22 +56,15 @@ namespace AgitekBackend.Migrations
                     Id = table.Column<int>(type: "int", nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
                     LocationCode = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
-                    LocationName = table.Column<string>(type: "nvarchar(30)", maxLength: 30, nullable: false),
+                    LocationName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
                     Latitude = table.Column<decimal>(type: "decimal(10,8)", nullable: false),
                     Longitude = table.Column<decimal>(type: "decimal(11,8)", nullable: false),
-                    ParentId = table.Column<int>(type: "int", nullable: true),
                     IsWarehouse = table.Column<bool>(type: "bit", nullable: false),
-                    AddressLine = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true)
+                    Status = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Locations", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Locations_Locations_ParentId",
-                        column: x => x.ParentId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -114,18 +107,11 @@ namespace AgitekBackend.Migrations
                     ReceiverName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
                     AddressLine = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    LocationId = table.Column<int>(type: "int", nullable: false),
                     IsDefault = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Addresses", x => x.Id);
-                    table.ForeignKey(
-                        name: "FK_Addresses_Locations_LocationId",
-                        column: x => x.LocationId,
-                        principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
                         name: "FK_Addresses_Users_UserId",
                         column: x => x.UserId,
@@ -312,7 +298,7 @@ namespace AgitekBackend.Migrations
                     DeliveredByUserId = table.Column<int>(type: "int", nullable: true),
                     VoucherId = table.Column<int>(type: "int", nullable: true),
                     FromLocationId = table.Column<int>(type: "int", nullable: true),
-                    ToLocationId = table.Column<int>(type: "int", nullable: false),
+                    ToLocationId = table.Column<int>(type: "int", nullable: true),
                     AddressId = table.Column<int>(type: "int", nullable: true),
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     SubtotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
@@ -337,8 +323,7 @@ namespace AgitekBackend.Migrations
                         name: "FK_Orders_Locations_ToLocationId",
                         column: x => x.ToLocationId,
                         principalTable: "Locations",
-                        principalColumn: "Id",
-                        onDelete: ReferentialAction.Cascade);
+                        principalColumn: "Id");
                     table.ForeignKey(
                         name: "FK_Orders_Users_ApprovedByUserId",
                         column: x => x.ApprovedByUserId,
@@ -616,11 +601,6 @@ namespace AgitekBackend.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Addresses_LocationId",
-                table: "Addresses",
-                column: "LocationId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_Addresses_UserId",
                 table: "Addresses",
                 column: "UserId");
@@ -652,11 +632,6 @@ namespace AgitekBackend.Migrations
                 table: "Locations",
                 column: "LocationCode",
                 unique: true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_Locations_ParentId",
-                table: "Locations",
-                column: "ParentId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Medias_OrderId",

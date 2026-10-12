@@ -12,8 +12,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261010155135_update_models")]
-    partial class update_models
+    [Migration("20261011153938_update_db")]
+    partial class update_db
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -41,9 +41,6 @@ namespace AgitekBackend.Migrations
                     b.Property<bool>("IsDefault")
                         .HasColumnType("bit");
 
-                    b.Property<int>("LocationId")
-                        .HasColumnType("int");
-
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
                         .HasMaxLength(20)
@@ -58,8 +55,6 @@ namespace AgitekBackend.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("LocationId");
 
                     b.HasIndex("UserId");
 
@@ -174,10 +169,6 @@ namespace AgitekBackend.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
-                    b.Property<string>("AddressLine")
-                        .HasMaxLength(255)
-                        .HasColumnType("nvarchar(255)");
-
                     b.Property<bool>("IsWarehouse")
                         .HasColumnType("bit");
 
@@ -191,21 +182,19 @@ namespace AgitekBackend.Migrations
 
                     b.Property<string>("LocationName")
                         .IsRequired()
-                        .HasMaxLength(30)
-                        .HasColumnType("nvarchar(30)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.Property<decimal>("Longitude")
                         .HasColumnType("decimal(11, 8)");
 
-                    b.Property<int?>("ParentId")
+                    b.Property<int?>("Status")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
 
                     b.HasIndex("LocationCode")
                         .IsUnique();
-
-                    b.HasIndex("ParentId");
 
                     b.ToTable("Locations");
                 });
@@ -299,7 +288,7 @@ namespace AgitekBackend.Migrations
                     b.Property<decimal>("SubtotalPrice")
                         .HasColumnType("decimal(18, 2)");
 
-                    b.Property<int>("ToLocationId")
+                    b.Property<int?>("ToLocationId")
                         .HasColumnType("int");
 
                     b.Property<decimal>("TotalPrice")
@@ -915,19 +904,11 @@ namespace AgitekBackend.Migrations
 
             modelBuilder.Entity("AgitekBackend.Models.Address", b =>
                 {
-                    b.HasOne("AgitekBackend.Models.Location", "Location")
-                        .WithMany()
-                        .HasForeignKey("LocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
                     b.HasOne("AgitekBackend.Models.User", "User")
                         .WithMany("Addresses")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.Navigation("Location");
 
                     b.Navigation("User");
                 });
@@ -951,16 +932,6 @@ namespace AgitekBackend.Migrations
                         .OnDelete(DeleteBehavior.Restrict);
 
                     b.Navigation("ParentCategory");
-                });
-
-            modelBuilder.Entity("AgitekBackend.Models.Location", b =>
-                {
-                    b.HasOne("AgitekBackend.Models.Location", "Parent")
-                        .WithMany("Children")
-                        .HasForeignKey("ParentId")
-                        .OnDelete(DeleteBehavior.Restrict);
-
-                    b.Navigation("Parent");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Media", b =>
@@ -1009,9 +980,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasOne("AgitekBackend.Models.Location", "ToLocation")
                         .WithMany()
-                        .HasForeignKey("ToLocationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
+                        .HasForeignKey("ToLocationId");
 
                     b.HasOne("AgitekBackend.Models.User", "User")
                         .WithMany("Orders")
@@ -1255,11 +1224,6 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Products");
 
                     b.Navigation("SubCategories");
-                });
-
-            modelBuilder.Entity("AgitekBackend.Models.Location", b =>
-                {
-                    b.Navigation("Children");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Order", b =>

@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace AgitekBackend.Models
@@ -15,8 +15,6 @@ namespace AgitekBackend.Models
         public string PhoneNumber { get; set; } = string.Empty;
         [Required, MaxLength(255)]
         public string AddressLine { get; set; } = string.Empty;
-        public int LocationId { get; set; }
-        public Location? Location { get; set; }
         public bool IsDefault { get; set; } = false;
     }
 }

@@ -16,7 +16,7 @@ namespace AgitekBackend.DTOs.Orders
         public int? DeliveredByUserId { get; set; }
         public int? VoucherId { get; set; }
         public int? FromLocationId { get; set; }
-        public int ToLocationId { get; set; }
+        public int? ToLocationId { get; set; }
         public string Address { get; set; } = string.Empty;
         public decimal SubtotalPrice { get; set; }
         public decimal ShippingFee { get; set; }

@@ -1,4 +1,3 @@
-using AgitekBackend.DTOs.Locations;
 using System.ComponentModel.DataAnnotations;
 
 namespace AgitekBackend.DTOs.Addresses
@@ -11,7 +10,6 @@ namespace AgitekBackend.DTOs.Addresses
         public string? PhoneNumber { get; set; }
         [MaxLength(255, ErrorMessage = "Address Line cannot exceed 255 characters")]
         public string? AddressLine { get; set; }
-        public int? LocationId { get; set; }
         public bool? IsDefault { get; set; }
     }
 }

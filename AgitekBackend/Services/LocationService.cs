@@ -26,20 +26,17 @@ namespace AgitekBackend.Services
             return _mapper.Map<IEnumerable<LocationDTO>>(locations);
         }
 
-        public async Task<LocationDTO> GetByIdAsync(int id)
+        public async Task<IEnumerable<LocationDTO>> GetAllWarehousesAsync()
         {
-            var location = await _context.Locations
-                .Include(l => l.Parent)
-                .FirstOrDefaultAsync(l => l.Id == id);
-            if (location == null) throw new NotFoundException("Location not found");
-            return _mapper.Map<LocationDTO>(location);
+            var warehouses = await _context.Locations
+                .Where(l => l.IsWarehouse)
+                .ToListAsync();
+            return _mapper.Map<IEnumerable<LocationDTO>>(warehouses);
         }
 
-        public async Task<LocationDTO> GetByIdWithChildrensAsync(int id)
+        public async Task<LocationDTO> GetByIdAsync(int id)
         {
-            var location = await _context.Locations
-                .Include(l => l.Children)
-                .FirstOrDefaultAsync(l => l.Id == id);
+            var location = await _context.Locations.FindAsync(id);
             if (location == null) throw new NotFoundException("Location not found");
             return _mapper.Map<LocationDTO>(location);
         }

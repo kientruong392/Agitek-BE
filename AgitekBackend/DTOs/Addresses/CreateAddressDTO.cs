@@ -1,4 +1,3 @@
-using AgitekBackend.DTOs.Locations;
 using System.ComponentModel.DataAnnotations;
 
 namespace AgitekBackend.DTOs.Addresses
@@ -14,8 +13,6 @@ namespace AgitekBackend.DTOs.Addresses
         [Required(ErrorMessage = "Address Line cannot be empty")]
         [MaxLength(255, ErrorMessage = "Address Line cannot exceed 255 characters")]
         public string AddressLine { get; set; } = string.Empty;
-        [Required(ErrorMessage = "Location cannot be empty")]
-        public int LocationId { get; set; }
         public bool IsDefault { get; set; } = false;
     }
 }

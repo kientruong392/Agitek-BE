@@ -22,7 +22,6 @@ namespace AgitekBackend.Services
         public async Task<IEnumerable<AddressDTO>> GetByUserIdAsync(int userId)
         {
             var addresses = await _context.Addresses
-                .Include(a => a.Location)
                 .Where(a => a.UserId == userId)
                 .ToListAsync();
             return _mapper.Map<IEnumerable<AddressDTO>>(addresses);
@@ -31,7 +30,6 @@ namespace AgitekBackend.Services
         public async Task<AddressDTO> GetByIdAsync(int id)
         {
             var address = await _context.Addresses
-                .Include(a => a.Location)
                 .FirstOrDefaultAsync(a => a.Id == id);
             if (address == null) throw new NotFoundException("Address not found");
             return _mapper.Map<AddressDTO>(address);
@@ -39,11 +37,6 @@ namespace AgitekBackend.Services
 
         public async Task<AddressDTO> CreateAsync(CreateAddressDTO dto, int currentUserId)
         {
-            if (!await _context.Locations.AnyAsync(l => l.Id == dto.LocationId))
-            {
-                throw new BadRequestException("Location not found");
-            }
-
             var existingAddress = await _context.Addresses
                 .FirstOrDefaultAsync(a => a.UserId == currentUserId);
 
@@ -79,11 +72,6 @@ namespace AgitekBackend.Services
         {
             var address = await _context.Addresses.FindAsync(id);
             if (address == null) throw new NotFoundException("Address not found");
-
-            if (dto.LocationId.HasValue && !await _context.Locations.AnyAsync(l => l.Id == dto.LocationId.Value))
-            {
-                throw new BadRequestException("Location not found");
-            }
 
             if (dto.IsDefault == false)
             {

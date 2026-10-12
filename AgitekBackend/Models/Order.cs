@@ -1,4 +1,4 @@
-﻿using AgitekBackend.Common;
+using AgitekBackend.Common;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -15,7 +15,7 @@ namespace AgitekBackend.Models
         public int? DeliveredByUserId { get; set; }
         public int? VoucherId { get; set; }
         public int? FromLocationId { get; set; }
-        public int ToLocationId { get; set; }
+        public int? ToLocationId { get; set; }
         public int? AddressId { get; set; }
         [Required, MaxLength(500)]
         public string Address { get; set; } = string.Empty;
