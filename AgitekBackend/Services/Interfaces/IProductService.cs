@@ -10,6 +10,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<IEnumerable<ProductDTO>> GetNewestAsync(int count, CurrentUser? currentUser);
         Task<IEnumerable<ProductDTO>> GetByCategoryAsync(int categoryId, CurrentUser? currentUser);
         Task<ProductDTO> GetByIdAsync(int id);
+        Task<ProductDTO> GetBySlugAsync(string slug);
         Task<ProductDTO> CreateAsync(CreateProductDTO dto, int currentUserId);
         Task<ProductDTO> UpdateAsync(int id, UpdateProductDTO dto);
         Task<bool> ChangeStatusAsync(int id, ProductStatus newStatus);

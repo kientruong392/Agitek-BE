@@ -40,6 +40,7 @@ namespace AgitekBackend.Controllers
         }
 
         [HttpGet("product/{productId}")]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<ReviewDTO>>> GetAll(int productId)
         {
             var reviews = await _reviewService.GetAllAsync(productId);

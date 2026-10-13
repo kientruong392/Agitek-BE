@@ -28,6 +28,9 @@ namespace AgitekBackend.Services
                 .AsNoTracking()
                 .Where(r => r.ProductId == productId)
                 .Include(r => r.Medias)
+                .Include(r => r.User)
+                    .ThenInclude(user => user!.Profile)
+                .OrderByDescending(r => r.CreatedAt)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ReviewDTO>>(reviews);

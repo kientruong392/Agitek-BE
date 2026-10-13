@@ -111,6 +111,19 @@ namespace AgitekBackend.Services
             return _mapper.Map<ProductDTO>(product);
         }
 
+        public async Task<ProductDTO> GetBySlugAsync(string slug)
+        {
+            var product = await _context.Products
+                .Include(p => p.Images)
+                .Include(p => p.Specifications)
+                .FirstOrDefaultAsync(p => p.Slug == slug
+                    && p.Status != ProductStatus.Pending
+                    && p.Status != ProductStatus.Deleted
+                    && p.Status != ProductStatus.Hidden);
+            if (product == null) throw new NotFoundException("Product not found");
+            return _mapper.Map<ProductDTO>(product);
+        }
+
         public async Task<ProductDTO> CreateAsync(CreateProductDTO dto, int currentUserId)
         {
             if (dto.Images == null || !dto.Images.Any())

@@ -1,4 +1,5 @@
 using AgitekBackend.DTOs.Medias;
+using AgitekBackend.DTOs.Users;
 
 namespace AgitekBackend.DTOs.Reviews
 {
@@ -8,6 +9,7 @@ namespace AgitekBackend.DTOs.Reviews
         public int OrderId { get; set; }
         public int ProductId { get; set; }
         public int UserId { get; set; }
+        public UserDTO? User { get; set; }
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public int? ReplyUserId { get; set; }
@@ -15,8 +17,6 @@ namespace AgitekBackend.DTOs.Reviews
         public DateTime? ReplyCreatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
-        public List<MediaDTO> Medias { get; set; } = new();
+        public List<MediaDTO> Medias { get; set; } = new List<MediaDTO>();
     }
 }
-
-

@@ -15,6 +15,7 @@ namespace AgitekBackend.Data
             await context.Database.MigrateAsync();
             await SeedUsersAsync(context);
             await SeedCatalogAsync(context);
+            await SeedProductDetailAsync(context);
             await SeedVouchersAsync(context);
             await SeedLocationsAsync(context);
         }
@@ -69,11 +70,7 @@ namespace AgitekBackend.Data
 
         private static async Task SeedCatalogAsync(AppDbContext context)
         {
-            if (await context.Products.AnyAsync())
-            {
-                context.Products.RemoveRange(context.Products);
-                await context.SaveChangesAsync();
-            }
+            if (await context.Products.AnyAsync()) return;
             if (await context.Categories.AnyAsync())
             {
                 context.Categories.RemoveRange(context.Categories);
@@ -241,6 +238,138 @@ namespace AgitekBackend.Data
             }
 
             await context.Products.AddRangeAsync(products);
+            await context.SaveChangesAsync();
+        }
+
+        private static async Task SeedProductDetailAsync(AppDbContext context)
+        {
+            var product = await context.Products
+                .FirstOrDefaultAsync(item => item.SKU == "B03-RAM-PROD013");
+            if (product == null) return;
+
+            product.Description = "RAM DDR5 32GB hiệu năng cao, phù hợp cho máy tính chơi game và làm việc chuyên nghiệp. Thiết kế tản nhiệt giúp duy trì hoạt động ổn định, hỗ trợ đa nhiệm mượt mà và dễ dàng nâng cấp hệ thống. Sản phẩm gồm hai thanh nhớ 16GB, bảo hành 36 tháng.";
+
+            if (!await context.ProductImages.AnyAsync(image => image.ProductId == product.Id))
+            {
+                context.ProductImages.AddRange(
+                    new ProductImage { ProductId = product.Id, ImageUrl = "https://placehold.co/900x900/png?text=DDR5+RAM+Front", IsPrimary = true, SortOrder = 0 },
+                    new ProductImage { ProductId = product.Id, ImageUrl = "https://placehold.co/900x900/png?text=DDR5+RAM+Heatspreader", SortOrder = 1 },
+                    new ProductImage { ProductId = product.Id, ImageUrl = "https://placehold.co/900x900/png?text=DDR5+RAM+Details", SortOrder = 2 }
+                );
+            }
+
+            var specifications = new Dictionary<string, string>
+            {
+                ["Dung lượng"] = "32GB (2 x 16GB)",
+                ["Loại RAM"] = "DDR5",
+                ["Tốc độ"] = "5600MHz",
+                ["Độ trễ"] = "CL36",
+                ["Điện áp"] = "1.25V",
+                ["Tản nhiệt"] = "Nhôm",
+                ["Bảo hành"] = "36 tháng"
+            };
+
+            var existingSpecifications = await context.ProductSpecifications
+                .Where(specification => specification.ProductId == product.Id)
+                .ToListAsync();
+            foreach (var (name, value) in specifications)
+            {
+                var specification = existingSpecifications.FirstOrDefault(item => item.SpecName == name);
+                if (specification == null)
+                {
+                    context.ProductSpecifications.Add(new ProductSpecification
+                    {
+                        ProductId = product.Id,
+                        SpecName = name,
+                        SpecValue = value
+                    });
+                }
+                else
+                {
+                    specification.SpecValue = value;
+                }
+            }
+
+            if (!await context.Reviews.AnyAsync(review => review.ProductId == product.Id))
+            {
+                var customers = await context.Users
+                    .Where(user => user.Role == RoleName.Customer)
+                    .OrderBy(user => user.Id)
+                    .ToListAsync();
+                if (customers.Count == 0)
+                {
+                    customers = await context.Users
+                        .Where(user => user.Role != RoleName.Guest)
+                        .OrderBy(user => user.Id)
+                        .Take(5)
+                        .ToListAsync();
+                }
+
+                if (customers.Count > 0)
+                {
+                    var sampleReviews = new[]
+                    {
+                        new { Rating = 5, Comment = "RAM chạy ổn định, bật XMP dễ dàng và máy khởi động nhanh. Đóng gói cẩn thận." },
+                        new { Rating = 4, Comment = "Hiệu năng tốt, đa nhiệm mượt. Tản nhiệt đẹp và nhiệt độ khi chơi game vẫn ổn." },
+                        new { Rating = 3, Comment = "RAM hoạt động ổn định, lắp đặt đơn giản. Mong có thêm hướng dẫn cấu hình XMP chi tiết." },
+                        new { Rating = 5, Comment = "Đúng thông số, tương thích tốt với cấu hình DDR5 của mình. Rất hài lòng." },
+                        new { Rating = 4, Comment = "Sản phẩm tốt, giao hàng nhanh. Dùng cho công việc và chơi game đều đáp ứng." }
+                    };
+                    var now = DateTime.Now;
+                    var orders = new List<Order>();
+                    var orderDetails = new List<OrderDetail>();
+                    var reviews = new List<Review>();
+
+                    for (var index = 0; index < sampleReviews.Length; index++)
+                    {
+                        var customer = customers[index % customers.Count];
+                        var createdAt = now.AddDays(-(sampleReviews.Length - index) * 3);
+                        var order = new Order
+                        {
+                            TrackingNumber = $"SEED-RAM-{index + 1:000}",
+                            UserId = customer.Id,
+                            Address = "Địa chỉ mẫu, Quận 1, TP. Hồ Chí Minh",
+                            SubtotalPrice = product.OriginalPrice,
+                            ShippingFee = 0,
+                            DiscountAmount = 0,
+                            TotalPrice = product.OriginalPrice,
+                            Status = OrderStatus.Completed,
+                            CreatedAt = createdAt,
+                            UpdatedAt = createdAt
+                        };
+                        orders.Add(order);
+                        orderDetails.Add(new OrderDetail
+                        {
+                            Order = order,
+                            ProductId = product.Id,
+                            Quantity = 1,
+                            UnitPrice = product.OriginalPrice,
+                            TotalPrice = product.OriginalPrice
+                        });
+                        reviews.Add(new Review
+                        {
+                            OrderDetail = orderDetails[^1],
+                            ProductId = product.Id,
+                            UserId = customer.Id,
+                            Rating = sampleReviews[index].Rating,
+                            Comment = sampleReviews[index].Comment,
+                            CreatedAt = createdAt,
+                            UpdatedAt = createdAt
+                        });
+                    }
+
+                    await context.Orders.AddRangeAsync(orders);
+                    await context.OrderDetails.AddRangeAsync(orderDetails);
+                    await context.Reviews.AddRangeAsync(reviews);
+                }
+            }
+
+            await context.SaveChangesAsync();
+            var averageRating = await context.Reviews
+                .Where(review => review.ProductId == product.Id)
+                .AverageAsync(review => (double?)review.Rating);
+            product.AverageRating = averageRating ?? 0;
+            product.UpdatedAt = DateTime.Now;
             await context.SaveChangesAsync();
         }
 

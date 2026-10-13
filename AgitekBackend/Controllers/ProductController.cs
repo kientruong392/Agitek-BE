@@ -68,6 +68,14 @@ namespace AgitekBackend.Controllers
             return Ok(products);
         }
 
+        [HttpGet("slug/{slug}")]
+        [AllowAnonymous]
+        public async Task<ActionResult<ProductDTO>> GetBySlug(string slug)
+        {
+            var product = await _productService.GetBySlugAsync(slug);
+            return Ok(product);
+        }
+
         [HttpGet("{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<ProductDTO>> GetById(int id)
