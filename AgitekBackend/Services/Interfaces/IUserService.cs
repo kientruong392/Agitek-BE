@@ -11,6 +11,8 @@ namespace AgitekBackend.Services.Interfaces
         Task<IEnumerable<UserDTO>> GetAllCustomersAsync();
         Task<IEnumerable<UserDTO>> GetAllStaffAsync();
         Task<UserDTO> GetByIdAsync(int id);
+        Task<UserDTO> GetMeAsync(int id);
+        Task ChangeMyPasswordAsync(int id, string oldPassword, string newPassword);
         Task<UserDTO> CreateAsync(CreateUserDTO dto, int? currentUserId = null);
         Task<UserDTO> CreateStaffAsync(CreateStaffDTO dto, int currentUserId);
         Task<UserDTO> UpdateRoleAsync(int id, UpdateUserRoleDTO dto, int currentUserId, RoleName currentRole);

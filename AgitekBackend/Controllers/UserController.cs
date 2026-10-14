@@ -52,7 +52,7 @@ namespace AgitekBackend.Controllers
             return Ok(users);
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id:int}")]
         public async Task<ActionResult<UserDTO>> GetById(int id)
         {
             var authResult = await _authorizationService.AuthorizeAsync(
@@ -116,18 +116,51 @@ namespace AgitekBackend.Controllers
             return Ok(updatedUser);
         }
 
+        [HttpGet("me")]
+        public async Task<ActionResult<UserDTO>> GetMe()
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
+            return Ok(await _userService.GetMeAsync(currentUser.Id));
+        }
+
         [HttpPatch("my-account")]
         public async Task<ActionResult<UserDTO>> UpdateMyAccount([FromBody] UpdateMyAccountDTO dto)
         {
-            var currentUserIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? User.FindFirstValue("sub") ?? User.FindFirstValue("id");
-            if (!int.TryParse(currentUserIdStr, out var currentUserId))
-                return Unauthorized();
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
 
-            var updatedUser = await _userService.UpdateAccountAsync(currentUserId, dto);
+            var updatedUser = await _userService.UpdateAccountAsync(currentUser.Id, dto);
             return Ok(updatedUser);
         }
 
-        [HttpDelete("{id}")]
+        [HttpPatch("my-account/password")]
+        public async Task<IActionResult> ChangeMyPassword([FromBody] ChangeMyPasswordDTO dto)
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
+
+            await _userService.ChangeMyPasswordAsync(currentUser.Id, dto.OldPassword, dto.NewPassword);
+            return NoContent();
+        }
+
+        private CurrentUser? GetCurrentUser()
+        {
+            var roleClaim = User.FindFirstValue(ClaimTypes.Role) ?? User.FindFirstValue("role");
+            var idClaim = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("id")
+                ?? User.FindFirstValue("sub");
+
+            if (roleClaim != null && Enum.TryParse<RoleName>(roleClaim, true, out var role) &&
+                idClaim != null && int.TryParse(idClaim, out var id))
+            {
+                return new CurrentUser { Id = id, Role = role };
+            }
+
+            return null;
+        }
+
+        [HttpDelete("{id:int}")]
         public async Task<ActionResult> Delete(int id)
         {
             var authResult = await _authorizationService.AuthorizeAsync(

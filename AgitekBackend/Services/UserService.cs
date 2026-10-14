@@ -41,6 +41,28 @@ namespace AgitekBackend.Services
             return _mapper.Map<UserDTO>(user);
         }
 
+        public async Task<UserDTO> GetMeAsync(int id)
+        {
+            var user = await _context.Users
+                .AsNoTracking()
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) throw new NotFoundException("User not found");
+            return _mapper.Map<UserDTO>(user);
+        }
+
+        public async Task ChangeMyPasswordAsync(int id, string oldPassword, string newPassword)
+        {
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == id);
+            if (user == null) throw new NotFoundException("User not found");
+            if (user.PasswordHash == null || !AuthUtils.VerifyPassword(oldPassword, user.PasswordHash))
+                throw new BadRequestException("Incorrect old password");
+
+            user.PasswordHash = AuthUtils.HashPassword(newPassword);
+            user.UpdatedAt = DateTime.Now;
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IEnumerable<UserDTO>> GetAllCustomersAsync()
         {
             var users = await _context.Users
