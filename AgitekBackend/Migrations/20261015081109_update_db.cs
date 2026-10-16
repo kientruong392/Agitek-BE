@@ -303,10 +303,11 @@ namespace AgitekBackend.Migrations
                     Address = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
                     SubtotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     ShippingFee = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
+                    ShippingType = table.Column<int>(type: "int", nullable: false),
                     DiscountAmount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     TotalPrice = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
-                    TransactionId = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    TransactionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Note = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
                     CreatedAt = table.Column<DateTime>(type: "datetime2", maxLength: 500, nullable: false),
                     UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
@@ -419,8 +420,9 @@ namespace AgitekBackend.Migrations
                     Amount = table.Column<decimal>(type: "decimal(18,2)", nullable: false),
                     PaymentMethod = table.Column<int>(type: "int", nullable: false),
                     Status = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
                     TransactionId = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
-                    GatewayResponse = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    GatewayResponse = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     ExpiresAt = table.Column<DateTime>(type: "datetime2", nullable: true),
                     PaidAt = table.Column<DateTime>(type: "datetime2", nullable: true)
                 },

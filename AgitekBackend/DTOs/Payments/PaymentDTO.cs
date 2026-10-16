@@ -14,5 +14,10 @@ namespace AgitekBackend.DTOs.Payments
         public string? GatewayResponse { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public DateTime? PaidAt { get; set; }
+        public string? QrCodeUrl { get; set; }
+        public string? BankId { get; set; }
+        public string? AccountNumber { get; set; }
+        public string? AccountName { get; set; }
+        public string? TransferDescription { get; set; }
     }
 }

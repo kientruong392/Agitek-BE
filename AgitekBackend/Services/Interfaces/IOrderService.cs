@@ -8,6 +8,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<IEnumerable<OrderDTO>> GetAllAsync(int userId, bool assignedToDelivery = false);
         Task<OrderDTO> GetByIdAsync(int id);
         Task<OrderDTO> CreateAsync(CreateOrderDTO dto, int currentUserId);
+        Task<OrderDTO> CreateGuestOrderAsync(CreateGuestOrderDTO dto);
         Task<OrderDTO> UpdateAsync(int id, UpdateOrderDTO dto);
         Task<OrderDTO> CancelOrderAsync(int id);
         Task<OrderDTO> CompleteOrderAsync(int id);

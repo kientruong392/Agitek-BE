@@ -47,6 +47,16 @@ namespace AgitekBackend.Authorization.Handlers
                 return;
             }
 
+            if (requirement.Operation == OrderOperation.Update)
+            {
+                if (targetOrder?.UserId == currentUserId ||
+                    currentRole == RoleName.Manager ||
+                    currentRole == RoleName.Admin ||
+                    currentRole == RoleName.SuperAdmin)
+                    context.Succeed(requirement);
+                return;
+            }
+
             if (requirement.Operation == OrderOperation.Cancel)
             {
                 if (targetOrder?.UserId == currentUserId)

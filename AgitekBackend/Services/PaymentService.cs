@@ -1,4 +1,5 @@
 using AgitekBackend.Common;
+using AgitekBackend.Common.Settings;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Payments;
@@ -13,11 +14,16 @@ namespace AgitekBackend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly VietQRSettings _vietQrSettings;
 
-        public PaymentService(AppDbContext context, IMapper mapper)
+        public PaymentService(
+            AppDbContext context,
+            IMapper mapper,
+            Microsoft.Extensions.Options.IOptions<VietQRSettings> vietQrSettings)
         {
             _context = context;
             _mapper = mapper;
+            _vietQrSettings = vietQrSettings.Value;
         }
 
         public async Task<PaymentDTO> CreateAsync(CreatePaymentDTO dto)
@@ -29,25 +35,26 @@ namespace AgitekBackend.Services
             var payment = _mapper.Map<Payment>(dto);
             payment.Amount = order.TotalPrice;
             payment.Status = PaymentStatus.Pending;
-            payment.ExpiresAt = payment.PaymentMethod == PaymentMethod.COD
-                ? null
-                : DateTime.UtcNow.AddHours(24);
+            payment.ExpiresAt = payment.PaymentMethod == PaymentMethod.Bank
+                ? DateTime.UtcNow.AddMinutes(15)
+                : null;
             payment.Order = order;
 
             _context.Payments.Add(payment);
             await _context.SaveChangesAsync();
 
-            return _mapper.Map<PaymentDTO>(payment);
+            return ToPaymentDTO(payment);
         }
 
         public async Task<IEnumerable<PaymentDTO>> GetByOrderIdAsync(int orderId)
         {
             var payments = await _context.Payments
                 .AsNoTracking()
+                .Include(payment => payment.Order)
                 .Where(p => p.OrderId == orderId)
                 .ToListAsync();
 
-            return _mapper.Map<IEnumerable<PaymentDTO>>(payments);
+            return payments.Select(ToPaymentDTO);
         }
 
         public async Task<PaymentDTO> GetByIdAsync(int id)
@@ -58,7 +65,7 @@ namespace AgitekBackend.Services
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (payment == null)
                 throw new NotFoundException("Payment not found");
-            return _mapper.Map<PaymentDTO>(payment);
+            return ToPaymentDTO(payment);
         }
 
         public async Task<PaymentDTO?> GetPendingPaymentAsync(int orderId)
@@ -67,7 +74,54 @@ namespace AgitekBackend.Services
                 .Include(p => p.Order)
                 .Where(p => p.OrderId == orderId)
                 .FirstOrDefaultAsync(p => p.Status == PaymentStatus.Pending);
-            return payment == null ? null : _mapper.Map<PaymentDTO>(payment);
+            return payment == null ? null : ToPaymentDTO(payment);
+        }
+
+        public async Task<PublicPaymentDTO> GetPublicByOrderAsync(int orderId, string trackingNumber)
+        {
+            var payment = await _context.Payments
+                .AsNoTracking()
+                .Include(item => item.Order)
+                .Where(item => item.OrderId == orderId && item.Order.TrackingNumber == trackingNumber)
+                .OrderByDescending(item => item.Id)
+                .FirstOrDefaultAsync();
+            if (payment == null || payment.PaymentMethod != PaymentMethod.Bank)
+                throw new NotFoundException("Payment not found");
+
+            var paymentDto = ToPaymentDTO(payment);
+            return new PublicPaymentDTO
+            {
+                OrderId = payment.OrderId,
+                Amount = payment.Amount,
+                PaymentMethod = payment.PaymentMethod,
+                Status = payment.Status,
+                ExpiresAt = payment.ExpiresAt,
+                PaidAt = payment.PaidAt,
+                OrderStatus = payment.Order.Status,
+                QrCodeUrl = paymentDto.QrCodeUrl,
+                BankId = paymentDto.BankId,
+                AccountNumber = paymentDto.AccountNumber,
+                AccountName = paymentDto.AccountName,
+                TransferDescription = paymentDto.TransferDescription
+            };
+        }
+
+        private PaymentDTO ToPaymentDTO(Payment payment)
+        {
+            var dto = _mapper.Map<PaymentDTO>(payment);
+            if (payment.PaymentMethod == PaymentMethod.Bank)
+            {
+                var description = Uri.EscapeDataString(payment.Order.TrackingNumber);
+                var accountName = Uri.EscapeDataString(_vietQrSettings.AccountName);
+                var amount = payment.Amount.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
+                dto.QrCodeUrl = $"https://img.vietqr.io/image/{Uri.EscapeDataString(_vietQrSettings.BankId)}-{Uri.EscapeDataString(_vietQrSettings.AccountNumber)}-compact2.png?amount={amount}&addInfo={description}&accountName={accountName}";
+                dto.BankId = _vietQrSettings.BankId;
+                dto.AccountNumber = _vietQrSettings.AccountNumber;
+                dto.AccountName = _vietQrSettings.AccountName;
+                dto.TransferDescription = payment.Order.TrackingNumber;
+            }
+
+            return dto;
         }
 
         public async Task UpdateStatusAsync(int id, PaymentStatus status)

@@ -23,12 +23,13 @@ namespace AgitekBackend.Models
         public decimal SubtotalPrice { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal ShippingFee { get; set; }
+        public ShippingType ShippingType { get; set; } = ShippingType.Standard;
         [Column(TypeName = "decimal(18, 2)")]
         public decimal DiscountAmount { get; set; }
         [Column(TypeName = "decimal(18, 2)")]
         public decimal TotalPrice { get; set; }
         public OrderStatus Status { get; set; } = OrderStatus.Ordered;
-        [MaxLength(50)]
+        [MaxLength(100)]
         public string? TransactionId { get; set; }
         [MaxLength(255)]
         public string? Note { get; set; }

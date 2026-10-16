@@ -10,6 +10,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<IEnumerable<PaymentDTO>> GetByOrderIdAsync(int orderId);
         Task<PaymentDTO> GetByIdAsync(int id);
         Task<PaymentDTO?> GetPendingPaymentAsync(int orderId);
+        Task<PublicPaymentDTO> GetPublicByOrderAsync(int orderId, string trackingNumber);
         Task UpdateStatusAsync(int id, PaymentStatus status);
     }
 }

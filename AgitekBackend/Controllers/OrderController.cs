@@ -17,7 +17,9 @@ namespace AgitekBackend.Controllers
         private readonly IOrderService _orderService;
         private readonly IAuthorizationService _authorizationService;
 
-        public OrderController(IOrderService orderService, IAuthorizationService authorizationService)
+        public OrderController(
+            IOrderService orderService,
+            IAuthorizationService authorizationService)
         {
             _orderService = orderService;
             _authorizationService = authorizationService;
@@ -47,19 +49,21 @@ namespace AgitekBackend.Controllers
                 return Unauthorized();
 
             var isDelivery = currentUser.Role == RoleName.Delivery;
-            var targetUserId = isDelivery ? currentUser.Id : userId ?? currentUser.Id;
+            var canViewAllUsers = currentUser.Role == RoleName.Manager ||
+                                  currentUser.Role == RoleName.Admin ||
+                                  currentUser.Role == RoleName.SuperAdmin;
+            var targetUserId = isDelivery
+                ? currentUser.Id
+                : canViewAllUsers && userId.HasValue
+                    ? userId.Value
+                    : currentUser.Id;
             var orders = await _orderService.GetAllAsync(targetUserId, assignedToDelivery: isDelivery);
 
             var orderList = orders.ToList();
-            var authorizationResource = orderList.FirstOrDefault() ?? new OrderDTO
-            {
-                UserId = targetUserId,
-                DeliveredByUserId = isDelivery ? currentUser.Id : null
-            };
-
-            var authResult = await _authorizationService.AuthorizeAsync(
-                User, authorizationResource, new OrderManagementRequirement(OrderOperation.Read));
-            if (!authResult.Succeeded)
+            if (!canViewAllUsers && orderList.Any(order =>
+                currentUser.Role == RoleName.Customer
+                    ? order.UserId != currentUser.Id
+                    : currentUser.Role == RoleName.Delivery && order.DeliveredByUserId != currentUser.Id))
                 throw new ForbiddenException("You do not have permission to access these orders");
 
             return Ok(orderList);
@@ -78,30 +82,46 @@ namespace AgitekBackend.Controllers
         }
 
         [HttpPost]
+        [Authorize(Roles = "Customer")]
         public async Task<ActionResult<OrderDTO>> Create([FromBody] CreateOrderDTO dto)
         {
-            var authResult = await _authorizationService.AuthorizeAsync(
-                User, null, new OrderManagementRequirement(OrderOperation.Create));
-            if (!authResult.Succeeded)
-                throw new ForbiddenException("You do not have permission to access this resource");
-
             var currentUser = GetCurrentUser();
             if (currentUser == null)
                 return Unauthorized();
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
 
             var createdOrder = await _orderService.CreateAsync(dto, currentUser.Id);
             return CreatedAtAction(nameof(GetById), new { id = createdOrder.Id }, createdOrder);
         }
 
+        [HttpPost("guest")]
+        [AllowAnonymous]
+        public async Task<ActionResult<OrderDTO>> CreateGuest([FromBody] CreateGuestOrderDTO dto)
+        {
+            if (!ModelState.IsValid)
+                return ValidationProblem(ModelState);
+
+            var createdOrder = await _orderService.CreateGuestOrderAsync(dto);
+            return StatusCode(StatusCodes.Status201Created, createdOrder);
+        }
+
         [HttpPatch("{id}")]
         public async Task<ActionResult<OrderDTO>> Update(int id, [FromBody] UpdateOrderDTO dto)
         {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
             var order = await _orderService.GetByIdAsync(id);
             var authResult = await _authorizationService.AuthorizeAsync(
-                User, order, new OrderManagementRequirement(OrderOperation.Read));
+                User, order, new OrderManagementRequirement(OrderOperation.Update));
             if (!authResult.Succeeded)
-                throw new ForbiddenException("You do not have permission to access this resource");
+                throw new ForbiddenException("You do not have permission to update this order");
 
+            if (currentUser.Id != order.UserId && currentUser.Role != RoleName.Admin &&
+                currentUser.Role != RoleName.SuperAdmin && currentUser.Role != RoleName.Manager)
+                throw new ForbiddenException("You do not have permission to update this order");
             if (order.Status != OrderStatus.Ordered)
                 throw new ForbiddenException("Order can only be updated while in Ordered status");
 

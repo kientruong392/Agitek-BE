@@ -4,7 +4,6 @@ using AgitekBackend.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -12,11 +11,9 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261011153938_update_db")]
-    partial class update_db
+    partial class AppDbContextModelSnapshot : ModelSnapshot
     {
-        /// <inheritdoc />
-        protected override void BuildTargetModel(ModelBuilder modelBuilder)
+        protected override void BuildModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -282,6 +279,9 @@ namespace AgitekBackend.Migrations
                     b.Property<decimal>("ShippingFee")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<int>("ShippingType")
+                        .HasColumnType("int");
+
                     b.Property<int>("Status")
                         .HasColumnType("int");
 
@@ -300,8 +300,8 @@ namespace AgitekBackend.Migrations
                         .HasColumnType("nvarchar(20)");
 
                     b.Property<string>("TransactionId")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime2");
@@ -403,12 +403,14 @@ namespace AgitekBackend.Migrations
                     b.Property<decimal>("Amount")
                         .HasColumnType("decimal(18, 2)");
 
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime?>("ExpiresAt")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("GatewayResponse")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("OrderId")
                         .HasColumnType("int");

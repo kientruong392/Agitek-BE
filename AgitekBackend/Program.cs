@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using AgitekBackend.Authorization.Handlers;
 using AgitekBackend.Data;
+using AgitekBackend.Common.Settings;
 using AgitekBackend.Middlewares;
 using AgitekBackend.Services;
 using AgitekBackend.Services.Interfaces;
@@ -16,6 +17,12 @@ var builder = WebApplication.CreateBuilder(args);
 var connectionString = builder.Configuration.GetConnectionString("AgitekConnection")
     ?? throw new InvalidOperationException("Connection string 'AgitekConnection' not found");
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(connectionString));
+builder.Services.Configure<VietQRSettings>(builder.Configuration.GetSection("VietQRSettings"));
+builder.Services.Configure<SePaySettings>(options =>
+{
+    builder.Configuration.GetSection("SePaySettings").Bind(options);
+    options.SecretKey = builder.Configuration["SEPAY_WEBHOOK_SECRET"] ?? options.SecretKey;
+});
 
 var redisConnectionString = builder.Configuration["Redis:ConnectionString"]
     ?? throw new InvalidOperationException("Redis:ConnectionString not configured");
@@ -188,12 +195,15 @@ builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
+builder.Services.AddScoped<ISePayService, SePayService>();
+builder.Services.AddHostedService<PaymentExpiryBackgroundService>();
 builder.Services.AddScoped<IBrandService, BrandService>();
 builder.Services.AddScoped<ICategoryService, CategoryService>();
 builder.Services.AddScoped<IReviewService, ReviewService>();
 builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
+builder.Services.AddScoped<ICartService, CartService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 

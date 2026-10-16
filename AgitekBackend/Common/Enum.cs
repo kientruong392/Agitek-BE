@@ -45,7 +45,8 @@ namespace AgitekBackend.Common
         Completed,
         Returned,
         Cancelled,
-        Refunded
+        Refunded,
+        Paid
     }
 
     public enum RefundStatus
@@ -53,6 +54,12 @@ namespace AgitekBackend.Common
         Pending,
         Approved,
         Rejected,
+    }
+
+    public enum ShippingType
+    {
+        Standard,
+        Express
     }
 
     public enum PaymentMethod
@@ -67,7 +74,8 @@ namespace AgitekBackend.Common
         Pending,
         Success,
         Failed,
-        Refunded
+        Refunded,
+        Expired
     }
 
     public enum MediaType

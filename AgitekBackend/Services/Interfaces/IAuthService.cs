@@ -14,5 +14,6 @@ namespace AgitekBackend.Services.Interfaces
         Task<TokenResponseDTO> RefreshTokenAsync(string refreshToken);
         Task LogoutAsync(string refreshToken);
         Task<TokenResponseDTO> HandleGoogleLoginAsync(string email, string name);
+        Task<UserDTO> CreateGuestUserAsync(CreateGuestDTO dto);
     }
 }

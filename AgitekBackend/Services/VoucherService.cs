@@ -39,6 +39,42 @@ namespace AgitekBackend.Services
             return _mapper.Map<VoucherDTO>(voucher);
         }
 
+        public async Task<VoucherApplicationDTO> ValidateForOrderAsync(string code, decimal subtotalPrice, int? userId)
+        {
+            var normalizedCode = code.ToUpperInvariant();
+            var voucher = await _context.Vouchers
+                .FirstOrDefaultAsync(item => item.Code.ToUpper() == normalizedCode);
+            if (voucher == null ||
+                (voucher.Status != VoucherStatus.Active && voucher.Status != VoucherStatus.LowStock) ||
+                voucher.StartDate > DateTime.Now || voucher.EndDate < DateTime.Now || voucher.Quantity <= 0)
+                throw new BadRequestException("Voucher is invalid or unavailable");
+            if (voucher.MinOrderValue < 0 || voucher.DiscountValue < 0 ||
+                voucher.MaxDiscountValue.HasValue && voucher.MaxDiscountValue.Value < 0)
+                throw new BadRequestException("Voucher configuration is invalid");
+            if (subtotalPrice < voucher.MinOrderValue)
+                throw new BadRequestException("Order does not meet the voucher minimum amount");
+            if (userId.HasValue && await _context.Orders.AnyAsync(order => order.UserId == userId && order.VoucherId == voucher.Id))
+                throw new BadRequestException("This voucher has already been used in one of your orders");
+
+            if (!Enum.IsDefined(voucher.DiscountType) ||
+                voucher.DiscountType == DiscountType.Percentage && voucher.DiscountValue > 100)
+                throw new BadRequestException("Voucher configuration is invalid");
+
+            var discountAmount = voucher.DiscountType == DiscountType.Percentage
+                ? subtotalPrice * voucher.DiscountValue / 100m
+                : voucher.DiscountValue;
+            if (voucher.MaxDiscountValue.HasValue)
+                discountAmount = Math.Min(discountAmount, voucher.MaxDiscountValue.Value);
+            discountAmount = Math.Round(Math.Min(discountAmount, subtotalPrice), 2, MidpointRounding.AwayFromZero);
+
+            return new VoucherApplicationDTO
+            {
+                VoucherId = voucher.Id,
+                Code = voucher.Code,
+                DiscountAmount = decimal.Round(discountAmount, 2)
+            };
+        }
+
         public async Task<VoucherDTO> CreateAsync(CreateVoucherDTO dto)
         {
             ValidateDiscount(dto.DiscountType, dto.DiscountValue, dto.MaxDiscountValue);
@@ -106,16 +142,22 @@ namespace AgitekBackend.Services
             var voucher = await _context.Vouchers.FindAsync(id);
             if (voucher == null) throw new NotFoundException($"Voucher not found");
 
-            if (voucher.Quantity <= 0)
-            {
+            var now = DateTime.Now;
+            var updated = await _context.Vouchers
+                .Where(item => item.Id == id &&
+                    (item.Status == VoucherStatus.Active || item.Status == VoucherStatus.LowStock) &&
+                    item.StartDate <= now && item.EndDate >= now && item.Quantity > 0)
+                .ExecuteUpdateAsync(update => update
+                    .SetProperty(item => item.Quantity, item => item.Quantity - 1)
+                    .SetProperty(item => item.UsedCount, item => item.UsedCount + 1)
+                    .SetProperty(item => item.Status, item => item.Quantity == 1
+                        ? VoucherStatus.OutOfStock
+                        : item.InitialQuantity > 0 && (decimal)(item.Quantity - 1) / item.InitialQuantity * 100 <= 20
+                            ? VoucherStatus.LowStock
+                            : VoucherStatus.Active));
+
+            if (updated != 1)
                 throw new BadRequestException("Voucher is out of stock");
-            }
-
-            voucher.Quantity -= 1;
-            voucher.UsedCount += 1;
-
-            CheckVoucherStatus(voucher);
-            await _context.SaveChangesAsync();
         }
 
         private bool IsManagementRole(RoleName? role)

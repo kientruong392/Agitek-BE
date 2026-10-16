@@ -16,9 +16,9 @@ namespace AgitekBackend.Models
         public PaymentMethod PaymentMethod { get; set; }
         [Required]
         public PaymentStatus Status { get; set; } = PaymentStatus.Pending;
+        public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
         [MaxLength(100)]
         public string? TransactionId { get; set; }
-        [MaxLength(500)]
         public string? GatewayResponse { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public DateTime? PaidAt { get; set; }

@@ -10,6 +10,7 @@ namespace AgitekBackend.DTOs.Orders
     public class OrderDTO
     {
         public int Id { get; set; }
+        public int? PaymentId { get; set; }
         public string TrackingNumber { get; set; } = string.Empty;
         public int UserId { get; set; }
         public int? ApprovedByUserId { get; set; }
@@ -20,6 +21,7 @@ namespace AgitekBackend.DTOs.Orders
         public string Address { get; set; } = string.Empty;
         public decimal SubtotalPrice { get; set; }
         public decimal ShippingFee { get; set; }
+        public ShippingType ShippingType { get; set; }
         public decimal DiscountAmount { get; set; }
         public decimal TotalPrice { get; set; }
         public OrderStatus Status { get; set; }

@@ -1,5 +1,6 @@
 using AgitekBackend.Common;
 using AgitekBackend.DTOs.Vouchers;
+using AgitekBackend.Models;
 
 namespace AgitekBackend.Services.Interfaces
 {
@@ -10,5 +11,6 @@ namespace AgitekBackend.Services.Interfaces
         Task<VoucherDTO> CreateAsync(CreateVoucherDTO dto);
         Task<VoucherDTO?> UpdateAsync(int id, UpdateVoucherDTO dto);
         Task DecreaseQuantityAsync(int id);
+        Task<VoucherApplicationDTO> ValidateForOrderAsync(string code, decimal subtotalPrice, int? userId);
     }
 }

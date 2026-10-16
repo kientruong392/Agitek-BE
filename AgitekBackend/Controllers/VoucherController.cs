@@ -41,6 +41,15 @@ namespace AgitekBackend.Controllers
             return null;
         }
 
+        [HttpPost("apply")]
+        [AllowAnonymous]
+        public async Task<ActionResult<VoucherApplicationDTO>> Apply([FromBody] ApplyVoucherDTO dto)
+        {
+            var currentUser = GetCurrentUser();
+            var application = await _voucherService.ValidateForOrderAsync(dto.Code, dto.SubtotalPrice, currentUser?.Id);
+            return Ok(application);
+        }
+
         [HttpGet]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<VoucherDTO>>> GetAll()

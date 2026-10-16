@@ -59,7 +59,7 @@ namespace AgitekBackend.Services
             return await CreateTokenPairAsync(userDto);
         }
 
-        public async Task<UserDTO> CreateGuestUserAsync(CreateGuestUserDTO dto)
+        public async Task<UserDTO> CreateGuestUserAsync(CreateGuestDTO dto)
         {
             var createUserDto = new CreateUserDTO
             {
@@ -73,8 +73,7 @@ namespace AgitekBackend.Services
                     PhoneNumber = dto.PhoneNumber,
                 }
             };
-            var userDto = await _userService.CreateAsync(createUserDto);
-            return userDto;
+            return await _userService.CreateAsync(createUserDto);
         }
 
         public async Task<TokenResponseDTO> RegisterAsync(SignUpDTO dto)
