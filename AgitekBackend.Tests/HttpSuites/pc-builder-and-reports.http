@@ -1,0 +1,32 @@
+# ============================================================================
+# Agitek API Smoke Suite: PC Builder & Admin Reports
+# ============================================================================
+@baseUrl = http://localhost:5106/api
+@adminToken = REPLACE_WITH_ADMIN_JWT
+@staffToken = REPLACE_WITH_STAFF_JWT
+@deliveryToken = REPLACE_WITH_DELIVERY_JWT
+@customerToken = REPLACE_WITH_CUSTOMER_JWT
+
+### 1. Get Saved PC Builds
+# Expected: HTTP 200
+GET {{baseUrl}}/PcBuild
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+
+
+### 2. Get Management Revenue Report
+# Expected: HTTP 200
+GET {{baseUrl}}/Report?from=2026-01-01&to=2026-11-21&interval=1
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+
+
+### 3. Get Audit Logs
+# Expected: HTTP 200
+GET {{baseUrl}}/AuditLog
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+

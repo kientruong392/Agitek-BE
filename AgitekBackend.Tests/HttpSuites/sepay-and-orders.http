@@ -1,0 +1,78 @@
+# ============================================================================
+# Agitek API Smoke Suite: Orders & SePay Flows
+# ============================================================================
+@baseUrl = http://localhost:5106/api
+@adminToken = REPLACE_WITH_ADMIN_JWT
+@staffToken = REPLACE_WITH_STAFF_JWT
+@deliveryToken = REPLACE_WITH_DELIVERY_JWT
+@customerToken = REPLACE_WITH_CUSTOMER_JWT
+
+### 1. Create Bank Order
+# Expected: HTTP 200
+POST {{baseUrl}}/Order
+Content-Type: application/json
+Authorization: Bearer {{customerToken}}
+
+
+{
+  "addressId": 1,
+  "shippingType": 0,
+  "paymentMethod": 1,
+  "orderDetails": [
+    {
+      "productId": 10,
+      "quantity": 1,
+      "unitPrice": 15490000,
+      "totalPrice": 15490000
+    }
+  ]
+}
+
+### 2. Get Public Payment QR & Countdown
+# Expected: HTTP 200
+GET {{baseUrl}}/sepay/payment/21?trackingNumber=AGT261016ABC123456
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 3. Resume Or Recreate Bank Payment
+# Expected: HTTP 200
+POST {{baseUrl}}/sepay/payment/21/resume?trackingNumber=AGT261016ABC123456
+Content-Type: application/json
+# Public / AllowAnonymous endpoint
+
+
+
+### 4. Confirm Paid Order As Manager
+# Expected: HTTP 200
+PATCH {{baseUrl}}/Order/21/confirm
+Content-Type: application/json
+Authorization: Bearer {{adminToken}}
+
+
+{
+  "status": 1,
+  "deliveredByUserId": 4,
+  "startingWarehouseId": 1
+}
+
+### 5. Start Transit As Delivery
+# Expected: HTTP 200
+PATCH {{baseUrl}}/Order/21/in-transit
+Content-Type: application/json
+Authorization: Bearer {{deliveryToken}}
+
+
+
+### 6. Add Intermediate Warehouse Point
+# Expected: HTTP 200
+POST {{baseUrl}}/Order/21/tracking
+Content-Type: application/json
+Authorization: Bearer {{deliveryToken}}
+
+
+{
+  "locationId": 2,
+  "description": "Da toi kho trung chuyen Da Nang"
+}
