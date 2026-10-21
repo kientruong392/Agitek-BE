@@ -14,7 +14,7 @@ namespace AgitekBackend.Authorization.Handlers
             OrderManagementRequirement requirement)
         {
             var roleClaim = context.User.FindFirstValue(ClaimTypes.Role) ?? context.User.FindFirstValue("role");
-            if (roleClaim == null || !Enum.TryParse<RoleName>(roleClaim, true, out var currentRole))
+            if (roleClaim == null || !Enum.TryParse<RoleName>(roleClaim, ignoreCase: true, out var currentRole))
                 return;
 
             var currentUserIdClaim = context.User.FindFirstValue(ClaimTypes.NameIdentifier)
@@ -59,21 +59,26 @@ namespace AgitekBackend.Authorization.Handlers
 
             if (requirement.Operation == OrderOperation.Cancel)
             {
-                if (targetOrder?.UserId == currentUserId)
+                if (targetOrder?.UserId == currentUserId ||
+                    currentRole == RoleName.Admin ||
+                    currentRole == RoleName.SuperAdmin)
                     context.Succeed(requirement);
                 return;
             }
 
             if (requirement.Operation == OrderOperation.Complete)
             {
-                if (targetOrder?.UserId == currentUserId)
+                if (targetOrder?.UserId == currentUserId ||
+                    currentRole == RoleName.Admin ||
+                    currentRole == RoleName.SuperAdmin)
                     context.Succeed(requirement);
                 return;
             }
 
             if (requirement.Operation == OrderOperation.Confirm)
             {
-                if (currentRole == RoleName.Manager ||
+                if (currentRole == RoleName.Staff ||
+                    currentRole == RoleName.Manager ||
                     currentRole == RoleName.Admin ||
                     currentRole == RoleName.SuperAdmin)
                 {

@@ -4,8 +4,8 @@ namespace AgitekBackend.DTOs.OrderTrackingLogs
 {
     public class CreateOrderTrackingLogDTO
     {
-        [Required(ErrorMessage = "Order Id cannot be empty")]
-        public int OrderId { get; set; }
+        [Required(ErrorMessage = "Warehouse cannot be empty")]
+        [Range(1, int.MaxValue)]
         public int? LocationId { get; set; }
         [Required(ErrorMessage = "Description cannot be empty")]
         [MaxLength(255, ErrorMessage = "Description cannot exceed 255 characters")]

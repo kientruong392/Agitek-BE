@@ -4,7 +4,8 @@ namespace AgitekBackend.Authorization.Requirements
 {
     public enum CloudinaryOperation
     {
-        Upload
+        Upload,
+        UploadOrderProof
     }
 
     public class CloudinaryManagementRequirement : IAuthorizationRequirement

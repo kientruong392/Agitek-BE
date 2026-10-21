@@ -1,4 +1,3 @@
-using System.Security.Claims;
 using AgitekBackend.Authorization.Requirements;
 using AgitekBackend.Common;
 using Microsoft.AspNetCore.Authorization;
@@ -11,16 +10,22 @@ namespace AgitekBackend.Authorization.Handlers
             AuthorizationHandlerContext context,
             CloudinaryManagementRequirement requirement)
         {
-            var roleClaim = context.User.FindFirstValue(ClaimTypes.Role) ?? context.User.FindFirstValue("role");
-            if (roleClaim != null && Enum.TryParse<RoleName>(roleClaim, out var currentRole))
+            var isAllowed = requirement.Operation switch
             {
-                if (currentRole == RoleName.Manager || currentRole == RoleName.Admin || currentRole == RoleName.SuperAdmin)
-                {
-                    context.Succeed(requirement);
-                }
-            }
+                CloudinaryOperation.Upload => IsInAnyRole(context, RoleName.Manager, RoleName.Admin, RoleName.SuperAdmin),
+                CloudinaryOperation.UploadOrderProof => IsInAnyRole(context, RoleName.Delivery, RoleName.Admin, RoleName.SuperAdmin),
+                _ => false
+            };
+
+            if (isAllowed)
+                context.Succeed(requirement);
 
             return Task.CompletedTask;
+        }
+
+        private static bool IsInAnyRole(AuthorizationHandlerContext context, params RoleName[] roles)
+        {
+            return roles.Any(role => context.User.IsInRole(role.ToString()));
         }
     }
 }

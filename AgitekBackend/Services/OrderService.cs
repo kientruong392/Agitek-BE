@@ -2,9 +2,11 @@ using AgitekBackend.Common;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Auths;
+using AgitekBackend.DTOs.Locations;
 using AgitekBackend.DTOs.Medias;
 using AgitekBackend.DTOs.OrderDetails;
 using AgitekBackend.DTOs.Orders;
+using AgitekBackend.DTOs.OrderTrackingLogs;
 using AgitekBackend.DTOs.Payments;
 using AgitekBackend.DTOs.Vouchers;
 using AgitekBackend.Models;
@@ -44,7 +46,7 @@ namespace AgitekBackend.Services
             _authService = authService;
         }
 
-        public async Task<IEnumerable<OrderDTO>> GetAllAsync(int userId, bool assignedToDelivery = false)
+        public async Task<IEnumerable<OrderDTO>> GetAllAsync(int? userId = null, bool assignedToDelivery = false)
         {
             IQueryable<Order> query = _context.Orders
                 .AsNoTracking()
@@ -54,19 +56,24 @@ namespace AgitekBackend.Services
                         .ThenInclude(product => product!.Images)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(detail => detail.Reviews)
+                .Include(o => o.User)
+                    .ThenInclude(user => user.Profile)
                 .Include(o => o.OrderTrackingLogs)
+                    .ThenInclude(log => log.Location)
                 .Include(o => o.Medias)
                 .Include(o => o.FromLocation)
-                .Include(o => o.ToLocation);
+                .Include(o => o.ToLocation)
+                .AsSplitQuery();
 
             if (assignedToDelivery)
-                query = query.Where(o => o.DeliveredByUserId == userId);
-            else
-                query = query.Where(o => o.UserId == userId);
+                query = query.Where(order => order.DeliveredByUserId == userId);
+            else if (userId.HasValue)
+                query = query.Where(order => order.UserId == userId.Value);
 
             var orders = await query.ToListAsync();
             return _mapper.Map<IEnumerable<OrderDTO>>(orders);
         }
+
 
         public async Task<OrderDTO> GetByIdAsync(int id)
         {
@@ -78,9 +85,14 @@ namespace AgitekBackend.Services
                         .ThenInclude(product => product!.Images)
                 .Include(o => o.OrderDetails)
                     .ThenInclude(detail => detail.Reviews)
+                .Include(o => o.User)
+                    .ThenInclude(user => user.Profile)
                 .Include(o => o.OrderTrackingLogs)
+                    .ThenInclude(log => log.Location)
+                .Include(o => o.Medias)
                 .Include(o => o.FromLocation)
                 .Include(o => o.ToLocation)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) throw new NotFoundException("Order not found");
             var dto = _mapper.Map<OrderDTO>(order);
@@ -131,6 +143,7 @@ namespace AgitekBackend.Services
                 var subtotal = orderDetails.Sum(detail => detail.TotalPrice);
                 var voucher = await GetVoucherApplicationAsync(dto.VoucherId, dto.VoucherCode, subtotal, guestUser.Id);
                 var order = await BuildOrderAsync(dto, guestUser.Id, addressSnapshot, orderDetails, subtotal, voucher);
+                if (order.ToLocation != null) _context.Locations.Add(order.ToLocation);
 
                 SetOrderStatus(order, OrderStatus.Ordered);
                 _context.Orders.Add(order);
@@ -163,6 +176,7 @@ namespace AgitekBackend.Services
             var subtotal = orderDetails.Sum(detail => detail.TotalPrice);
             var voucher = await GetVoucherApplicationAsync(dto.VoucherId, dto.VoucherCode, subtotal, userId);
             var order = await BuildOrderAsync(dto, userId, addressSnapshot, addressId, orderDetails, subtotal, voucher);
+            if (order.ToLocation != null) _context.Locations.Add(order.ToLocation);
 
             SetOrderStatus(order, OrderStatus.Ordered);
             _context.Orders.Add(order);
@@ -267,7 +281,7 @@ namespace AgitekBackend.Services
             decimal subtotal,
             VoucherApplicationDTO? voucher)
         {
-            return await BuildOrderAsync(
+            var order = await BuildOrderAsync(
                 _mapper.Map<Order>(dto),
                 dto.ShippingType,
                 currentUserId,
@@ -276,6 +290,9 @@ namespace AgitekBackend.Services
                 orderDetails,
                 subtotal,
                 voucher);
+            if (dto.CreateLocation != null)
+                order.ToLocation = await CreateDeliveryLocationAsync(dto.CreateLocation, addressSnapshot, order.TrackingNumber);
+            return order;
         }
 
         private async Task<Order> BuildOrderAsync(
@@ -286,7 +303,7 @@ namespace AgitekBackend.Services
             decimal subtotal,
             VoucherApplicationDTO? voucher)
         {
-            return await BuildOrderAsync(
+            var order = await BuildOrderAsync(
                 _mapper.Map<Order>(dto),
                 dto.ShippingType,
                 currentUserId,
@@ -295,6 +312,31 @@ namespace AgitekBackend.Services
                 orderDetails,
                 subtotal,
                 voucher);
+            if (dto.CreateLocation != null)
+                order.ToLocation = await CreateDeliveryLocationAsync(dto.CreateLocation, addressSnapshot, order.TrackingNumber);
+            return order;
+        }
+
+        private async Task<Location> CreateDeliveryLocationAsync(
+            CreateDeliveryLocationDTO input,
+            string address,
+            string trackingNumber)
+        {
+            if (input.Latitude < -90 || input.Latitude > 90 || input.Longitude < -180 || input.Longitude > 180)
+                throw new BadRequestException("Delivery coordinates are invalid");
+
+            var code = $"DL{trackingNumber}";
+            if (await _context.Locations.AnyAsync(location => location.LocationCode == code))
+                throw new BadRequestException("Could not generate a unique delivery location code");
+            return new Location
+            {
+                LocationCode = code,
+                LocationName = address.Length > 255 ? address[..255] : address,
+                Latitude = input.Latitude,
+                Longitude = input.Longitude,
+                IsWarehouse = false,
+                Status = LocationStatus.Active
+            };
         }
 
         private static string FormatAddress(string receiverName, string phoneNumber, string addressLine)
@@ -332,6 +374,7 @@ namespace AgitekBackend.Services
             order.TotalPrice = Math.Max(0m, total);
             order.OrderDetails = orderDetails;
             order.Payments = [];
+            order.OrderTrackingLogs = new List<OrderTrackingLog>();
             return order;
         }
 
@@ -433,22 +476,72 @@ namespace AgitekBackend.Services
         {
             var order = await GetTrackedOrderAsync(id);
 
-            if (dto.Status != OrderStatus.Confirmed && dto.Status != OrderStatus.Shipped)
-                throw new BadRequestException("Confirm order can only set status to Confirmed or Shipped");
+            if (dto.Status != OrderStatus.Confirmed)
+                throw new BadRequestException("Order approval can only set status to Confirmed");
+            if (order.Status != OrderStatus.Ordered && order.Status != OrderStatus.Paid)
+                throw new BadRequestException("Only unpaid or paid new orders can be confirmed");
+            if (order.Payments.Any(payment => payment.PaymentMethod != PaymentMethod.COD && payment.Status != PaymentStatus.Success))
+                throw new BadRequestException("Order payment must be successful before confirmation");
+            if (order.Payments.Any(payment => payment.Status == PaymentStatus.Expired || payment.Status == PaymentStatus.Failed || payment.Status == PaymentStatus.Refunded))
+                throw new BadRequestException("Order payment is no longer valid");
 
-            if (dto.Status == OrderStatus.Confirmed)
+            if (order.DeliveredByUserId.HasValue)
+                throw new BadRequestException("Delivery user has already been assigned");
+            if (!dto.DeliveredByUserId.HasValue)
+                throw new BadRequestException("Delivery user is required when confirming");
+            if (!dto.StartingWarehouseId.HasValue)
+                throw new BadRequestException("Starting warehouse is required when confirming");
+
+            var deliveryUser = await _context.Users
+                .FirstOrDefaultAsync(user => user.Id == dto.DeliveredByUserId.Value && user.Role == RoleName.Delivery);
+            if (deliveryUser == null || !deliveryUser.IsActive)
+                throw new BadRequestException("Selected delivery user is invalid or inactive");
+
+            var warehouse = await _context.Locations
+                .FirstOrDefaultAsync(location => location.Id == dto.StartingWarehouseId.Value &&
+                    location.IsWarehouse && location.Status == LocationStatus.Active);
+            if (warehouse == null)
+                throw new BadRequestException("Selected starting warehouse is unavailable");
+
+            if (!order.ToLocationId.HasValue)
             {
-                if (order.DeliveredByUserId.HasValue)
-                    throw new BadRequestException("Delivery user has already been assigned");
-                if (!dto.DeliveredByUserId.HasValue)
-                    throw new BadRequestException("Delivery user is required when confirming");
-                order.DeliveredByUserId = dto.DeliveredByUserId.Value;
+                if (dto.CreateLocation == null)
+                    throw new BadRequestException("Delivery location is required before confirming the order");
+                var deliveryLocation = await CreateDeliveryLocationAsync(dto.CreateLocation, order.Address, order.TrackingNumber);
+                order.ToLocation = deliveryLocation;
+                _context.Locations.Add(deliveryLocation);
             }
-            await UpdateOrderStatusAsync(id, dto.Status);
 
+            order.DeliveredByUserId = deliveryUser.Id;
+            _context.OrderTrackingLogs.Add(new OrderTrackingLog
+            {
+                OrderId = order.Id,
+                LocationId = warehouse.Id,
+                Description = string.IsNullOrWhiteSpace(dto.StartingWarehouseDescription)
+                    ? "Bắt đầu giao hàng"
+                    : dto.StartingWarehouseDescription.Trim(),
+                Timestamp = DateTime.UtcNow
+            });
+            order.Status = dto.Status;
             order.UpdatedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
 
+            return _mapper.Map<OrderDTO>(order);
+        }
+
+        public async Task<OrderDTO> StartTransitAsync(int id, CurrentUser currentUser)
+        {
+            var order = await GetTrackedOrderAsync(id);
+            if (order.Status != OrderStatus.Confirmed)
+                throw new BadRequestException("Only confirmed orders can start transit");
+            if (currentUser.Role == RoleName.Delivery && order.DeliveredByUserId != currentUser.Id)
+                throw new ForbiddenException("Only the assigned delivery user can start transit");
+            if (!await _context.OrderTrackingLogs.AnyAsync(log => log.OrderId == id && log.LocationId != null))
+                throw new BadRequestException("Order must have a starting warehouse before transit");
+
+            order.Status = OrderStatus.InTransit;
+            order.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
             return _mapper.Map<OrderDTO>(order);
         }
 
@@ -458,7 +551,8 @@ namespace AgitekBackend.Services
 
             if (dto.Status != OrderStatus.Delivered && dto.Status != OrderStatus.Returned)
                 throw new BadRequestException("Ship order can only set status to Delivered or Returned");
-
+            if (order.Status != OrderStatus.InTransit)
+                throw new BadRequestException("Only in-transit orders can be completed by delivery");
             if (!dto.Medias.Any())
                 throw new BadRequestException("Ship order must have at least one media");
 
@@ -467,7 +561,6 @@ namespace AgitekBackend.Services
             {
                 await UpdateOrderStatusAsync(id, dto.Status);
                 await UpdateCodPaymentStatusAsync(id, dto.Status == OrderStatus.Delivered ? PaymentStatus.Success : PaymentStatus.Failed);
-
                 foreach (var mediaDto in dto.Medias)
                 {
                     var media = _mapper.Map<Media>(mediaDto);
@@ -489,10 +582,99 @@ namespace AgitekBackend.Services
             return _mapper.Map<OrderDTO>(order);
         }
 
+        public async Task<IEnumerable<object>> GetDeliveryUsersAsync()
+        {
+            return await _context.Users
+                .AsNoTracking()
+                .Where(user => user.Role == RoleName.Delivery && user.IsActive)
+                .OrderBy(user => user.Username)
+                .Select(user => new
+                {
+                    user.Id,
+                    user.Username,
+                    FullName = user.Profile.FullName
+                })
+                .ToListAsync();
+        }
+
+        public async Task<IEnumerable<OrderTrackingLogDTO>> GetTrackingLogsAsync(int orderId)
+        {
+            if (!await _context.Orders.AnyAsync(order => order.Id == orderId))
+                throw new NotFoundException("Order not found");
+
+            var logs = await _context.OrderTrackingLogs
+                .AsNoTracking()
+                .Include(log => log.Location)
+                .Where(log => log.OrderId == orderId)
+                .ToListAsync();
+            return logs
+                .OrderBy(log => log.Timestamp)
+                .ThenBy(log => log.Id)
+                .Select(MapTrackingLog);
+        }
+
+        public async Task<IEnumerable<OrderTrackingLogDTO>> AddTrackingLogAsync(
+            int orderId,
+            CreateOrderTrackingLogDTO dto,
+            CurrentUser currentUser)
+        {
+            var order = await _context.Orders
+                .Include(item => item.OrderTrackingLogs)
+                .FirstOrDefaultAsync(item => item.Id == orderId);
+            if (order == null) throw new NotFoundException("Order not found");
+            if (currentUser.Role == RoleName.Delivery && order.DeliveredByUserId != currentUser.Id)
+                throw new ForbiddenException("Only the assigned delivery user can add tracking points");
+            if (order.Status != OrderStatus.InTransit)
+                throw new BadRequestException("Tracking points can only be added while the order is in transit");
+            if (!dto.LocationId.HasValue)
+                throw new BadRequestException("A warehouse must be selected for a tracking point");
+
+            var warehouse = await _context.Locations
+                .FirstOrDefaultAsync(location => location.Id == dto.LocationId.Value &&
+                    location.IsWarehouse && location.Status == LocationStatus.Active);
+            if (warehouse == null)
+                throw new BadRequestException("Selected warehouse is unavailable");
+            if (string.IsNullOrWhiteSpace(dto.Description))
+                throw new BadRequestException("Description cannot be empty");
+
+            _context.OrderTrackingLogs.Add(new OrderTrackingLog
+            {
+                OrderId = orderId,
+                LocationId = warehouse.Id,
+                Description = dto.Description.Trim(),
+                Timestamp = DateTime.UtcNow
+            });
+            order.UpdatedAt = DateTime.UtcNow;
+            await _context.SaveChangesAsync();
+            return await GetTrackingLogsAsync(orderId);
+        }
+
+        private static OrderTrackingLogDTO MapTrackingLog(OrderTrackingLog log)
+        {
+            var dto = new OrderTrackingLogDTO
+            {
+                Id = log.Id,
+                OrderId = log.OrderId,
+                LocationId = log.LocationId,
+                Description = log.Description,
+                Timestamp = log.Timestamp,
+                LocationCode = log.Location?.LocationCode,
+                LocationName = log.Location?.LocationName,
+                Latitude = log.Location?.Latitude,
+                Longitude = log.Location?.Longitude
+            };
+
+            return dto;
+        }
+
         private async Task<Order> GetTrackedOrderAsync(int id)
         {
             var order = await _context.Orders
                 .Include(o => o.Payments)
+                .Include(o => o.User)
+                    .ThenInclude(user => user.Profile)
+                .Include(o => o.FromLocation)
+                .Include(o => o.ToLocation)
                 .FirstOrDefaultAsync(o => o.Id == id);
             if (order == null) throw new NotFoundException("Order not found");
             return order;
@@ -534,7 +716,8 @@ namespace AgitekBackend.Services
                 var randomPart = Guid.NewGuid().ToString("N")[..9].ToUpperInvariant();
                 var trackingNumber = $"AGT{datePart}{randomPart}";
 
-                if (!await _context.Orders.AnyAsync(o => o.TrackingNumber == trackingNumber))
+                if (!await _context.Orders.AnyAsync(order => order.TrackingNumber == trackingNumber) &&
+                    !await _context.Locations.AnyAsync(location => location.LocationCode == $"DL{trackingNumber}"))
                     return trackingNumber;
             }
 

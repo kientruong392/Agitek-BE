@@ -23,7 +23,9 @@ namespace AgitekBackend.Controllers
         [HttpGet("signature")]
         public async Task<ActionResult> GetUploadSignature([FromQuery] string folder = "agitek")
         {
-            var authResult = await _authorizationService.AuthorizeAsync(User, null, new CloudinaryManagementRequirement(CloudinaryOperation.Upload));
+            var isOrderProof = string.Equals(folder, "agitek/orders/proof", StringComparison.OrdinalIgnoreCase);
+            var operation = isOrderProof ? CloudinaryOperation.UploadOrderProof : CloudinaryOperation.Upload;
+            var authResult = await _authorizationService.AuthorizeAsync(User, folder, new CloudinaryManagementRequirement(operation));
             if (!authResult.Succeeded) throw new ForbiddenException("You do not have permission to access this resource");
 
             var signatureDto = _cloudinaryService.GetUploadSignature(folder);

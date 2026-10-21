@@ -3,6 +3,7 @@ using AgitekBackend.Authorization.Requirements;
 using AgitekBackend.Common;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.DTOs.Orders;
+using AgitekBackend.DTOs.OrderTrackingLogs;
 using AgitekBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -42,31 +43,44 @@ namespace AgitekBackend.Controllers
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAll([FromQuery] int? userId)
+        [Authorize(Roles = "Staff,Manager,Admin,SuperAdmin,Delivery,Customer,Guest")]
+        public async Task<ActionResult<IEnumerable<OrderDTO>>> GetAll()
         {
             var currentUser = GetCurrentUser();
             if (currentUser == null)
                 return Unauthorized();
 
-            var isDelivery = currentUser.Role == RoleName.Delivery;
-            var canViewAllUsers = currentUser.Role == RoleName.Manager ||
-                                  currentUser.Role == RoleName.Admin ||
-                                  currentUser.Role == RoleName.SuperAdmin;
-            var targetUserId = isDelivery
-                ? currentUser.Id
-                : canViewAllUsers && userId.HasValue
-                    ? userId.Value
-                    : currentUser.Id;
-            var orders = await _orderService.GetAllAsync(targetUserId, assignedToDelivery: isDelivery);
+            var hasManagementScope = currentUser.Role == RoleName.Staff ||
+                                     currentUser.Role == RoleName.Manager ||
+                                     currentUser.Role == RoleName.Admin ||
+                                     currentUser.Role == RoleName.SuperAdmin;
+            int? userId = hasManagementScope ? null : currentUser.Id;
+            var assignedToDelivery = currentUser.Role == RoleName.Delivery;
+            return Ok(await _orderService.GetAllAsync(userId, assignedToDelivery));
+        }
 
-            var orderList = orders.ToList();
-            if (!canViewAllUsers && orderList.Any(order =>
-                currentUser.Role == RoleName.Customer
-                    ? order.UserId != currentUser.Id
-                    : currentUser.Role == RoleName.Delivery && order.DeliveredByUserId != currentUser.Id))
-                throw new ForbiddenException("You do not have permission to access these orders");
 
-            return Ok(orderList);
+        [HttpGet("{id}/tracking")]
+        public async Task<ActionResult<IEnumerable<OrderTrackingLogDTO>>> GetTrackingLogs(int id)
+        {
+            var order = await _orderService.GetByIdAsync(id);
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, order, new OrderManagementRequirement(OrderOperation.Read));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access this resource");
+            return Ok(await _orderService.GetTrackingLogsAsync(id));
+        }
+
+        [HttpPost("{id}/tracking")]
+        [Authorize(Roles = "Delivery,Admin,SuperAdmin")]
+        public async Task<ActionResult<IEnumerable<OrderTrackingLogDTO>>> AddTrackingLog(
+            int id,
+            [FromBody] CreateOrderTrackingLogDTO dto)
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
+            if (!ModelState.IsValid) return ValidationProblem(ModelState);
+            return Ok(await _orderService.AddTrackingLogAsync(id, dto, currentUser));
         }
 
         [HttpGet("{id}")]
@@ -79,6 +93,14 @@ namespace AgitekBackend.Controllers
                 throw new ForbiddenException("You do not have permission to access this resource");
 
             return Ok(order);
+        }
+
+        [HttpGet("delivery-users")]
+        [Authorize(Roles = "Staff,Manager,Admin,SuperAdmin")]
+        public async Task<ActionResult<IEnumerable<object>>> GetDeliveryUsers()
+        {
+            var users = await _orderService.GetDeliveryUsersAsync();
+            return Ok(users);
         }
 
         [HttpPost]
@@ -172,14 +194,27 @@ namespace AgitekBackend.Controllers
             return Ok(await _orderService.ConfirmOrderAsync(id, dto));
         }
 
+        [HttpPatch("{id}/in-transit")]
+        [Authorize(Roles = "Delivery,Admin,SuperAdmin")]
+        public async Task<ActionResult<OrderDTO>> StartTransit(int id)
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
+            return Ok(await _orderService.StartTransitAsync(id, currentUser));
+        }
+
         [HttpPatch("{id}/ship")]
+        [Authorize(Roles = "Delivery,Admin,SuperAdmin")]
         public async Task<ActionResult<OrderDTO>> Ship(int id, [FromBody] ShipOrderDTO dto)
         {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
             var order = await _orderService.GetByIdAsync(id);
-            var authResult = await _authorizationService.AuthorizeAsync(
-                User, order, new OrderManagementRequirement(OrderOperation.Ship));
-            if (!authResult.Succeeded)
-                throw new ForbiddenException("Only the assigned delivery user or administrators can ship this order");
+
+            if (currentUser.Role == RoleName.Delivery && order.DeliveredByUserId != currentUser.Id)
+                throw new ForbiddenException("Only the assigned delivery user can ship this order");
 
             return Ok(await _orderService.ShipOrderAsync(id, dto));
         }

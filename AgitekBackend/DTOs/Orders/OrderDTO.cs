@@ -13,6 +13,8 @@ namespace AgitekBackend.DTOs.Orders
         public int? PaymentId { get; set; }
         public string TrackingNumber { get; set; } = string.Empty;
         public int UserId { get; set; }
+        public string? CustomerName { get; set; }
+        public string? CustomerPhone { get; set; }
         public int? ApprovedByUserId { get; set; }
         public int? DeliveredByUserId { get; set; }
         public int? VoucherId { get; set; }

@@ -1,6 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using AgitekBackend.Common;
 using AgitekBackend.DTOs.Auths;
+using AgitekBackend.DTOs.Locations;
 using AgitekBackend.DTOs.OrderDetails;
 
 namespace AgitekBackend.DTOs.Orders
@@ -21,6 +22,8 @@ namespace AgitekBackend.DTOs.Orders
 
         [MaxLength(255)]
         public string? Note { get; set; }
+
+        public CreateDeliveryLocationDTO? CreateLocation { get; set; }
 
         [MaxLength(50)]
         public string? VoucherCode { get; set; }
