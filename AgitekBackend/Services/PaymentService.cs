@@ -26,6 +26,16 @@ namespace AgitekBackend.Services
             _vietQrSettings = vietQrSettings.Value;
         }
 
+        public async Task<IEnumerable<PaymentDTO>> GetAllAsync()
+        {
+            var payments = await PaymentsWithOrderDetails()
+                .AsNoTracking()
+                .OrderByDescending(payment => payment.CreatedAt)
+                .ToListAsync();
+
+            return payments.Select(ToPaymentDTO);
+        }
+
         public async Task<PaymentDTO> CreateAsync(CreatePaymentDTO dto)
         {
             var order = await _context.Orders.FirstOrDefaultAsync(o => o.Id == dto.OrderId);
@@ -48,9 +58,8 @@ namespace AgitekBackend.Services
 
         public async Task<IEnumerable<PaymentDTO>> GetByOrderIdAsync(int orderId)
         {
-            var payments = await _context.Payments
+            var payments = await PaymentsWithOrderDetails()
                 .AsNoTracking()
-                .Include(payment => payment.Order)
                 .Where(p => p.OrderId == orderId)
                 .ToListAsync();
 
@@ -59,9 +68,8 @@ namespace AgitekBackend.Services
 
         public async Task<PaymentDTO> GetByIdAsync(int id)
         {
-            var payment = await _context.Payments
+            var payment = await PaymentsWithOrderDetails()
                 .AsNoTracking()
-                .Include(p => p.Order)
                 .FirstOrDefaultAsync(p => p.Id == id);
             if (payment == null)
                 throw new NotFoundException("Payment not found");
@@ -70,8 +78,7 @@ namespace AgitekBackend.Services
 
         public async Task<PaymentDTO?> GetPendingPaymentAsync(int orderId)
         {
-            var payment = await _context.Payments
-                .Include(p => p.Order)
+            var payment = await PaymentsWithOrderDetails()
                 .Where(p => p.OrderId == orderId)
                 .FirstOrDefaultAsync(p => p.Status == PaymentStatus.Pending);
             return payment == null ? null : ToPaymentDTO(payment);
@@ -79,9 +86,8 @@ namespace AgitekBackend.Services
 
         public async Task<PublicPaymentDTO> GetPublicByOrderAsync(int orderId, string trackingNumber)
         {
-            var payment = await _context.Payments
+            var payment = await PaymentsWithOrderDetails()
                 .AsNoTracking()
-                .Include(item => item.Order)
                 .Where(item => item.OrderId == orderId && item.Order.TrackingNumber == trackingNumber)
                 .OrderByDescending(item => item.Id)
                 .FirstOrDefaultAsync();
@@ -109,19 +115,33 @@ namespace AgitekBackend.Services
         private PaymentDTO ToPaymentDTO(Payment payment)
         {
             var dto = _mapper.Map<PaymentDTO>(payment);
+            var order = payment.Order;
+
             if (payment.PaymentMethod == PaymentMethod.Bank)
             {
-                var description = Uri.EscapeDataString(payment.Order.TrackingNumber);
+                var description = Uri.EscapeDataString(order?.TrackingNumber ?? string.Empty);
                 var accountName = Uri.EscapeDataString(_vietQrSettings.AccountName);
                 var amount = payment.Amount.ToString("0.##", System.Globalization.CultureInfo.InvariantCulture);
                 dto.QrCodeUrl = $"https://img.vietqr.io/image/{Uri.EscapeDataString(_vietQrSettings.BankId)}-{Uri.EscapeDataString(_vietQrSettings.AccountNumber)}-compact2.png?amount={amount}&addInfo={description}&accountName={accountName}";
                 dto.BankId = _vietQrSettings.BankId;
                 dto.AccountNumber = _vietQrSettings.AccountNumber;
                 dto.AccountName = _vietQrSettings.AccountName;
-                dto.TransferDescription = payment.Order.TrackingNumber;
+                dto.TransferDescription = order?.TrackingNumber;
             }
 
             return dto;
+        }
+
+        private IQueryable<Payment> PaymentsWithOrderDetails()
+        {
+            return _context.Payments
+                .Include(payment => payment.Order)
+                    .ThenInclude(order => order.User)
+                        .ThenInclude(user => user.Profile)
+                .Include(payment => payment.Order)
+                    .ThenInclude(order => order.OrderDetails)
+                        .ThenInclude(detail => detail.Product)
+                        .ThenInclude(product => product!.Images);
         }
 
         public async Task UpdateStatusAsync(int id, PaymentStatus status)

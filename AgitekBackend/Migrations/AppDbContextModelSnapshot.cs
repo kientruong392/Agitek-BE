@@ -375,9 +375,6 @@ namespace AgitekBackend.Migrations
                     b.Property<int>("OrderId")
                         .HasColumnType("int");
 
-                    b.Property<int?>("OrderId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("Timestamp")
                         .HasColumnType("datetime2");
 
@@ -386,8 +383,6 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("LocationId");
 
                     b.HasIndex("OrderId");
-
-                    b.HasIndex("OrderId1");
 
                     b.ToTable("OrderTrackingLogs");
                 });
@@ -1035,14 +1030,10 @@ namespace AgitekBackend.Migrations
                         .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("AgitekBackend.Models.Order", "Order")
-                        .WithMany()
+                        .WithMany("OrderTrackingLogs")
                         .HasForeignKey("OrderId")
                         .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
-
-                    b.HasOne("AgitekBackend.Models.Order", null)
-                        .WithMany("OrderTrackingLogs")
-                        .HasForeignKey("OrderId1");
 
                     b.Navigation("Location");
 

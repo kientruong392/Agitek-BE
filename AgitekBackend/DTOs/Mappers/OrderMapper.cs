@@ -19,7 +19,8 @@ namespace AgitekBackend.DTOs.Mappers
                     src.Payments.OrderByDescending(payment => payment.Id).Select(payment => (int?)payment.Id).FirstOrDefault()))
                 .ForMember(dest => dest.CustomerName, opts => opts.MapFrom(src => src.User.Profile.FullName))
                 .ForMember(dest => dest.CustomerPhone, opts => opts.MapFrom(src => src.User.Profile.PhoneNumber))
-                .ForMember(dest => dest.ToLocation, opts => opts.MapFrom(src => src.ToLocation));
+                .ForMember(dest => dest.ToLocation, opts => opts.MapFrom(src => src.ToLocation))
+                .ForMember(dest => dest.Payments, opts => opts.Ignore());
 
             CreateMap<CreateOrderDetailDTO, OrderDetail>();
             CreateMap<UpdateOrderDetailDTO, OrderDetail>()
@@ -32,7 +33,11 @@ namespace AgitekBackend.DTOs.Mappers
                     .ThenBy(image => image.SortOrder)
                     .Select(image => image.ImageUrl)
                     .FirstOrDefault()))
-                .ForMember(dest => dest.HasReview, opts => opts.MapFrom(src => src.Reviews != null && src.Reviews.Any()));
+                .ForMember(dest => dest.HasReview, opts => opts.MapFrom(src => src.Reviews != null && src.Reviews.Any()))
+                .ForMember(dest => dest.ReviewId, opts => opts.MapFrom(src => src.Reviews
+                    .OrderByDescending(review => review.CreatedAt)
+                    .Select(review => (int?)review.Id)
+                    .FirstOrDefault()));
 
             CreateMap<CreateOrderTrackingLogDTO, OrderTrackingLog>();
             CreateMap<UpdateOrderTrackingLogDTO, OrderTrackingLog>()

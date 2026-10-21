@@ -20,6 +20,33 @@ namespace AgitekBackend.Data
             await SeedLocationsAsync(context);
         }
 
+        public static async Task ReseedOrdersAsync(this WebApplication app)
+        {
+            await app.SeedDataAsync();
+
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+
+            await using (var transaction = await context.Database.BeginTransactionAsync())
+            {
+                await context.Medias.ExecuteDeleteAsync();
+                await context.Refunds.ExecuteDeleteAsync();
+                await context.Warranties.ExecuteDeleteAsync();
+                await context.Reviews.ExecuteDeleteAsync();
+                await context.Payments.ExecuteDeleteAsync();
+                await context.OrderTrackingLogs.ExecuteDeleteAsync();
+                await context.OrderDetails.ExecuteDeleteAsync();
+                await context.Orders.ExecuteDeleteAsync();
+                await context.Products.ExecuteUpdateAsync(setters => setters
+                    .SetProperty(product => product.AverageRating, 0d));
+
+                await transaction.CommitAsync();
+            }
+
+            await ResetOrderDataIdentitiesAsync(context);
+            await SeedOrdersForReviewTestingAsync(context);
+        }
+
         private static async Task SeedUsersAsync(AppDbContext context)
         {
             if (await context.Users.AnyAsync()) return;
@@ -490,6 +517,187 @@ namespace AgitekBackend.Data
                 await context.Locations.AddRangeAsync(toAdd);
                 await context.SaveChangesAsync();
             }
+        }
+
+        private static async Task ResetOrderDataIdentitiesAsync(AppDbContext context)
+        {
+            var commands = new[]
+            {
+                "DBCC CHECKIDENT ('[Payments]', RESEED, 0)",
+                "DBCC CHECKIDENT ('[OrderTrackingLogs]', RESEED, 0)",
+                "DBCC CHECKIDENT ('[Reviews]', RESEED, 0)",
+                "DBCC CHECKIDENT ('[Warranties]', RESEED, 0)",
+                "DBCC CHECKIDENT ('[Medias]', RESEED, 0)",
+                "DBCC CHECKIDENT ('[Orders]', RESEED, 0)"
+            };
+
+            foreach (var command in commands)
+            {
+                await context.Database.ExecuteSqlRawAsync(command);
+            }
+        }
+
+        private static async Task SeedOrdersForReviewTestingAsync(AppDbContext context)
+        {
+            var customers = await context.Users
+                .Where(user => user.Role == RoleName.Customer && user.IsActive)
+                .Include(user => user.Profile)
+                .OrderBy(user => user.Id)
+                .Take(2)
+                .ToListAsync();
+            var products = await context.Products
+                .Where(product => product.Status == ProductStatus.InStock && product.DeletedAt == null && product.StockQuantity > 0)
+                .OrderBy(product => product.Id)
+                .Take(8)
+                .ToListAsync();
+            var locations = await context.Locations
+                .Where(location => location.IsWarehouse && location.Status == LocationStatus.Active)
+                .OrderBy(location => location.Id)
+                .Take(2)
+                .ToListAsync();
+            var approverId = await context.Users
+                .Where(user => user.Role == RoleName.Staff || user.Role == RoleName.Manager || user.Role == RoleName.Admin)
+                .OrderBy(user => user.Id)
+                .Select(user => (int?)user.Id)
+                .FirstOrDefaultAsync();
+            var deliveryUserId = await context.Users
+                .Where(user => user.Role == RoleName.Delivery && user.IsActive)
+                .OrderBy(user => user.Id)
+                .Select(user => (int?)user.Id)
+                .FirstOrDefaultAsync();
+
+            if (customers.Count == 0)
+                throw new InvalidOperationException("At least one active customer is required to seed orders");
+            if (products.Count < 4)
+                throw new InvalidOperationException("At least four in-stock products are required to seed orders");
+
+            var now = DateTime.Now;
+            var orderNumber = 0;
+            var productIndex = 0;
+            var orders = new List<Order>();
+            var deliveredOrders = new List<Order>();
+            var fromLocation = locations.ElementAtOrDefault(0);
+            var toLocation = locations.ElementAtOrDefault(1) ?? fromLocation;
+
+            Order CreateOrder(User customer, OrderStatus status, int daysAgo, params Product[] orderProducts)
+            {
+                orderNumber++;
+                var createdAt = now.AddDays(-daysAgo);
+                var shippingType = orderNumber % 2 == 0 ? ShippingType.Express : ShippingType.Standard;
+                var shippingFee = shippingType == ShippingType.Express ? 50_000m : 30_000m;
+                var details = orderProducts.Select(product =>
+                {
+                    var unitPrice = product.DiscountPrice ?? product.OriginalPrice;
+                    return new OrderDetail
+                    {
+                        ProductId = product.Id,
+                        Quantity = 1,
+                        UnitPrice = unitPrice,
+                        TotalPrice = unitPrice
+                    };
+                }).ToList();
+                var subtotal = details.Sum(detail => detail.TotalPrice);
+                var order = new Order
+                {
+                    TrackingNumber = $"SEED-{now:yyMMdd}-{orderNumber:000}",
+                    UserId = customer.Id,
+                    ApprovedByUserId = approverId,
+                    DeliveredByUserId = status == OrderStatus.Delivered ? deliveryUserId : null,
+                    FromLocationId = fromLocation?.Id,
+                    ToLocationId = toLocation?.Id,
+                    Address = $"{customer.Profile.FullName}, địa chỉ kiểm thử đơn hàng #{orderNumber}",
+                    ShippingType = shippingType,
+                    SubtotalPrice = subtotal,
+                    ShippingFee = shippingFee,
+                    DiscountAmount = 0,
+                    TotalPrice = subtotal + shippingFee,
+                    Status = status,
+                    Note = "Dữ liệu mẫu phục vụ kiểm thử đơn hàng và đánh giá sản phẩm.",
+                    CreatedAt = createdAt,
+                    UpdatedAt = status == OrderStatus.Delivered ? createdAt.AddDays(2) : createdAt.AddHours(12),
+                    OrderDetails = details
+                };
+
+                order.Payments.Add(new Payment
+                {
+                    Amount = order.TotalPrice,
+                    PaymentMethod = (PaymentMethod)(orderNumber % 3),
+                    Status = status == OrderStatus.Delivered ? PaymentStatus.Success : PaymentStatus.Pending,
+                    CreatedAt = createdAt,
+                    PaidAt = status == OrderStatus.Delivered ? createdAt.AddDays(2) : null,
+                    TransactionId = status == OrderStatus.Delivered ? $"SEED-PAY-{orderNumber:000}" : null
+                });
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    LocationId = fromLocation?.Id,
+                    Description = "Đơn hàng đã được tạo.",
+                    Timestamp = createdAt
+                });
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    LocationId = fromLocation?.Id,
+                    Description = "Đơn hàng đã được xác nhận và bàn giao vận chuyển.",
+                    Timestamp = createdAt.AddHours(4)
+                });
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    LocationId = toLocation?.Id,
+                    Description = status == OrderStatus.Delivered
+                        ? "Đơn hàng đã giao thành công."
+                        : "Đơn hàng đang được giao đến khách hàng.",
+                    Timestamp = status == OrderStatus.Delivered ? createdAt.AddDays(2) : createdAt.AddHours(12)
+                });
+
+                return order;
+            }
+
+            foreach (var customer in customers)
+            {
+                var firstDelivered = CreateOrder(
+                    customer,
+                    OrderStatus.Delivered,
+                    10 - orderNumber,
+                    products[productIndex++ % products.Count],
+                    products[productIndex++ % products.Count]);
+                var secondDelivered = CreateOrder(
+                    customer,
+                    OrderStatus.Delivered,
+                    5 - orderNumber,
+                    products[productIndex++ % products.Count]);
+
+                orders.Add(firstDelivered);
+                orders.Add(secondDelivered);
+                deliveredOrders.Add(firstDelivered);
+                deliveredOrders.Add(secondDelivered);
+            }
+
+            orders.Add(CreateOrder(
+                customers[0],
+                OrderStatus.InTransit,
+                1,
+                products[productIndex % products.Count]));
+
+            var reviewedDetail = deliveredOrders[0].OrderDetails.First();
+            var reviewedProduct = products.First(product => product.Id == reviewedDetail.ProductId);
+            reviewedProduct.AverageRating = 5;
+            reviewedProduct.UpdatedAt = now;
+
+            context.Orders.AddRange(orders);
+            context.Reviews.Add(new Review
+            {
+                OrderDetail = reviewedDetail,
+                ProductId = reviewedDetail.ProductId,
+                UserId = deliveredOrders[0].UserId,
+                Rating = 5,
+                Comment = "Sản phẩm đúng mô tả, đây là đánh giá mẫu đã có sẵn.",
+                CreatedAt = deliveredOrders[0].UpdatedAt,
+                UpdatedAt = deliveredOrders[0].UpdatedAt
+            });
+
+            await context.SaveChangesAsync();
         }
     }
 }

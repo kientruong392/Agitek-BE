@@ -39,6 +39,21 @@ namespace AgitekBackend.Controllers
             return null;
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<PaymentDTO>>> GetAll()
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, null, new PaymentManagementRequirement(PaymentOperation.Read));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access payment transactions");
+
+            return Ok(await _paymentService.GetAllAsync());
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<PaymentDTO>> GetById(int id)
         {

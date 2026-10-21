@@ -214,6 +214,12 @@ builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
 
+if (args.Any(argument => string.Equals(argument, "--reseed-orders", StringComparison.OrdinalIgnoreCase)))
+{
+    await app.ReseedOrdersAsync();
+    return;
+}
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())

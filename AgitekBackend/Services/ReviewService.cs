@@ -1,4 +1,5 @@
 using AgitekBackend.Common.Exceptions;
+using AgitekBackend.Common;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Medias;
 using AgitekBackend.DTOs.Reviews;
@@ -50,7 +51,7 @@ namespace AgitekBackend.Services
 
         public async Task<ReviewDTO> CreateAsync(CreateReviewDTO dto, int currentUserId)
         {
-            await EnsureOrderDetailExistsAsync(dto.OrderId, dto.ProductId);
+            await EnsureCanCreateReviewAsync(dto.OrderId, dto.ProductId, currentUserId);
 
             var review = _mapper.Map<Review>(dto);
             review.UserId = currentUserId;
@@ -146,6 +147,31 @@ namespace AgitekBackend.Services
                 .AnyAsync(od => od.OrderId == orderId && od.ProductId == productId);
             if (!orderDetailExists)
                 throw new NotFoundException("Order detail not found");
+        }
+
+        private async Task EnsureCanCreateReviewAsync(int orderId, int productId, int currentUserId)
+        {
+            var orderDetail = await _context.OrderDetails
+                .Where(detail => detail.OrderId == orderId && detail.ProductId == productId)
+                .Select(detail => new
+                {
+                    detail.Order.UserId,
+                    detail.Order.Status,
+                    AlreadyReviewed = detail.Reviews.Any(review => review.UserId == currentUserId)
+                })
+                .FirstOrDefaultAsync();
+
+            if (orderDetail == null)
+                throw new NotFoundException("Order detail not found");
+
+            if (orderDetail.UserId != currentUserId)
+                throw new ForbiddenException("You do not have permission to review this order item");
+
+            if (orderDetail.Status != OrderStatus.Delivered)
+                throw new BadRequestException("Reviews are only available after the order is delivered");
+
+            if (orderDetail.AlreadyReviewed)
+                throw new BadRequestException("This order item has already been reviewed");
         }
 
         private async Task UpdateAverageRatingAsync(int productId)

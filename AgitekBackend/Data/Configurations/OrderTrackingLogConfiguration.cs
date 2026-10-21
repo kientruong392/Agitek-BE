@@ -14,7 +14,7 @@ namespace AgitekBackend.Data.Configurations
                    .OnDelete(DeleteBehavior.SetNull);
 
             builder.HasOne(t => t.Order)
-                   .WithMany()
+                   .WithMany(order => order.OrderTrackingLogs)
                    .HasForeignKey(t => t.OrderId)
                    .OnDelete(DeleteBehavior.Restrict);
         }

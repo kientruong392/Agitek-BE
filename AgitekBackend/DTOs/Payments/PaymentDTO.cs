@@ -1,4 +1,5 @@
 using AgitekBackend.Common;
+using AgitekBackend.DTOs.Orders;
 
 namespace AgitekBackend.DTOs.Payments
 {
@@ -10,10 +11,12 @@ namespace AgitekBackend.DTOs.Payments
         public decimal Amount { get; set; }
         public PaymentMethod PaymentMethod { get; set; }
         public PaymentStatus Status { get; set; }
+        public DateTime CreatedAt { get; set; }
         public string? TransactionId { get; set; }
         public string? GatewayResponse { get; set; }
         public DateTime? ExpiresAt { get; set; }
         public DateTime? PaidAt { get; set; }
+        public OrderDTO? Order { get; set; }
         public string? QrCodeUrl { get; set; }
         public string? BankId { get; set; }
         public string? AccountNumber { get; set; }
