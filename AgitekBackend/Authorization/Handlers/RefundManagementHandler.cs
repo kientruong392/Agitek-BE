@@ -2,6 +2,8 @@ using System.Security.Claims;
 using AgitekBackend.Authorization.Requirements;
 using AgitekBackend.Common;
 using AgitekBackend.Data;
+using AgitekBackend.DTOs.Refunds;
+using AgitekBackend.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 
@@ -24,7 +26,8 @@ namespace AgitekBackend.Authorization.Handlers
             if (roleClaim == null || !Enum.TryParse<RoleName>(roleClaim, true, out var currentRole))
                 return;
 
-            if (requirement.Operation == RefundOperation.Approve)
+            if (requirement.Operation == RefundOperation.ReadAll ||
+                requirement.Operation == RefundOperation.Approve)
             {
                 if (currentRole == RoleName.Manager ||
                     currentRole == RoleName.Admin ||
@@ -36,15 +39,32 @@ namespace AgitekBackend.Authorization.Handlers
                 return;
             }
 
+            if (requirement.Operation == RefundOperation.Read &&
+                (currentRole == RoleName.Manager ||
+                 currentRole == RoleName.Admin ||
+                 currentRole == RoleName.SuperAdmin))
+            {
+                context.Succeed(requirement);
+                return;
+            }
+
             var currentUserIdClaim = context.User.FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? context.User.FindFirstValue("sub")
                 ?? context.User.FindFirstValue("id");
             if (currentUserIdClaim == null || !int.TryParse(currentUserIdClaim, out var currentUserId))
                 return;
 
-            if (requirement.Operation == RefundOperation.Create &&
-                context.Resource is int orderId &&
-                await GetOrderOwnerIdAsync(orderId) == currentUserId)
+            var orderOwnerId = context.Resource switch
+            {
+                int orderId => await GetOrderOwnerIdAsync(orderId),
+                Refund refund => refund.UserId,
+                RefundDTO refundDto => refundDto.UserId,
+                _ => null
+            };
+
+            if ((requirement.Operation == RefundOperation.Create ||
+                 requirement.Operation == RefundOperation.Read) &&
+                orderOwnerId == currentUserId)
             {
                 context.Succeed(requirement);
             }

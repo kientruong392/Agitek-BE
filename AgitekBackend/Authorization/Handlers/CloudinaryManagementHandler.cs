@@ -15,6 +15,7 @@ namespace AgitekBackend.Authorization.Handlers
                 CloudinaryOperation.Upload => IsInAnyRole(context, RoleName.Manager, RoleName.Admin, RoleName.SuperAdmin),
                 CloudinaryOperation.UploadOrderProof => IsInAnyRole(context, RoleName.Delivery, RoleName.Admin, RoleName.SuperAdmin),
                 CloudinaryOperation.UploadReview => IsInAnyRole(context, RoleName.Customer),
+                CloudinaryOperation.UploadRefund => IsInAnyRole(context, RoleName.Customer),
                 _ => false
             };
 

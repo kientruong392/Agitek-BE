@@ -1,7 +1,6 @@
 using AgitekBackend.Common;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.Data;
-using AgitekBackend.DTOs.Payments;
 using AgitekBackend.DTOs.Refunds;
 using AgitekBackend.Models;
 using AgitekBackend.Services.Interfaces;
@@ -14,30 +13,23 @@ namespace AgitekBackend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
-        private readonly IOrderService _orderService;
-        private readonly IPaymentService _paymentService;
         private readonly IMediaService _mediaService;
 
         public RefundService(
             AppDbContext context,
             IMapper mapper,
-            IOrderService orderService,
-            IPaymentService paymentService,
             IMediaService mediaService)
         {
             _context = context;
             _mapper = mapper;
-            _orderService = orderService;
-            _paymentService = paymentService;
             _mediaService = mediaService;
         }
 
         public async Task<IEnumerable<RefundDTO>> GetAllAsync()
         {
-            var refunds = await _context.Refunds
+            var refunds = await RefundsWithDetails()
                 .AsNoTracking()
-                .Include(r => r.OrderDetail)
-                .Include(r => r.Medias)
+                .OrderByDescending(refund => refund.CreatedAt)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<RefundDTO>>(refunds);
@@ -45,10 +37,8 @@ namespace AgitekBackend.Services
 
         public async Task<RefundDTO> GetByIdAsync(int orderId, int productId)
         {
-            var refund = await _context.Refunds
+            var refund = await RefundsWithDetails()
                 .AsNoTracking()
-                .Include(r => r.OrderDetail)
-                .Include(r => r.Medias)
                 .FirstOrDefaultAsync(r => r.OrderId == orderId && r.ProductId == productId);
             if (refund == null)
                 throw new NotFoundException("Refund not found");
@@ -58,7 +48,7 @@ namespace AgitekBackend.Services
 
         public async Task<RefundDTO> CreateAsync(CreateRefundDTO dto, int currentUserId)
         {
-            if (!dto.Medias.Any())
+            if (dto.Medias == null || !dto.Medias.Any())
                 throw new BadRequestException("Refund must have at least one media");
 
             var orderDetail = await _context.OrderDetails
@@ -69,6 +59,9 @@ namespace AgitekBackend.Services
 
             if (orderDetail.Order.UserId != currentUserId)
                 throw new BadRequestException("Order does not belong to the current user");
+
+            if (orderDetail.Order.Status != OrderStatus.Delivered)
+                throw new BadRequestException("Refunds are only available after the order is delivered");
 
             if (dto.Quantity > orderDetail.Quantity)
                 throw new BadRequestException("Refund quantity cannot exceed order quantity");
@@ -124,25 +117,74 @@ namespace AgitekBackend.Services
             if (dto.Status != RefundStatus.Approved && dto.Status != RefundStatus.Rejected)
                 throw new BadRequestException("Refund status must be Approved or Rejected");
 
-            _mapper.Map(dto, refund);
-            refund.ApprovedByUserId = currentUserId;
-            refund.UpdatedAt = DateTime.UtcNow;
+            if (string.IsNullOrWhiteSpace(dto.Response))
+                throw new BadRequestException("Refund response cannot be empty");
 
-            await _context.SaveChangesAsync();
-
-            if (dto.Status == RefundStatus.Approved)
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
             {
-                await _orderService.UpdateOrderStatusAsync(refund.OrderId, OrderStatus.Refunded);
+                _mapper.Map(dto, refund);
+                refund.Response = dto.Response.Trim();
+                refund.ApprovedByUserId = currentUserId;
+                refund.UpdatedAt = DateTime.UtcNow;
 
-                var refundPayment = await _paymentService.CreateAsync(new CreatePaymentDTO
+                await _context.SaveChangesAsync();
+
+                if (dto.Status == RefundStatus.Approved)
                 {
-                    OrderId = refund.OrderId,
-                    PaymentMethod = PaymentMethod.Bank
-                });
-                await _paymentService.UpdateStatusAsync(refundPayment.Id, PaymentStatus.Refunded);
+                    _context.Payments.Add(new Payment
+                    {
+                        OrderId = refund.OrderId,
+                        Amount = refund.Amount,
+                        PaymentMethod = PaymentMethod.Bank,
+                        Status = PaymentStatus.Refunded,
+                        CreatedAt = DateTime.UtcNow,
+                        PaidAt = DateTime.UtcNow,
+                        GatewayResponse = $"Approved refund request for product #{refund.ProductId}"
+                    });
+
+                    var allOrderDetailsRefunded = await _context.OrderDetails
+                        .Where(detail => detail.OrderId == refund.OrderId)
+                        .AllAsync(detail => detail.Refund != null && detail.Refund.Status == RefundStatus.Approved);
+                    if (allOrderDetailsRefunded)
+                    {
+                        var order = await _context.Orders.FirstOrDefaultAsync(order => order.Id == refund.OrderId);
+                        if (order != null)
+                        {
+                            order.Status = OrderStatus.Refunded;
+                            order.UpdatedAt = DateTime.UtcNow;
+                        }
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
             }
 
             return await GetByIdAsync(refund.OrderId, refund.ProductId);
+        }
+
+        private IQueryable<Refund> RefundsWithDetails()
+        {
+            return _context.Refunds
+                .Include(refund => refund.Medias)
+                .Include(refund => refund.User)
+                    .ThenInclude(user => user!.Profile)
+                .Include(refund => refund.ApprovedByUser)
+                    .ThenInclude(user => user!.Profile)
+                .Include(refund => refund.OrderDetail)
+                    .ThenInclude(detail => detail.Product)
+                        .ThenInclude(product => product!.Images)
+                .Include(refund => refund.OrderDetail)
+                    .ThenInclude(detail => detail.Order)
+                        .ThenInclude(order => order.User)
+                            .ThenInclude(user => user.Profile)
+                .AsSplitQuery();
         }
     }
 }

@@ -37,7 +37,10 @@ namespace AgitekBackend.DTOs.Mappers
                 .ForMember(dest => dest.ReviewId, opts => opts.MapFrom(src => src.Reviews
                     .OrderByDescending(review => review.CreatedAt)
                     .Select(review => (int?)review.Id)
-                    .FirstOrDefault()));
+                    .FirstOrDefault()))
+                .ForMember(dest => dest.HasRefund, opts => opts.MapFrom(src => src.Refund != null))
+                .ForMember(dest => dest.RefundStatus, opts => opts.MapFrom(src =>
+                    src.Refund == null ? null : (AgitekBackend.Common.RefundStatus?)src.Refund.Status));
 
             CreateMap<CreateOrderTrackingLogDTO, OrderTrackingLog>();
             CreateMap<UpdateOrderTrackingLogDTO, OrderTrackingLog>()

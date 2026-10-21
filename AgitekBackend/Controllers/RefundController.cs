@@ -42,6 +42,15 @@ namespace AgitekBackend.Controllers
         [HttpGet]
         public async Task<ActionResult<IEnumerable<RefundDTO>>> GetAll()
         {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, null, new RefundManagementRequirement(RefundOperation.ReadAll));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access refund requests");
+
             var refunds = await _refundService.GetAllAsync();
             return Ok(refunds);
         }
@@ -50,6 +59,12 @@ namespace AgitekBackend.Controllers
         public async Task<ActionResult<RefundDTO>> GetById(int orderId, int productId)
         {
             var refund = await _refundService.GetByIdAsync(orderId, productId);
+
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, refund, new RefundManagementRequirement(RefundOperation.Read));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access this refund request");
+
             return Ok(refund);
         }
 

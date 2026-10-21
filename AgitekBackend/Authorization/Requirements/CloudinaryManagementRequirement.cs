@@ -6,7 +6,8 @@ namespace AgitekBackend.Authorization.Requirements
     {
         Upload,
         UploadOrderProof,
-        UploadReview
+        UploadReview,
+        UploadRefund
     }
 
     public class CloudinaryManagementRequirement : IAuthorizationRequirement

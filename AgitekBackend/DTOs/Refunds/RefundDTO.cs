@@ -1,6 +1,8 @@
 using AgitekBackend.Common;
 using AgitekBackend.DTOs.Medias;
 using AgitekBackend.DTOs.OrderDetails;
+using AgitekBackend.DTOs.Orders;
+using AgitekBackend.DTOs.Users;
 
 namespace AgitekBackend.DTOs.Refunds
 {
@@ -18,6 +20,9 @@ namespace AgitekBackend.DTOs.Refunds
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public OrderDetailDTO? OrderDetail { get; set; }
+        public OrderDTO? Order { get; set; }
+        public UserDTO? User { get; set; }
+        public UserDTO? ApprovedByUser { get; set; }
         public ICollection<MediaDTO> Medias { get; set; } = new List<MediaDTO>();
     }
 }

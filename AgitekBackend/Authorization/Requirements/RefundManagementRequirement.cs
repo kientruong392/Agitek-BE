@@ -4,6 +4,8 @@ namespace AgitekBackend.Authorization.Requirements
 {
     public enum RefundOperation
     {
+        ReadAll,
+        Read,
         Create,
         Approve
     }
