@@ -13,10 +13,12 @@ namespace AgitekBackend.DTOs.Reviews
         public int Rating { get; set; }
         public string? Comment { get; set; }
         public int? ReplyUserId { get; set; }
+        public UserDTO? ReplyUser { get; set; }
         public string? ReplyComment { get; set; }
         public DateTime? ReplyCreatedAt { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        public ReviewProductDTO? Product { get; set; }
         public List<MediaDTO> Medias { get; set; } = new List<MediaDTO>();
     }
 }

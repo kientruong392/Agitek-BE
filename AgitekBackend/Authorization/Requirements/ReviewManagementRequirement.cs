@@ -4,6 +4,7 @@ namespace AgitekBackend.Authorization.Requirements
 {
     public enum ReviewOperation
     {
+        View,
         Create,
         Update,
         Reply

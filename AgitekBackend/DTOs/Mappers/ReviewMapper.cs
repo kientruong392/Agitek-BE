@@ -13,6 +13,7 @@ namespace AgitekBackend.DTOs.Mappers
                 .ForMember(dest => dest.Medias, opts => opts.Ignore())
                 .ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<ReplyReviewDTO, Review>();
+            CreateMap<Product, ReviewProductDTO>();
             CreateMap<Review, ReviewDTO>();
         }
     }

@@ -31,7 +31,27 @@ namespace AgitekBackend.Services
                 .Include(r => r.Medias)
                 .Include(r => r.User)
                     .ThenInclude(user => user!.Profile)
+                .Include(r => r.ReplyUser)
+                    .ThenInclude(user => user!.Profile)
                 .OrderByDescending(r => r.CreatedAt)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
+        }
+
+        public async Task<IEnumerable<ReviewDTO>> GetManagementAsync()
+        {
+            var reviews = await _context.Reviews
+                .AsNoTracking()
+                .Include(review => review.Medias)
+                .Include(review => review.User)
+                    .ThenInclude(user => user!.Profile)
+                .Include(review => review.ReplyUser)
+                    .ThenInclude(user => user!.Profile)
+                .Include(review => review.Product)
+                    .ThenInclude(product => product!.Images)
+                .OrderByDescending(review => review.CreatedAt)
+                .AsSplitQuery()
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<ReviewDTO>>(reviews);
@@ -42,6 +62,13 @@ namespace AgitekBackend.Services
             var review = await _context.Reviews
                 .AsNoTracking()
                 .Include(r => r.Medias)
+                .Include(r => r.User)
+                    .ThenInclude(user => user!.Profile)
+                .Include(r => r.ReplyUser)
+                    .ThenInclude(user => user!.Profile)
+                .Include(r => r.Product)
+                    .ThenInclude(product => product!.Images)
+                .AsSplitQuery()
                 .FirstOrDefaultAsync(r => r.Id == id);
             if (review == null)
                 throw new NotFoundException("Review not found");
@@ -125,6 +152,9 @@ namespace AgitekBackend.Services
 
         public async Task<ReviewDTO> ReplyAsync(int id, int currentUserId, ReplyReviewDTO dto)
         {
+            if (string.IsNullOrWhiteSpace(dto.ReplyComment))
+                throw new BadRequestException("Reply comment cannot be empty");
+
             var review = await _context.Reviews.FirstOrDefaultAsync(r => r.Id == id);
             if (review == null)
                 throw new NotFoundException("Review not found");
@@ -132,13 +162,13 @@ namespace AgitekBackend.Services
             if (review.ReplyUserId.HasValue || review.ReplyComment != null || review.ReplyCreatedAt.HasValue)
                 throw new BadRequestException("Review already has a reply");
 
-            _mapper.Map(dto, review);
+            review.ReplyComment = dto.ReplyComment.Trim();
             review.ReplyUserId = currentUserId;
             review.ReplyCreatedAt = DateTime.UtcNow;
             review.UpdatedAt = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return _mapper.Map<ReviewDTO>(review);
+            return await GetByIdAsync(review.Id);
         }
 
         private async Task EnsureOrderDetailExistsAsync(int orderId, int productId)

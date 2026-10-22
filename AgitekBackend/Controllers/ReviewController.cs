@@ -47,6 +47,18 @@ namespace AgitekBackend.Controllers
             return Ok(reviews);
         }
 
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<ReviewDTO>>> GetManagement()
+        {
+            var authResult = await _authorizationService.AuthorizeAsync(
+                User, null, new ReviewManagementRequirement(ReviewOperation.View));
+            if (!authResult.Succeeded)
+                throw new ForbiddenException("You do not have permission to access reviews");
+
+            var reviews = await _reviewService.GetManagementAsync();
+            return Ok(reviews);
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<ReviewDTO>> GetById(int id)
         {

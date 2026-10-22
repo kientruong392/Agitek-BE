@@ -26,7 +26,7 @@ namespace AgitekBackend.Authorization.Handlers
             if (roleClaim == null || !Enum.TryParse<RoleName>(roleClaim, true, out var currentRole))
                 return;
 
-            if (requirement.Operation == ReviewOperation.Reply)
+            if (requirement.Operation is ReviewOperation.View or ReviewOperation.Reply)
             {
                 if (currentRole == RoleName.Staff ||
                     currentRole == RoleName.Manager ||
