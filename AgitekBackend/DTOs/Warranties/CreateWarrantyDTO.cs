@@ -7,6 +7,9 @@ namespace AgitekBackend.DTOs.Warranties
     {
         public int OrderId { get; set; }
         public int ProductId { get; set; }
+        [Required(ErrorMessage = "Quantity cannot be empty")]
+        [Range(1, int.MaxValue, ErrorMessage = "Quantity must be greater than 0")]
+        public int Quantity { get; set; }
         [Required(ErrorMessage = "Full name cannot be empty")]
         [MaxLength(100, ErrorMessage = "Full name cannot exceed 100 characters")]
         public string FullName { get; set; } = string.Empty;

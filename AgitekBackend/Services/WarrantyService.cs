@@ -33,11 +33,20 @@ namespace AgitekBackend.Services
                 throw new ForbiddenException("You do not have permission to access this resource");
             }
 
-            var warranties = await _context.Warranties
+            var warranties = await WarrantiesWithDetails()
                 .AsNoTracking()
-                .Include(w => w.Media)
-                .Include(w => w.OrderDetail)
-                .Include(w => w.User)
+                .OrderByDescending(warranty => warranty.CreatedAt)
+                .ToListAsync();
+
+            return _mapper.Map<IEnumerable<WarrantyDTO>>(warranties);
+        }
+
+        public async Task<IEnumerable<WarrantyDTO>> GetMyAsync(int currentUserId)
+        {
+            var warranties = await WarrantiesWithDetails()
+                .AsNoTracking()
+                .Where(warranty => warranty.UserId == currentUserId)
+                .OrderByDescending(warranty => warranty.CreatedAt)
                 .ToListAsync();
 
             return _mapper.Map<IEnumerable<WarrantyDTO>>(warranties);
@@ -45,11 +54,8 @@ namespace AgitekBackend.Services
 
         public async Task<WarrantyDTO?> GetByIdAsync(int id)
         {
-            var warranty = await _context.Warranties
+            var warranty = await WarrantiesWithDetails()
                 .AsNoTracking()
-                .Include(w => w.Media)
-                .Include(w => w.OrderDetail)
-                .Include(w => w.User)
                 .FirstOrDefaultAsync(w => w.Id == id);
             if (warranty == null)
                 throw new NotFoundException("Warranty not found");
@@ -59,20 +65,40 @@ namespace AgitekBackend.Services
 
         public async Task<WarrantyDTO> CreateAsync(CreateWarrantyDTO dto, int currentUserId)
         {
+            if (dto.Medias == null || !dto.Medias.Any())
+                throw new BadRequestException("Warranty must have at least one media");
+
             var orderDetail = await _context.OrderDetails
-                .AsNoTracking()
+                .Include(detail => detail.Order)
+                .Include(detail => detail.Product)
                 .FirstOrDefaultAsync(od => od.OrderId == dto.OrderId && od.ProductId == dto.ProductId);
             if (orderDetail == null)
                 throw new NotFoundException("Order detail not found");
 
-            var order = await _context.Orders
-                .AsNoTracking()
-                .FirstOrDefaultAsync(o => o.Id == dto.OrderId);
-            if (order == null)
-                throw new NotFoundException("Order not found");
-
-            if (order.UserId != currentUserId)
+            if (orderDetail.Order.UserId != currentUserId)
                 throw new BadRequestException("Order does not belong to the current user");
+
+            if (orderDetail.Order.Status != OrderStatus.Delivered &&
+                orderDetail.Order.Status != OrderStatus.Completed)
+            {
+                throw new BadRequestException("Warranties are only available after the order is delivered");
+            }
+
+            if (orderDetail.Product.WarrantyPeriod <= 0)
+                throw new BadRequestException("This product does not have a warranty period");
+
+            if (dto.Quantity < 1 || dto.Quantity > orderDetail.Quantity)
+                throw new BadRequestException("Warranty quantity must be between 1 and the purchased quantity");
+
+            if (DateTime.UtcNow > orderDetail.Order.UpdatedAt.AddMonths(orderDetail.Product.WarrantyPeriod))
+                throw new BadRequestException("The product warranty period has expired");
+
+            var hasActiveWarranty = await _context.Warranties.AnyAsync(warranty =>
+                warranty.OrderId == dto.OrderId &&
+                warranty.ProductId == dto.ProductId &&
+                (warranty.Status == WarrantyStatus.Pending || warranty.Status == WarrantyStatus.Processing));
+            if (hasActiveWarranty)
+                throw new BadRequestException("This order item already has an active warranty request");
 
             var warranty = _mapper.Map<Warranty>(dto);
             warranty.Code = Helpers.GenerateWarrantyCode();
@@ -108,7 +134,8 @@ namespace AgitekBackend.Services
                 throw;
             }
 
-            return _mapper.Map<WarrantyDTO>(warranty);
+            return await GetByIdAsync(warranty.Id)
+                ?? throw new NotFoundException("Warranty not found");
         }
 
         public async Task<WarrantyDTO?> UpdateAsync(int id, UpdateWarrantyDTO dto)
@@ -155,7 +182,8 @@ namespace AgitekBackend.Services
                 throw;
             }
 
-            return _mapper.Map<WarrantyDTO>(warranty);
+            return await GetByIdAsync(warranty.Id)
+                ?? throw new NotFoundException("Warranty not found");
         }
 
         public async Task<WarrantyDTO> ApproveAsync(int id, int currentUserId, ApproveWarrantyDTO dto)
@@ -186,7 +214,8 @@ namespace AgitekBackend.Services
                 warranty.CompletedDate = DateTime.UtcNow;
 
             await _context.SaveChangesAsync();
-            return _mapper.Map<WarrantyDTO>(warranty);
+            return await GetByIdAsync(warranty.Id)
+                ?? throw new NotFoundException("Warranty not found");
         }
 
         public async Task<bool> DeleteAsync(int id)
@@ -204,6 +233,22 @@ namespace AgitekBackend.Services
             _context.Warranties.Remove(warranty);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        private IQueryable<Warranty> WarrantiesWithDetails()
+        {
+            return _context.Warranties
+                .Include(warranty => warranty.Media)
+                .Include(warranty => warranty.User)
+                    .ThenInclude(user => user!.Profile)
+                .Include(warranty => warranty.OrderDetail)
+                    .ThenInclude(detail => detail!.Product)
+                        .ThenInclude(product => product!.Images)
+                .Include(warranty => warranty.OrderDetail)
+                    .ThenInclude(detail => detail!.Order)
+                        .ThenInclude(order => order.User)
+                            .ThenInclude(user => user.Profile)
+                .AsSplitQuery();
         }
     }
 }

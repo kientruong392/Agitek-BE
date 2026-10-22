@@ -12,6 +12,7 @@ namespace AgitekBackend.DTOs.OrderDetails
         public string ProductName { get; set; } = string.Empty;
         public string? ProductImageUrl { get; set; }
         public string ProductSlug { get; set; } = string.Empty;
+        public int WarrantyPeriod { get; set; }
         public bool HasReview { get; set; }
         public int? ReviewId { get; set; }
         public bool HasRefund { get; set; }

@@ -385,8 +385,7 @@ namespace AgitekBackend.Migrations
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     LocationId = table.Column<int>(type: "int", nullable: true),
                     Description = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: false),
-                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    OrderId1 = table.Column<int>(type: "int", nullable: true)
+                    Timestamp = table.Column<DateTime>(type: "datetime2", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -403,11 +402,6 @@ namespace AgitekBackend.Migrations
                         principalTable: "Orders",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_OrderTrackingLogs_Orders_OrderId1",
-                        column: x => x.OrderId1,
-                        principalTable: "Orders",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -531,6 +525,7 @@ namespace AgitekBackend.Migrations
                     Code = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     OrderId = table.Column<int>(type: "int", nullable: false),
                     ProductId = table.Column<int>(type: "int", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
                     UserId = table.Column<int>(type: "int", nullable: false),
                     FullName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
                     PhoneNumber = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
@@ -705,11 +700,6 @@ namespace AgitekBackend.Migrations
                 name: "IX_OrderTrackingLogs_OrderId",
                 table: "OrderTrackingLogs",
                 column: "OrderId");
-
-            migrationBuilder.CreateIndex(
-                name: "IX_OrderTrackingLogs_OrderId1",
-                table: "OrderTrackingLogs",
-                column: "OrderId1");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Payments_OrderId",

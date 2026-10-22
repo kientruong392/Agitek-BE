@@ -28,6 +28,7 @@ namespace AgitekBackend.Controllers
                 "agitek/orders/proof" => CloudinaryOperation.UploadOrderProof,
                 "agitek/reviews" => CloudinaryOperation.UploadReview,
                 "agitek/refunds" => CloudinaryOperation.UploadRefund,
+                "agitek/warranties" => CloudinaryOperation.UploadWarranty,
                 _ => CloudinaryOperation.Upload
             };
             var authResult = await _authorizationService.AuthorizeAsync(User, folder, new CloudinaryManagementRequirement(operation));

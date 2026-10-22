@@ -871,6 +871,9 @@ namespace AgitekBackend.Migrations
                     b.Property<int>("ProductId")
                         .HasColumnType("int");
 
+                    b.Property<int>("Quantity")
+                        .HasColumnType("int");
+
                     b.Property<string>("Response")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");

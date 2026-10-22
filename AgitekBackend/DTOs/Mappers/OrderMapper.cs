@@ -33,6 +33,7 @@ namespace AgitekBackend.DTOs.Mappers
                     .ThenBy(image => image.SortOrder)
                     .Select(image => image.ImageUrl)
                     .FirstOrDefault()))
+                .ForMember(dest => dest.WarrantyPeriod, opts => opts.MapFrom(src => src.Product == null ? 0 : src.Product.WarrantyPeriod))
                 .ForMember(dest => dest.HasReview, opts => opts.MapFrom(src => src.Reviews != null && src.Reviews.Any()))
                 .ForMember(dest => dest.ReviewId, opts => opts.MapFrom(src => src.Reviews
                     .OrderByDescending(review => review.CreatedAt)

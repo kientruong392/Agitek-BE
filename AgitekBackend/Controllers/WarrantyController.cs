@@ -55,6 +55,17 @@ namespace AgitekBackend.Controllers
             return Ok(warranties);
         }
 
+        [HttpGet("my")]
+        [Authorize(Roles = "Customer")]
+        public async Task<ActionResult<IEnumerable<WarrantyDTO>>> GetMy()
+        {
+            var currentUser = GetCurrentUser();
+            if (currentUser == null)
+                return Unauthorized();
+
+            return Ok(await _warrantyService.GetMyAsync(currentUser.Id));
+        }
+
         [HttpGet("{id}")]
         public async Task<ActionResult<WarrantyDTO>> GetById(int id)
         {

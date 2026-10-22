@@ -6,6 +6,7 @@ namespace AgitekBackend.Services.Interfaces
     public interface IWarrantyService
     {
         Task<IEnumerable<WarrantyDTO>> GetAllAsync(CurrentUser currentUser);
+        Task<IEnumerable<WarrantyDTO>> GetMyAsync(int currentUserId);
         Task<WarrantyDTO?> GetByIdAsync(int id);
         Task<WarrantyDTO> CreateAsync(CreateWarrantyDTO dto, int currentUserId);
         Task<WarrantyDTO?> UpdateAsync(int id, UpdateWarrantyDTO dto);

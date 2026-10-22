@@ -10,7 +10,9 @@ namespace AgitekBackend.DTOs.Mappers
             CreateMap<CreateWarrantyDTO, Warranty>();
             CreateMap<UpdateWarrantyDTO, Warranty>().ForAllMembers(opts => opts.Condition((src, dest, srcMember) => srcMember != null));
             CreateMap<ApproveWarrantyDTO, Warranty>();
-            CreateMap<Warranty, WarrantyDTO>();
+            CreateMap<Warranty, WarrantyDTO>()
+                .ForMember(dest => dest.Medias, opts => opts.MapFrom(src => src.Media))
+                .ForMember(dest => dest.Order, opts => opts.MapFrom(src => src.OrderDetail!.Order));
         }
     }
 }

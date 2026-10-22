@@ -26,6 +26,10 @@ namespace AgitekBackend.Data
 
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var orderedQuantities = await context.OrderDetails
+                .AsNoTracking()
+                .GroupBy(detail => detail.ProductId)
+                .ToDictionaryAsync(group => group.Key, group => group.Sum(detail => detail.Quantity));
 
             await using (var transaction = await context.Database.BeginTransactionAsync())
             {
@@ -37,8 +41,12 @@ namespace AgitekBackend.Data
                 await context.OrderTrackingLogs.ExecuteDeleteAsync();
                 await context.OrderDetails.ExecuteDeleteAsync();
                 await context.Orders.ExecuteDeleteAsync();
+                await context.Locations
+                    .Where(location => !location.IsWarehouse && location.LocationCode.StartsWith("DLAGT"))
+                    .ExecuteDeleteAsync();
                 await context.Products.ExecuteUpdateAsync(setters => setters
                     .SetProperty(product => product.AverageRating, 0d));
+                await RestoreProductInventoryAsync(context, orderedQuantities);
 
                 await transaction.CommitAsync();
             }
@@ -519,6 +527,42 @@ namespace AgitekBackend.Data
             }
         }
 
+        private static async Task RestoreProductInventoryAsync(
+            AppDbContext context,
+            IReadOnlyDictionary<int, int> orderedQuantities)
+        {
+            if (orderedQuantities.Count == 0) return;
+
+            var products = await context.Products
+                .Where(product => orderedQuantities.Keys.Contains(product.Id))
+                .ToDictionaryAsync(product => product.Id);
+            var now = DateTime.UtcNow;
+
+            foreach (var (productId, quantity) in orderedQuantities)
+            {
+                if (!products.TryGetValue(productId, out var product)) continue;
+
+                product.StockQuantity = Math.Min(product.InitialQuantity, product.StockQuantity + quantity);
+                product.SoldQuantity = Math.Max(0, product.SoldQuantity - quantity);
+                product.UpdatedAt = now;
+                UpdateInventoryStatus(product);
+            }
+
+            await context.SaveChangesAsync();
+        }
+
+        private static void UpdateInventoryStatus(Product product)
+        {
+            if (product.Status is ProductStatus.Deleted or ProductStatus.Hidden or ProductStatus.Pending or ProductStatus.PreOrder)
+                return;
+
+            product.Status = product.StockQuantity == 0
+                ? ProductStatus.OutOfStock
+                : product.InitialQuantity > 0 && (decimal)product.StockQuantity * 100m <= (decimal)product.InitialQuantity * 20m
+                    ? ProductStatus.LowStock
+                    : ProductStatus.InStock;
+        }
+
         private static async Task ResetOrderDataIdentitiesAsync(AppDbContext context)
         {
             var commands = new[]
@@ -546,7 +590,7 @@ namespace AgitekBackend.Data
                 .Take(2)
                 .ToListAsync();
             var products = await context.Products
-                .Where(product => product.Status == ProductStatus.InStock && product.DeletedAt == null && product.StockQuantity > 0)
+                .Where(product => product.Status == ProductStatus.InStock && product.DeletedAt == null && product.StockQuantity >= 3)
                 .OrderBy(product => product.Id)
                 .Take(8)
                 .ToListAsync();
@@ -568,105 +612,158 @@ namespace AgitekBackend.Data
 
             if (customers.Count == 0)
                 throw new InvalidOperationException("At least one active customer is required to seed orders");
-            if (products.Count < 4)
-                throw new InvalidOperationException("At least four in-stock products are required to seed orders");
+            if (products.Count < 5)
+                throw new InvalidOperationException("At least five in-stock products are required to seed orders");
+            if (locations.Count == 0 || !deliveryUserId.HasValue)
+                throw new InvalidOperationException("An active warehouse and delivery user are required to seed orders");
 
-            var now = DateTime.Now;
+            var customerIds = customers.Select(customer => customer.Id).ToList();
+            var addressesByUserId = await context.Addresses
+                .Where(address => customerIds.Contains(address.UserId))
+                .OrderByDescending(address => address.IsDefault)
+                .ThenBy(address => address.Id)
+                .GroupBy(address => address.UserId)
+                .ToDictionaryAsync(group => group.Key, group => group.First());
+            foreach (var customer in customers.Where(customer => !addressesByUserId.ContainsKey(customer.Id)))
+            {
+                var address = new Address
+                {
+                    UserId = customer.Id,
+                    ReceiverName = customer.Profile?.FullName ?? $"Customer {customer.Id}",
+                    PhoneNumber = customer.Profile?.PhoneNumber ?? "0900000000",
+                    AddressLine = $"{customer.Id} Nguyen Hue, District 1, Ho Chi Minh City",
+                    IsDefault = true
+                };
+                context.Addresses.Add(address);
+                addressesByUserId[customer.Id] = address;
+            }
+            await context.SaveChangesAsync();
+
+            var now = DateTime.UtcNow;
             var orderNumber = 0;
             var productIndex = 0;
             var orders = new List<Order>();
             var deliveredOrders = new List<Order>();
-            var fromLocation = locations.ElementAtOrDefault(0);
-            var toLocation = locations.ElementAtOrDefault(1) ?? fromLocation;
+            var deliveryLocations = new List<Location>();
+            var fromLocation = locations[0];
 
-            Order CreateOrder(User customer, OrderStatus status, int daysAgo, params Product[] orderProducts)
+            Order CreateOrder(
+                User customer,
+                Address address,
+                OrderStatus status,
+                int daysAgo,
+                params (Product Product, int Quantity)[] requestedProducts)
             {
                 orderNumber++;
                 var createdAt = now.AddDays(-daysAgo);
+                var confirmedAt = createdAt.AddHours(4);
+                var transitAt = confirmedAt.AddHours(8);
+                var deliveredAt = transitAt.AddDays(1);
+                var trackingNumber = $"AGT{createdAt:yyMMdd}SEED{orderNumber:000}";
+                var addressSnapshot = $"{address.ReceiverName.Trim()}, {address.PhoneNumber.Trim()}, {address.AddressLine.Trim()}";
+                var deliveryLocation = new Location
+                {
+                    LocationCode = $"DL{trackingNumber}",
+                    LocationName = addressSnapshot.Length > 255 ? addressSnapshot[..255] : addressSnapshot,
+                    Latitude = 10.776889m + orderNumber * 0.001m,
+                    Longitude = 106.700806m + orderNumber * 0.001m,
+                    IsWarehouse = false,
+                    Status = LocationStatus.Active
+                };
+                deliveryLocations.Add(deliveryLocation);
                 var shippingType = orderNumber % 2 == 0 ? ShippingType.Express : ShippingType.Standard;
                 var shippingFee = shippingType == ShippingType.Express ? 50_000m : 30_000m;
-                var details = orderProducts.Select(product =>
+                var details = requestedProducts.Select(request =>
                 {
-                    var unitPrice = product.DiscountPrice ?? product.OriginalPrice;
+                    var unitPrice = request.Product.DiscountPrice.HasValue && request.Product.DiscountPrice.Value < request.Product.OriginalPrice
+                        ? request.Product.DiscountPrice.Value
+                        : request.Product.OriginalPrice;
                     return new OrderDetail
                     {
-                        ProductId = product.Id,
-                        Quantity = 1,
+                        ProductId = request.Product.Id,
+                        Quantity = request.Quantity,
                         UnitPrice = unitPrice,
-                        TotalPrice = unitPrice
+                        TotalPrice = unitPrice * request.Quantity
                     };
                 }).ToList();
                 var subtotal = details.Sum(detail => detail.TotalPrice);
                 var order = new Order
                 {
-                    TrackingNumber = $"SEED-{now:yyMMdd}-{orderNumber:000}",
+                    TrackingNumber = trackingNumber,
                     UserId = customer.Id,
                     ApprovedByUserId = approverId,
-                    DeliveredByUserId = status == OrderStatus.Delivered ? deliveryUserId : null,
-                    FromLocationId = fromLocation?.Id,
-                    ToLocationId = toLocation?.Id,
-                    Address = $"{customer.Profile.FullName}, địa chỉ kiểm thử đơn hàng #{orderNumber}",
+                    DeliveredByUserId = deliveryUserId,
+                    FromLocationId = fromLocation.Id,
+                    AddressId = address.Id,
+                    ToLocation = deliveryLocation,
+                    Address = addressSnapshot,
                     ShippingType = shippingType,
                     SubtotalPrice = subtotal,
                     ShippingFee = shippingFee,
-                    DiscountAmount = 0,
+                    DiscountAmount = 0m,
                     TotalPrice = subtotal + shippingFee,
                     Status = status,
                     Note = "Dữ liệu mẫu phục vụ kiểm thử đơn hàng và đánh giá sản phẩm.",
                     CreatedAt = createdAt,
-                    UpdatedAt = status == OrderStatus.Delivered ? createdAt.AddDays(2) : createdAt.AddHours(12),
+                    UpdatedAt = status == OrderStatus.Delivered ? deliveredAt : transitAt,
                     OrderDetails = details
                 };
 
+                var paymentMethod = orderNumber % 2 == 0 ? PaymentMethod.Bank : PaymentMethod.COD;
+                var isPaid = status == OrderStatus.Delivered || paymentMethod == PaymentMethod.Bank;
                 order.Payments.Add(new Payment
                 {
                     Amount = order.TotalPrice,
-                    PaymentMethod = (PaymentMethod)(orderNumber % 3),
-                    Status = status == OrderStatus.Delivered ? PaymentStatus.Success : PaymentStatus.Pending,
+                    PaymentMethod = paymentMethod,
+                    Status = isPaid ? PaymentStatus.Success : PaymentStatus.Pending,
                     CreatedAt = createdAt,
-                    PaidAt = status == OrderStatus.Delivered ? createdAt.AddDays(2) : null,
-                    TransactionId = status == OrderStatus.Delivered ? $"SEED-PAY-{orderNumber:000}" : null
+                    PaidAt = isPaid ? (paymentMethod == PaymentMethod.COD ? deliveredAt : createdAt.AddMinutes(10)) : null,
+                    TransactionId = paymentMethod == PaymentMethod.Bank ? $"SEED-BANK-{orderNumber:000}" : null
                 });
                 order.OrderTrackingLogs.Add(new OrderTrackingLog
                 {
                     Order = order,
-                    LocationId = fromLocation?.Id,
+                    LocationId = fromLocation.Id,
                     Description = "Đơn hàng đã được tạo.",
                     Timestamp = createdAt
                 });
                 order.OrderTrackingLogs.Add(new OrderTrackingLog
                 {
                     Order = order,
-                    LocationId = fromLocation?.Id,
+                    LocationId = fromLocation.Id,
                     Description = "Đơn hàng đã được xác nhận và bàn giao vận chuyển.",
                     Timestamp = createdAt.AddHours(4)
                 });
-                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                if (status == OrderStatus.Delivered)
                 {
-                    Order = order,
-                    LocationId = toLocation?.Id,
-                    Description = status == OrderStatus.Delivered
-                        ? "Đơn hàng đã giao thành công."
-                        : "Đơn hàng đang được giao đến khách hàng.",
-                    Timestamp = status == OrderStatus.Delivered ? createdAt.AddDays(2) : createdAt.AddHours(12)
-                });
+                    order.OrderTrackingLogs.Add(new OrderTrackingLog
+                    {
+                        Order = order,
+                        Location = deliveryLocation,
+                        Description = "Đơn hàng đã giao thành công.",
+                        Timestamp = deliveredAt
+                    });
+                }
 
                 return order;
             }
 
             foreach (var customer in customers)
             {
+                var address = addressesByUserId[customer.Id];
                 var firstDelivered = CreateOrder(
                     customer,
+                    address,
                     OrderStatus.Delivered,
-                    10 - orderNumber,
-                    products[productIndex++ % products.Count],
-                    products[productIndex++ % products.Count]);
+                    45 - orderNumber * 2,
+                    (products[productIndex++ % products.Count], 2),
+                    (products[productIndex++ % products.Count], 1));
                 var secondDelivered = CreateOrder(
                     customer,
+                    address,
                     OrderStatus.Delivered,
-                    5 - orderNumber,
-                    products[productIndex++ % products.Count]);
+                    24 - orderNumber,
+                    (products[productIndex++ % products.Count], 1));
 
                 orders.Add(firstDelivered);
                 orders.Add(secondDelivered);
@@ -676,15 +773,31 @@ namespace AgitekBackend.Data
 
             orders.Add(CreateOrder(
                 customers[0],
+                addressesByUserId[customers[0].Id],
                 OrderStatus.InTransit,
-                1,
-                products[productIndex % products.Count]));
+                3,
+                (products[productIndex % products.Count], 1)));
+
+            foreach (var product in products)
+            {
+                var quantity = orders
+                    .SelectMany(order => order.OrderDetails)
+                    .Where(detail => detail.ProductId == product.Id)
+                    .Sum(detail => detail.Quantity);
+                if (quantity == 0) continue;
+
+                product.StockQuantity -= quantity;
+                product.SoldQuantity += quantity;
+                product.UpdatedAt = now;
+                UpdateInventoryStatus(product);
+            }
 
             var reviewedDetail = deliveredOrders[0].OrderDetails.First();
             var reviewedProduct = products.First(product => product.Id == reviewedDetail.ProductId);
             reviewedProduct.AverageRating = 5;
             reviewedProduct.UpdatedAt = now;
 
+            context.Locations.AddRange(deliveryLocations);
             context.Orders.AddRange(orders);
             context.Reviews.Add(new Review
             {

@@ -11,6 +11,8 @@ namespace AgitekBackend.Models
         public string Code { get; set; } = string.Empty;
         public int OrderId { get; set; }
         public int ProductId { get; set; }
+        [Required]
+        public int Quantity { get; set; }
         public int UserId { get; set; }
         [Required, MaxLength(100)]
         public string FullName { get; set; } = string.Empty;
