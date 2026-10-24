@@ -1,0 +1,265 @@
+{
+  "suite": "AgitekBackend.Tests.catalog-products",
+  "revision": "v3",
+  "totalBaselines": 43,
+  "baselines": [
+    {
+      "id": "CATALOG-PRODUCTS-V3-0001",
+      "caseKey": "catalog-products.baseline.1",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0002",
+      "caseKey": "catalog-products.baseline.2",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0003",
+      "caseKey": "catalog-products.baseline.3",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0004",
+      "caseKey": "catalog-products.baseline.4",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0005",
+      "caseKey": "catalog-products.baseline.5",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0006",
+      "caseKey": "catalog-products.baseline.6",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0007",
+      "caseKey": "catalog-products.baseline.7",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0008",
+      "caseKey": "catalog-products.baseline.8",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0009",
+      "caseKey": "catalog-products.baseline.9",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0010",
+      "caseKey": "catalog-products.baseline.10",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0011",
+      "caseKey": "catalog-products.baseline.11",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0012",
+      "caseKey": "catalog-products.baseline.12",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0013",
+      "caseKey": "catalog-products.baseline.13",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0014",
+      "caseKey": "catalog-products.baseline.14",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0015",
+      "caseKey": "catalog-products.baseline.15",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0016",
+      "caseKey": "catalog-products.baseline.16",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0017",
+      "caseKey": "catalog-products.baseline.17",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0018",
+      "caseKey": "catalog-products.baseline.18",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0019",
+      "caseKey": "catalog-products.baseline.19",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0020",
+      "caseKey": "catalog-products.baseline.20",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0021",
+      "caseKey": "catalog-products.baseline.21",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0022",
+      "caseKey": "catalog-products.baseline.22",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0023",
+      "caseKey": "catalog-products.baseline.23",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0024",
+      "caseKey": "catalog-products.baseline.24",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0025",
+      "caseKey": "catalog-products.baseline.25",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0026",
+      "caseKey": "catalog-products.baseline.26",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0027",
+      "caseKey": "catalog-products.baseline.27",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0028",
+      "caseKey": "catalog-products.baseline.28",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0029",
+      "caseKey": "catalog-products.baseline.29",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0030",
+      "caseKey": "catalog-products.baseline.30",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0031",
+      "caseKey": "catalog-products.baseline.31",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0032",
+      "caseKey": "catalog-products.baseline.32",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0033",
+      "caseKey": "catalog-products.baseline.33",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0034",
+      "caseKey": "catalog-products.baseline.34",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0035",
+      "caseKey": "catalog-products.baseline.35",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0036",
+      "caseKey": "catalog-products.baseline.36",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0037",
+      "caseKey": "catalog-products.baseline.37",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0038",
+      "caseKey": "catalog-products.baseline.38",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0039",
+      "caseKey": "catalog-products.baseline.39",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0040",
+      "caseKey": "catalog-products.baseline.40",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0041",
+      "caseKey": "catalog-products.baseline.41",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0042",
+      "caseKey": "catalog-products.baseline.42",
+      "expectedStatus": "REJECTED",
+      "revision": "v3"
+    },
+    {
+      "id": "CATALOG-PRODUCTS-V3-0043",
+      "caseKey": "catalog-products.baseline.43",
+      "expectedStatus": "ACCEPTED",
+      "revision": "v3"
+    }
+  ]
+}
