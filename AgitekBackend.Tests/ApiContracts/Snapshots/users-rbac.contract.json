@@ -1,1117 +1,1146 @@
 {
   "suite": "AgitekBackend.Tests.users-rbac",
-  "revision": "v1",
-  "totalBaselines": 74,
+  "revision": "v2",
+  "totalBaselines": 67,
   "baselines": [
     {
-      "caseId": "USERS-RBAC-V1-0001",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1001",
-        "amountVnd": 387000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #1 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0002",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1002",
-        "amountVnd": 524000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #2 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0003",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1003",
-        "amountVnd": 661000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #3 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0004",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1004",
-        "amountVnd": 798000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #4 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0005",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1005",
-        "amountVnd": 935000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #5 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0006",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1006",
-        "amountVnd": 1072000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #6 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0007",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1007",
-        "amountVnd": 1209000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #7 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0008",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1008",
-        "amountVnd": 1346000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #8 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0009",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1009",
-        "amountVnd": 1483000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #9 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0010",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1010",
-        "amountVnd": 1620000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #10 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0011",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1011",
-        "amountVnd": 1757000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #11 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0012",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1012",
-        "amountVnd": 1894000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #12 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0013",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1013",
-        "amountVnd": 2031000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #13 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0014",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1014",
-        "amountVnd": 2168000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #14 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0015",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1015",
-        "amountVnd": 2305000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #15 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0016",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1016",
-        "amountVnd": 2442000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #16 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0017",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1017",
-        "amountVnd": 2579000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #17 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0018",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1018",
-        "amountVnd": 2716000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #18 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0019",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1019",
-        "amountVnd": 2853000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #19 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0020",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1020",
-        "amountVnd": 2990000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #20 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0021",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1021",
-        "amountVnd": 3127000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #21 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0022",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1022",
-        "amountVnd": 3264000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #22 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0023",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1023",
-        "amountVnd": 3401000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #23 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0024",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1024",
-        "amountVnd": 3538000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #24 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0025",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1025",
-        "amountVnd": 3675000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #25 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0026",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1026",
-        "amountVnd": 3812000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #26 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0027",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1027",
-        "amountVnd": 3949000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #27 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0028",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1028",
-        "amountVnd": 4086000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #28 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0029",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1029",
-        "amountVnd": 4223000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #29 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0030",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1030",
-        "amountVnd": 4360000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #30 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0031",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1031",
-        "amountVnd": 4497000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #31 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0032",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1032",
-        "amountVnd": 4634000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #32 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0033",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1033",
-        "amountVnd": 4771000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #33 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0034",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1034",
-        "amountVnd": 4908000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #34 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0035",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1035",
-        "amountVnd": 5045000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #35 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0036",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1036",
-        "amountVnd": 5182000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #36 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0037",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1037",
-        "amountVnd": 5319000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #37 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0038",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1038",
-        "amountVnd": 5456000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #38 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0039",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1039",
-        "amountVnd": 5593000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #39 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0040",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1040",
-        "amountVnd": 5730000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #40 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0041",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1041",
-        "amountVnd": 5867000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #41 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0042",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1042",
-        "amountVnd": 6004000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #42 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0043",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1043",
-        "amountVnd": 6141000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #43 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0044",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1044",
-        "amountVnd": 6278000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #44 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0045",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1045",
-        "amountVnd": 6415000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #45 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0046",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1046",
-        "amountVnd": 6552000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #46 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0047",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1047",
-        "amountVnd": 6689000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #47 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0048",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1048",
-        "amountVnd": 6826000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #48 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0049",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1049",
-        "amountVnd": 6963000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #49 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0050",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1050",
-        "amountVnd": 7100000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #50 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0051",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1051",
-        "amountVnd": 7237000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #51 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0052",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1052",
-        "amountVnd": 7374000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #52 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0053",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1053",
-        "amountVnd": 7511000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #53 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0054",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1054",
-        "amountVnd": 7648000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #54 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0055",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1055",
-        "amountVnd": 7785000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #55 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0056",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1056",
-        "amountVnd": 7922000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #56 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0057",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1057",
-        "amountVnd": 8059000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #57 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0058",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1058",
-        "amountVnd": 8196000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #58 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0059",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1059",
-        "amountVnd": 8333000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #59 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0060",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1060",
-        "amountVnd": 8470000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #60 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0061",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1061",
-        "amountVnd": 8607000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #61 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0062",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1062",
-        "amountVnd": 8744000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #62 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0063",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1063",
-        "amountVnd": 8881000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #63 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0064",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1064",
-        "amountVnd": 9018000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #64 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0065",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1065",
-        "amountVnd": 9155000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #65 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0066",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1066",
-        "amountVnd": 9292000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #66 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0067",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1067",
-        "amountVnd": 9429000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #67 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0068",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1068",
-        "amountVnd": 9566000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #68 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0069",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1069",
-        "amountVnd": 9703000,
-        "quantity": 4,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #69 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0070",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Customer",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1070",
-        "amountVnd": 9840000,
-        "quantity": 5,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #70 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0071",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Staff",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1071",
-        "amountVnd": 9977000,
-        "quantity": 6,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #71 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0072",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Manager",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1072",
-        "amountVnd": 10114000,
-        "quantity": 1,
-        "locale": "vi-VN",
-        "isActive": false
-      },
-      "expectedLegacyStatus": 400,
-      "auditNote": "Initial v1 verification baseline #72 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0073",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Admin",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1073",
-        "amountVnd": 10251000,
-        "quantity": 2,
-        "locale": "en-US",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #73 for users-rbac"
-    },
-    {
-      "caseId": "USERS-RBAC-V1-0074",
-      "domainModule": "users-rbac",
-      "schemaRevision": "v1",
-      "actorRole": "Delivery",
-      "legacyPayload": {
-        "skuOrCode": "AGT-USE-1074",
-        "amountVnd": 10388000,
-        "quantity": 3,
-        "locale": "vi-VN",
-        "isActive": true
-      },
-      "expectedLegacyStatus": 200,
-      "auditNote": "Initial v1 verification baseline #74 for users-rbac"
+      "snapshotRef": "USERS-RBAC-V2-0001",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-1",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:1",
+        "netAmountVnd": 410000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0002",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-2",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:2",
+        "netAmountVnd": 621000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0003",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-3",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:3",
+        "netAmountVnd": 832000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0004",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-4",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:4",
+        "netAmountVnd": 1043000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0005",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-5",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:5",
+        "netAmountVnd": 1254000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0006",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-6",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:6",
+        "netAmountVnd": 1465000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0007",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-7",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:7",
+        "netAmountVnd": 1676000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0008",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-8",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:8",
+        "netAmountVnd": 1887000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0009",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-9",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:9",
+        "netAmountVnd": 2098000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0010",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-10",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:10",
+        "netAmountVnd": 2309000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0011",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-11",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:11",
+        "netAmountVnd": 2520000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0012",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-12",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:12",
+        "netAmountVnd": 2731000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0013",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-13",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:13",
+        "netAmountVnd": 2942000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0014",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-14",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:14",
+        "netAmountVnd": 3153000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0015",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-15",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:15",
+        "netAmountVnd": 3364000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0016",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-16",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:16",
+        "netAmountVnd": 3575000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0017",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-17",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:17",
+        "netAmountVnd": 3786000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0018",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-18",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:18",
+        "netAmountVnd": 3997000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0019",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-19",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:19",
+        "netAmountVnd": 4208000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0020",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-20",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:20",
+        "netAmountVnd": 4419000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0021",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-21",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:21",
+        "netAmountVnd": 4630000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0022",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-22",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:22",
+        "netAmountVnd": 4841000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0023",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-23",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:23",
+        "netAmountVnd": 5052000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0024",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-24",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:24",
+        "netAmountVnd": 5263000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0025",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-25",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:25",
+        "netAmountVnd": 5474000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0026",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-26",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:26",
+        "netAmountVnd": 5685000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0027",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-27",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:27",
+        "netAmountVnd": 5896000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0028",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-28",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:28",
+        "netAmountVnd": 6107000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0029",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-29",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:29",
+        "netAmountVnd": 6318000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0030",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-30",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:30",
+        "netAmountVnd": 6529000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0031",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-31",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:31",
+        "netAmountVnd": 6740000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0032",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-32",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:32",
+        "netAmountVnd": 6951000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0033",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-33",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:33",
+        "netAmountVnd": 7162000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0034",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-34",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:34",
+        "netAmountVnd": 7373000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0035",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-35",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:35",
+        "netAmountVnd": 7584000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0036",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-36",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:36",
+        "netAmountVnd": 7795000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0037",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-37",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:37",
+        "netAmountVnd": 8006000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0038",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-38",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:38",
+        "netAmountVnd": 8217000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0039",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-39",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:39",
+        "netAmountVnd": 8428000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0040",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-40",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:40",
+        "netAmountVnd": 8639000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0041",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-15T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-41",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:41",
+        "netAmountVnd": 8850000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0042",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-16T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-42",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:42",
+        "netAmountVnd": 9061000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0043",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-17T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-43",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:43",
+        "netAmountVnd": 9272000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0044",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-18T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-44",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:44",
+        "netAmountVnd": 9483000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0045",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-19T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-45",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:45",
+        "netAmountVnd": 9694000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0046",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-20T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-46",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:46",
+        "netAmountVnd": 9905000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0047",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-21T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-47",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:47",
+        "netAmountVnd": 10116000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0048",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-22T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-48",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:48",
+        "netAmountVnd": 10327000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0049",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-23T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-49",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:49",
+        "netAmountVnd": 10538000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0050",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-24T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-50",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:50",
+        "netAmountVnd": 10749000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0051",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-25T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-51",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:51",
+        "netAmountVnd": 10960000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0052",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-26T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-52",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:52",
+        "netAmountVnd": 11171000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0053",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-27T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-53",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:53",
+        "netAmountVnd": 11382000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0054",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-01T20:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-54",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:54",
+        "netAmountVnd": 11593000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0055",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-02T21:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-55",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:55",
+        "netAmountVnd": 11804000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0056",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-03T08:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-56",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:56",
+        "netAmountVnd": 12015000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0057",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-04T09:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-57",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:57",
+        "netAmountVnd": 12226000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0058",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-05T10:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-58",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:58",
+        "netAmountVnd": 12437000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0059",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-06T11:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-59",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:59",
+        "netAmountVnd": 12648000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0060",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-07T12:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-60",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:60",
+        "netAmountVnd": 12859000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0061",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-08T13:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-61",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:61",
+        "netAmountVnd": 13070000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0062",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-09T14:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-62",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:62",
+        "netAmountVnd": 13281000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0063",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-10T15:15:00Z",
+      "envelope": {
+        "success": false,
+        "statusCode": 422,
+        "correlationId": "corr-v2-users-rbac-63",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:63",
+        "netAmountVnd": 13492000,
+        "rolePolicy": "ManagementOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0064",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-11T16:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-64",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:64",
+        "netAmountVnd": 13703000,
+        "rolePolicy": "Public"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0065",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-12T17:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-65",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:65",
+        "netAmountVnd": 13914000,
+        "rolePolicy": "CustomerOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0066",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-13T18:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-66",
+        "cloudinaryVerified": false
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:66",
+        "netAmountVnd": 14125000,
+        "rolePolicy": "EmployeeOnly"
+      }
+    },
+    {
+      "snapshotRef": "USERS-RBAC-V2-0067",
+      "boundedContext": "users-rbac",
+      "contractVersion": "v2",
+      "utcVerifiedAt": "2026-10-14T19:15:00Z",
+      "envelope": {
+        "success": true,
+        "statusCode": 200,
+        "correlationId": "corr-v2-users-rbac-67",
+        "cloudinaryVerified": true
+      },
+      "invariants": {
+        "idempotentKey": "idem:users-rbac:v2:67",
+        "netAmountVnd": 14336000,
+        "rolePolicy": "ManagementOnly"
+      }
     }
   ]
 }
