@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using StackExchange.Redis;
+using SmartComponents.LocalEmbeddings;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -193,6 +194,9 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddSingleton<LocalEmbedder>();
+builder.Services.AddScoped<ISemanticSearchService, SemanticSearchService>();
+builder.Services.AddHostedService<ProductEmbeddingBackgroundService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<IPaymentService, PaymentService>();
 builder.Services.AddScoped<ISePayService, SePayService>();
@@ -213,6 +217,12 @@ builder.Services.AddScoped<IRefundService, RefundService>();
 builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
+
+if (args.Any(argument => string.Equals(argument, "--reseed-catalog", StringComparison.OrdinalIgnoreCase)))
+{
+    await app.ReseedCatalogAsync();
+    return;
+}
 
 if (args.Any(argument => string.Equals(argument, "--reseed-orders", StringComparison.OrdinalIgnoreCase)))
 {

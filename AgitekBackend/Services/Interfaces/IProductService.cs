@@ -9,6 +9,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<IEnumerable<ProductDTO>> GetFeaturedAsync(int count, CurrentUser? currentUser);
         Task<IEnumerable<ProductDTO>> GetNewestAsync(int count, CurrentUser? currentUser);
         Task<IEnumerable<ProductDTO>> GetByCategoryAsync(int categoryId, CurrentUser? currentUser);
+        Task<IEnumerable<ProductDTO>> SemanticSearchAsync(string query, int maxResults, CurrentUser? currentUser);
         Task<ProductDTO> GetByIdAsync(int id);
         Task<ProductDTO> GetBySlugAsync(string slug);
         Task<ProductDTO> CreateAsync(CreateProductDTO dto, int currentUserId);

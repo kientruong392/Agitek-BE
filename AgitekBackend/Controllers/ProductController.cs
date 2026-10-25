@@ -68,6 +68,19 @@ namespace AgitekBackend.Controllers
             return Ok(products);
         }
 
+        [HttpGet("semantic-search")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<ProductDTO>>> SemanticSearch(
+            [FromQuery] string? q,
+            [FromQuery] int limit = 6)
+        {
+            if (string.IsNullOrWhiteSpace(q))
+                return Ok(Array.Empty<ProductDTO>());
+
+            var products = await _productService.SemanticSearchAsync(q, Math.Clamp(limit, 1, 24), GetCurrentUser());
+            return Ok(products);
+        }
+
         [HttpGet("slug/{slug}")]
         [AllowAnonymous]
         public async Task<ActionResult<ProductDTO>> GetBySlug(string slug)

@@ -68,6 +68,22 @@ namespace AgitekBackend.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SemanticSearchCaches",
+                columns: table => new
+                {
+                    QueryHash = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    NormalizedQuery = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: false),
+                    VectorJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dimension = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SemanticSearchCaches", x => x.QueryHash);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "Users",
                 columns: table => new
                 {
@@ -241,6 +257,28 @@ namespace AgitekBackend.Migrations
                         column: x => x.UserId,
                         principalTable: "Users",
                         principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "ProductEmbeddings",
+                columns: table => new
+                {
+                    ProductId = table.Column<int>(type: "int", nullable: false),
+                    SourceHash = table.Column<string>(type: "nvarchar(64)", maxLength: 64, nullable: false),
+                    VectorJson = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Dimension = table.Column<int>(type: "int", nullable: false),
+                    CreatedAt = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    UpdatedAt = table.Column<DateTime>(type: "datetime2", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ProductEmbeddings", x => x.ProductId);
+                    table.ForeignKey(
+                        name: "FK_ProductEmbeddings_Products_ProductId",
+                        column: x => x.ProductId,
+                        principalTable: "Products",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateTable(
@@ -707,6 +745,11 @@ namespace AgitekBackend.Migrations
                 column: "OrderId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_ProductEmbeddings_SourceHash",
+                table: "ProductEmbeddings",
+                column: "SourceHash");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_ProductImages_ProductId",
                 table: "ProductImages",
                 column: "ProductId");
@@ -839,6 +882,9 @@ namespace AgitekBackend.Migrations
                 name: "Payments");
 
             migrationBuilder.DropTable(
+                name: "ProductEmbeddings");
+
+            migrationBuilder.DropTable(
                 name: "ProductImages");
 
             migrationBuilder.DropTable(
@@ -846,6 +892,9 @@ namespace AgitekBackend.Migrations
 
             migrationBuilder.DropTable(
                 name: "Profiles");
+
+            migrationBuilder.DropTable(
+                name: "SemanticSearchCaches");
 
             migrationBuilder.DropTable(
                 name: "Refunds");

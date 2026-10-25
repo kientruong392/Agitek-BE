@@ -12,7 +12,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace AgitekBackend.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    [Migration("20261022075437_update_db")]
+    [Migration("20261023120029_update_db")]
     partial class update_db
     {
         /// <inheritdoc />
@@ -518,6 +518,36 @@ namespace AgitekBackend.Migrations
                     b.ToTable("Products");
                 });
 
+            modelBuilder.Entity("AgitekBackend.Models.ProductEmbedding", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Dimension")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SourceHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VectorJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("SourceHash");
+
+                    b.ToTable("ProductEmbeddings");
+                });
+
             modelBuilder.Entity("AgitekBackend.Models.ProductImage", b =>
                 {
                     b.Property<int>("Id")
@@ -701,6 +731,35 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("OrderId", "ProductId");
 
                     b.ToTable("Reviews");
+                });
+
+            modelBuilder.Entity("AgitekBackend.Models.SemanticSearchCache", b =>
+                {
+                    b.Property<string>("QueryHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Dimension")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NormalizedQuery")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VectorJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("QueryHash");
+
+                    b.ToTable("SemanticSearchCaches");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.User", b =>
@@ -1082,6 +1141,17 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AgitekBackend.Models.ProductEmbedding", b =>
+                {
+                    b.HasOne("AgitekBackend.Models.Product", "Product")
+                        .WithOne()
+                        .HasForeignKey("AgitekBackend.Models.ProductEmbedding", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.ProductImage", b =>

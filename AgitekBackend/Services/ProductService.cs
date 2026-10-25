@@ -14,11 +14,13 @@ namespace AgitekBackend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly ISemanticSearchService _semanticSearchService;
 
-        public ProductService(AppDbContext context, IMapper mapper)
+        public ProductService(AppDbContext context, IMapper mapper, ISemanticSearchService semanticSearchService)
         {
             _context = context;
             _mapper = mapper;
+            _semanticSearchService = semanticSearchService;
         }
 
         private IQueryable<Product> ApplyVisibilityFilter(IQueryable<Product> query, CurrentUser? currentUser)
@@ -100,6 +102,11 @@ namespace AgitekBackend.Services
             return await GetVisibleProductsAsync(query, currentUser);
         }
 
+        public Task<IEnumerable<ProductDTO>> SemanticSearchAsync(string query, int maxResults, CurrentUser? currentUser)
+        {
+            return _semanticSearchService.SearchProductsAsync(query, maxResults, currentUser);
+        }
+
         public async Task<ProductDTO> GetByIdAsync(int id)
         {
             var product = await _context.Products
@@ -161,6 +168,7 @@ namespace AgitekBackend.Services
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+                await _semanticSearchService.SynchronizeProductAsync(product.Id);
                 await transaction.CommitAsync();
 
                 return await GetByIdAsync(product.Id);
@@ -235,6 +243,7 @@ namespace AgitekBackend.Services
                 }
 
                 await _context.SaveChangesAsync();
+                await _semanticSearchService.SynchronizeProductAsync(product.Id);
                 await transaction.CommitAsync();
 
                 return await GetByIdAsync(product.Id);

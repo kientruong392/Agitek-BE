@@ -55,7 +55,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Addresses");
+                    b.ToTable("Addresses", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.AuditLog", b =>
@@ -86,7 +86,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("AuditLogs");
+                    b.ToTable("AuditLogs", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Brand", b =>
@@ -120,7 +120,7 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.ToTable("Brands");
+                    b.ToTable("Brands", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Category", b =>
@@ -155,7 +155,7 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("Slug")
                         .IsUnique();
 
-                    b.ToTable("Categories");
+                    b.ToTable("Categories", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Location", b =>
@@ -193,7 +193,7 @@ namespace AgitekBackend.Migrations
                     b.HasIndex("LocationCode")
                         .IsUnique();
 
-                    b.ToTable("Locations");
+                    b.ToTable("Locations", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Media", b =>
@@ -237,7 +237,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("RefundOrderId", "RefundProductId");
 
-                    b.ToTable("Medias");
+                    b.ToTable("Medias", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Order", b =>
@@ -329,7 +329,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("VoucherId");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.OrderDetail", b =>
@@ -353,7 +353,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.OrderTrackingLog", b =>
@@ -384,7 +384,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("OrderTrackingLogs");
+                    b.ToTable("OrderTrackingLogs", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Payment", b =>
@@ -427,7 +427,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("OrderId");
 
-                    b.ToTable("Payments");
+                    b.ToTable("Payments", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Product", b =>
@@ -512,7 +512,37 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Products");
+                    b.ToTable("Products", (string)null);
+                });
+
+            modelBuilder.Entity("AgitekBackend.Models.ProductEmbedding", b =>
+                {
+                    b.Property<int>("ProductId")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Dimension")
+                        .HasColumnType("int");
+
+                    b.Property<string>("SourceHash")
+                        .IsRequired()
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VectorJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("ProductId");
+
+                    b.HasIndex("SourceHash");
+
+                    b.ToTable("ProductEmbeddings", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.ProductImage", b =>
@@ -541,7 +571,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductImages");
+                    b.ToTable("ProductImages", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.ProductSpecification", b =>
@@ -569,7 +599,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductSpecifications");
+                    b.ToTable("ProductSpecifications", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Profile", b =>
@@ -597,7 +627,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasKey("UserId");
 
-                    b.ToTable("Profiles");
+                    b.ToTable("Profiles", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Refund", b =>
@@ -644,7 +674,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Refunds");
+                    b.ToTable("Refunds", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Review", b =>
@@ -697,7 +727,36 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("OrderId", "ProductId");
 
-                    b.ToTable("Reviews");
+                    b.ToTable("Reviews", (string)null);
+                });
+
+            modelBuilder.Entity("AgitekBackend.Models.SemanticSearchCache", b =>
+                {
+                    b.Property<string>("QueryHash")
+                        .HasMaxLength(64)
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<int>("Dimension")
+                        .HasColumnType("int");
+
+                    b.Property<string>("NormalizedQuery")
+                        .IsRequired()
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("VectorJson")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("QueryHash");
+
+                    b.ToTable("SemanticSearchCaches", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.User", b =>
@@ -758,7 +817,7 @@ namespace AgitekBackend.Migrations
                         .IsUnique()
                         .HasFilter("[Username] IS NOT NULL");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Voucher", b =>
@@ -823,7 +882,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Vouchers", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Warranty", b =>
@@ -899,7 +958,7 @@ namespace AgitekBackend.Migrations
 
                     b.HasIndex("OrderId", "ProductId");
 
-                    b.ToTable("Warranties");
+                    b.ToTable("Warranties", (string)null);
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.Address", b =>
@@ -1079,6 +1138,17 @@ namespace AgitekBackend.Migrations
                     b.Navigation("Category");
 
                     b.Navigation("User");
+                });
+
+            modelBuilder.Entity("AgitekBackend.Models.ProductEmbedding", b =>
+                {
+                    b.HasOne("AgitekBackend.Models.Product", "Product")
+                        .WithOne()
+                        .HasForeignKey("AgitekBackend.Models.ProductEmbedding", "ProductId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Product");
                 });
 
             modelBuilder.Entity("AgitekBackend.Models.ProductImage", b =>

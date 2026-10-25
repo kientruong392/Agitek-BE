@@ -9,6 +9,8 @@ namespace AgitekBackend.Data
         public DbSet<Profile> Profiles { get; set; }
         public DbSet<Address> Addresses { get; set; }
         public DbSet<Product> Products { get; set; }
+        public DbSet<ProductEmbedding> ProductEmbeddings { get; set; }
+        public DbSet<SemanticSearchCache> SemanticSearchCaches { get; set; }
         public DbSet<ProductImage> ProductImages { get; set; }
         public DbSet<ProductSpecification> ProductSpecifications { get; set; }
         public DbSet<Brand> Brands { get; set; }
