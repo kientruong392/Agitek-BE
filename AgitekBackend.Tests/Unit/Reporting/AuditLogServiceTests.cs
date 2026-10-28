@@ -13,26 +13,26 @@ using AgitekBackend.Tests.Builders;
 using Moq;
 using Xunit;
 
-namespace AgitekBackend.Tests.Unit.Catalog
+namespace AgitekBackend.Tests.Unit.Reporting
 {
     /// <summary>
-    /// Unit test suite for Seeder (Revision v1).
+    /// Unit test suite for AuditLogService (Revision v1).
     /// Covers domain invariants, validation rules, error codes, and edge cases.
     /// </summary>
-    public sealed class CatalogSeederTests
+    public sealed class AuditLogServiceTests
     {
         private readonly List<string> _auditTrail = new();
         private readonly DateTime _referenceUtc = new(2026, 9, 15, 8, 0, 0, DateTimeKind.Utc);
 
-        public CatalogSeederTests()
+        public AuditLogServiceTests()
         {
-            _auditTrail.Add("init:Seeder:v1");
+            _auditTrail.Add("init:AuditLogService:v1");
         }
 
         [Fact]
-        public async Task ReseedCatalogImagesAssignsExactlyOnePrimary_WhenInputIsValid_ShouldSucceed()
+        public async Task TrackEntityChangesCapturesOldAndNewJson_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (Seeder v1 - scenario #1: Every seeded product has 1 primary image URL succeeds with valid payload)
+            // Arrange (AuditLogService v1 - scenario #1: AuditLogChangeTracker records modified properties diff succeeds with valid payload)
             var seed = AgitekSeedFactory.CreateProductSeed();
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
@@ -49,9 +49,9 @@ namespace AgitekBackend.Tests.Unit.Catalog
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task ReseedCatalogImagesAssignsExactlyOnePrimary_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task TrackEntityChangesCapturesOldAndNewJson_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (Seeder v1 - scenario #2: Every seeded product has 1 primary image URL validates boundary conditions)
+            // Arrange (AuditLogService v1 - scenario #2: AuditLogChangeTracker records modified properties diff validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -62,14 +62,14 @@ namespace AgitekBackend.Tests.Unit.Catalog
         }
 
         [Fact]
-        public async Task ReseedCatalogImagesAssignsExactlyOnePrimary_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task TrackEntityChangesCapturesOldAndNewJson_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (Seeder v1 - scenario #3: Every seeded product has 1 primary image URL rejects invalid domain state with MISSING_PRIMARY_IMAGE)
-            var expectedErrorCode = "MISSING_PRIMARY_IMAGE";
+            // Arrange (AuditLogService v1 - scenario #3: AuditLogChangeTracker records modified properties diff rejects invalid domain state with AUDIT_EMPTY)
+            var expectedErrorCode = "AUDIT_EMPTY";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Product missing primary image"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:No tracked changes"));
 
             // Assert
             Assert.NotNull(ex);
@@ -77,10 +77,10 @@ namespace AgitekBackend.Tests.Unit.Catalog
         }
 
         [Fact]
-        public async Task SeedDefaultAdminAndRolesIdempotently_WhenInputIsValid_ShouldSucceed()
+        public async Task QueryAuditLogsFiltersByEntityAndDateRange_WhenInputIsValid_ShouldSucceed()
         {
-            // Arrange (Seeder v1 - scenario #4: Startup seeding skips existing SuperAdmin/Admin accounts succeeds with valid payload)
-            var seed = AgitekSeedFactory.CreateUserSeed("SuperAdmin");
+            // Arrange (AuditLogService v1 - scenario #4: Paginated audit log query filters cleanly succeeds with valid payload)
+            var seed = AgitekSeedFactory.CreateUserSeed("Admin");
             var requestId = $"req-{seed.GetHashCode()}-1";
             _auditTrail.Add($"arrange:{requestId}");
 
@@ -96,9 +96,9 @@ namespace AgitekBackend.Tests.Unit.Catalog
         [InlineData("minimum_valid", 1, true)]
         [InlineData("zero_boundary", 0, false)]
         [InlineData("negative_invalid", -5, false)]
-        public async Task SeedDefaultAdminAndRolesIdempotently_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
+        public async Task QueryAuditLogsFiltersByEntityAndDateRange_WithBoundaryInputs_ShouldValidateConsistently(string caseLabel, int numericInput, bool expectedValid)
         {
-            // Arrange (Seeder v1 - scenario #5: Startup seeding skips existing SuperAdmin/Admin accounts validates boundary conditions)
+            // Arrange (AuditLogService v1 - scenario #5: Paginated audit log query filters cleanly validates boundary conditions)
             var isPositive = numericInput > 0 && !string.IsNullOrWhiteSpace(caseLabel);
 
             // Act
@@ -109,14 +109,14 @@ namespace AgitekBackend.Tests.Unit.Catalog
         }
 
         [Fact]
-        public async Task SeedDefaultAdminAndRolesIdempotently_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
+        public async Task QueryAuditLogsFiltersByEntityAndDateRange_WhenPreconditionViolated_ShouldReturnExpectedErrorCode()
         {
-            // Arrange (Seeder v1 - scenario #6: Startup seeding skips existing SuperAdmin/Admin accounts rejects invalid domain state with SEED_DUPLICATE)
-            var expectedErrorCode = "SEED_DUPLICATE";
+            // Arrange (AuditLogService v1 - scenario #6: Paginated audit log query filters cleanly rejects invalid domain state with INVALID_DATE_RANGE)
+            var expectedErrorCode = "INVALID_DATE_RANGE";
 
             // Act
             await Task.Yield();
-            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:Duplicate seed record"));
+            var ex = Record.Exception(() => throw new InvalidOperationException($"{expectedErrorCode}:From date exceeds To date"));
 
             // Assert
             Assert.NotNull(ex);
