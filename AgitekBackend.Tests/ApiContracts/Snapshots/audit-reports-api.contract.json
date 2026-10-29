@@ -1,0 +1,1102 @@
+{
+  "suite": "AgitekBackend.Tests.audit-reports-api",
+  "revision": "v1",
+  "totalBaselines": 73,
+  "baselines": [
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0001",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1001",
+        "amountVnd": 387000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #1 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0002",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1002",
+        "amountVnd": 524000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #2 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0003",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1003",
+        "amountVnd": 661000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #3 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0004",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1004",
+        "amountVnd": 798000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #4 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0005",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1005",
+        "amountVnd": 935000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #5 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0006",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1006",
+        "amountVnd": 1072000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #6 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0007",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1007",
+        "amountVnd": 1209000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #7 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0008",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1008",
+        "amountVnd": 1346000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #8 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0009",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1009",
+        "amountVnd": 1483000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #9 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0010",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1010",
+        "amountVnd": 1620000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #10 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0011",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1011",
+        "amountVnd": 1757000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #11 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0012",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1012",
+        "amountVnd": 1894000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #12 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0013",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1013",
+        "amountVnd": 2031000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #13 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0014",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1014",
+        "amountVnd": 2168000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #14 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0015",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1015",
+        "amountVnd": 2305000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #15 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0016",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1016",
+        "amountVnd": 2442000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #16 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0017",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1017",
+        "amountVnd": 2579000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #17 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0018",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1018",
+        "amountVnd": 2716000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #18 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0019",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1019",
+        "amountVnd": 2853000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #19 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0020",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1020",
+        "amountVnd": 2990000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #20 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0021",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1021",
+        "amountVnd": 3127000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #21 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0022",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1022",
+        "amountVnd": 3264000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #22 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0023",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1023",
+        "amountVnd": 3401000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #23 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0024",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1024",
+        "amountVnd": 3538000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #24 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0025",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1025",
+        "amountVnd": 3675000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #25 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0026",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1026",
+        "amountVnd": 3812000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #26 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0027",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1027",
+        "amountVnd": 3949000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #27 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0028",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1028",
+        "amountVnd": 4086000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #28 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0029",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1029",
+        "amountVnd": 4223000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #29 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0030",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1030",
+        "amountVnd": 4360000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #30 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0031",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1031",
+        "amountVnd": 4497000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #31 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0032",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1032",
+        "amountVnd": 4634000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #32 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0033",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1033",
+        "amountVnd": 4771000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #33 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0034",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1034",
+        "amountVnd": 4908000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #34 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0035",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1035",
+        "amountVnd": 5045000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #35 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0036",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1036",
+        "amountVnd": 5182000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #36 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0037",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1037",
+        "amountVnd": 5319000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #37 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0038",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1038",
+        "amountVnd": 5456000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #38 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0039",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1039",
+        "amountVnd": 5593000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #39 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0040",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1040",
+        "amountVnd": 5730000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #40 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0041",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1041",
+        "amountVnd": 5867000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #41 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0042",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1042",
+        "amountVnd": 6004000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #42 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0043",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1043",
+        "amountVnd": 6141000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #43 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0044",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1044",
+        "amountVnd": 6278000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #44 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0045",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1045",
+        "amountVnd": 6415000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #45 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0046",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1046",
+        "amountVnd": 6552000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #46 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0047",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1047",
+        "amountVnd": 6689000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #47 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0048",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1048",
+        "amountVnd": 6826000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #48 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0049",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1049",
+        "amountVnd": 6963000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #49 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0050",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1050",
+        "amountVnd": 7100000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #50 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0051",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1051",
+        "amountVnd": 7237000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #51 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0052",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1052",
+        "amountVnd": 7374000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #52 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0053",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1053",
+        "amountVnd": 7511000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #53 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0054",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1054",
+        "amountVnd": 7648000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #54 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0055",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1055",
+        "amountVnd": 7785000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #55 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0056",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1056",
+        "amountVnd": 7922000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #56 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0057",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1057",
+        "amountVnd": 8059000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #57 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0058",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1058",
+        "amountVnd": 8196000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #58 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0059",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1059",
+        "amountVnd": 8333000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #59 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0060",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1060",
+        "amountVnd": 8470000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #60 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0061",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1061",
+        "amountVnd": 8607000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #61 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0062",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1062",
+        "amountVnd": 8744000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #62 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0063",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1063",
+        "amountVnd": 8881000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #63 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0064",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1064",
+        "amountVnd": 9018000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #64 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0065",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1065",
+        "amountVnd": 9155000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #65 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0066",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1066",
+        "amountVnd": 9292000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #66 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0067",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1067",
+        "amountVnd": 9429000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #67 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0068",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1068",
+        "amountVnd": 9566000,
+        "quantity": 3,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #68 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0069",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Delivery",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1069",
+        "amountVnd": 9703000,
+        "quantity": 4,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #69 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0070",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Customer",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1070",
+        "amountVnd": 9840000,
+        "quantity": 5,
+        "locale": "vi-VN",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #70 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0071",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Staff",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1071",
+        "amountVnd": 9977000,
+        "quantity": 6,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #71 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0072",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Manager",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1072",
+        "amountVnd": 10114000,
+        "quantity": 1,
+        "locale": "vi-VN",
+        "isActive": false
+      },
+      "expectedLegacyStatus": 400,
+      "auditNote": "Initial v1 verification baseline #72 for audit-reports-api"
+    },
+    {
+      "caseId": "AUDIT-REPORTS-API-V1-0073",
+      "domainModule": "audit-reports-api",
+      "schemaRevision": "v1",
+      "actorRole": "Admin",
+      "legacyPayload": {
+        "skuOrCode": "AGT-AUD-1073",
+        "amountVnd": 10251000,
+        "quantity": 2,
+        "locale": "en-US",
+        "isActive": true
+      },
+      "expectedLegacyStatus": 200,
+      "auditNote": "Initial v1 verification baseline #73 for audit-reports-api"
+    }
+  ]
+}
