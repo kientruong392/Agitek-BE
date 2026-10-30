@@ -344,6 +344,8 @@ namespace AgitekBackend.Services
 
                 if (product == null) throw new NotFoundException("Product not found");
 
+                if (await _context.PcBuilds.AnyAsync(build => build.Products.Any(item => item.Id == id)))
+                    throw new BadRequestException("This product belongs to a saved PC configuration. Use soft delete instead.", "PRODUCT_IN_PC_BUILD");
                 _context.ProductImages.RemoveRange(product.Images);
                 _context.ProductSpecifications.RemoveRange(product.Specifications);
 

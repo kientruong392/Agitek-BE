@@ -1,5 +1,17 @@
 namespace AgitekBackend.Common
 {
+    public enum PcComponentType
+    {
+        Mainboard,
+        Cpu,
+        CpuCooler,
+        Ram,
+        GraphicsCard,
+        Storage,
+        PowerSupply,
+        Case
+    }
+
     public enum Provider
     {
         Credentials,

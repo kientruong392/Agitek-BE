@@ -20,6 +20,7 @@ namespace AgitekBackend.DTOs.Products
         public ProductStatus Status { get; set; } = ProductStatus.Pending;
         public int WarrantyPeriod { get; set; }
         public int CategoryId { get; set; }
+        public string CategoryCode { get; set; } = string.Empty;
         public int BrandId { get; set; }
         public int UserId { get; set; }
         public DateTime CreatedAt { get; set; }

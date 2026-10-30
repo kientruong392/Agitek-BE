@@ -109,6 +109,7 @@ builder.Services.AddSingleton<IAuthorizationHandler, RefundManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, ReviewManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, WarrantyManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CloudinaryManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, PcBuildManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -208,6 +209,7 @@ builder.Services.AddScoped<IVoucherService, VoucherService>();
 builder.Services.AddScoped<IWarrantyService, WarrantyService>();
 builder.Services.AddScoped<IAddressService, AddressService>();
 builder.Services.AddScoped<ICartService, CartService>();
+builder.Services.AddScoped<IPcBuildService, PcBuildService>();
 builder.Services.AddScoped<IProfileService, ProfileService>();
 builder.Services.AddScoped<IMediaService, MediaService>();
 
