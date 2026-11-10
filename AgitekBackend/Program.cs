@@ -220,6 +220,12 @@ builder.Services.AddScoped<ICloudinaryService, CloudinaryService>();
 
 var app = builder.Build();
 
+if (args.Any(argument => string.Equals(argument, "--reseed-catalog-images", StringComparison.OrdinalIgnoreCase)))
+{
+    await app.ReseedCatalogImagesAsync();
+    return;
+}
+
 if (args.Any(argument => string.Equals(argument, "--reseed-catalog", StringComparison.OrdinalIgnoreCase)))
 {
     await app.ReseedCatalogAsync();

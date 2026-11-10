@@ -533,6 +533,46 @@ namespace AgitekBackend.Data
                 productIds.Count);
         }
 
+        public static async Task ReseedCatalogImagesAsync(this WebApplication app)
+        {
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            var brands = await context.Brands.AsNoTracking()
+                .ToDictionaryAsync(brand => brand.Name, brand => brand.Code);
+            var products = await context.Products.Include(product => product.Images)
+                .ToDictionaryAsync(product => product.SKU);
+
+            var updated = 0;
+            foreach (var seed in Products)
+            {
+                var sku = $"{brands[seed.BrandName]}-{seed.CategoryCode}-{seed.ProductCode}";
+                if (!products.TryGetValue(sku, out var product))
+                    continue;
+
+                var imageUrl = GetCatalogImageUrl(seed.ProductCode);
+                var primaryImage = product.Images.FirstOrDefault(image => image.IsPrimary)
+                    ?? product.Images.OrderBy(image => image.SortOrder).FirstOrDefault();
+                if (primaryImage == null)
+                {
+                    product.Images.Add(new ProductImage
+                    {
+                        ImageUrl = imageUrl,
+                        IsPrimary = true,
+                        SortOrder = 0
+                    });
+                }
+                else
+                {
+                    primaryImage.ImageUrl = imageUrl;
+                    primaryImage.IsPrimary = true;
+                }
+                updated++;
+            }
+
+            await context.SaveChangesAsync();
+            app.Logger.LogInformation("Updated primary images for {ProductCount} products without changing product details.", updated);
+        }
+
         private static async Task SeedCatalogAsync(AppDbContext context)
         {
             await using var transaction = await context.Database.BeginTransactionAsync();
@@ -564,7 +604,7 @@ namespace AgitekBackend.Data
                         BrandId = brands[seed.BrandName].Id, CategoryId = categories[seed.CategoryCode].Id, UserId = userId,
                         OriginalPrice = seed.Price, Description = seed.Description, WarrantyPeriod = seed.WarrantyPeriod,
                         InitialQuantity = 20, StockQuantity = 20, Status = ProductStatus.InStock,
-                        Images = [new ProductImage { ImageUrl = seed.ImageUrl ?? $"https://placehold.co/900x900/png?text={Uri.EscapeDataString(seed.ProductCode)}", IsPrimary = true }]
+                        Images = [new ProductImage { ImageUrl = GetCatalogImageUrl(seed.ProductCode), IsPrimary = true }]
                     };
                     context.Products.Add(product);
                 }
@@ -667,8 +707,7 @@ namespace AgitekBackend.Data
                 }).ToList();
                 product.Images.Add(new ProductImage
                 {
-                    ImageUrl = seed.ImageUrl
-                        ?? $"https://placehold.co/900x900/png?text={Uri.EscapeDataString($"{seed.BrandName} {seed.ProductCode}")}",
+                    ImageUrl = GetCatalogImageUrl(seed.ProductCode),
                     IsPrimary = true,
                     SortOrder = 0
                 });
@@ -796,6 +835,73 @@ namespace AgitekBackend.Data
             string ReferenceUrl,
             (string Name, string Value)[] Specifications,
             string? ImageUrl = null);
+
+        // Files live in agitek-frontend/public/images/catalog; sources.json records their public sources.
+        private static readonly Dictionary<string, string> CatalogImageFiles = new()
+        {
+            ["I512400F"] = "cpu-intel-12400f.jpg",
+            ["B760MAD4"] = "main-asus-b760.png",
+            ["KF432C16BBK216"] = "ram-kingston-ddr4.jpg",
+            ["TUF3090O24G"] = "gpu-asus-3090.png",
+            ["990PRO2TB"] = "ssd-samsung-990.jpg",
+            ["RM750E2023"] = "psu-corsair-750.png",
+            ["4000DAIRFLOW"] = "case-corsair-4000d.png",
+            ["HACOM022"] = "pc-hacom-022.jpg",
+            ["POSEIDON3090"] = "pc-poseidon-3090.jpg",
+            ["ECONOMY035"] = "pc-economy-035.jpg",
+            ["I513400F"] = "cpu-intel-13400f.jpg",
+            ["B550MPROVDHW"] = "main-msi-b550.png",
+            ["KF556C36BBEK232"] = "ram-corsair-ddr5.png",
+            ["RTX3060VENTUS12"] = "gpu-msi-3060.jpg",
+            ["970EVOPLUS1TB"] = "ssd-samsung-970.jpg",
+            ["MWE650BRONZEV2"] = "psu-corsair-750.png",
+            ["TD500MESHV2"] = "case-corsair-4000d.png",
+            ["TD500PC14700KF"] = "pc-hacom-022.jpg",
+            ["MACMINIM28256"] = "mac-mini-m2.jpg",
+            ["ECONOMY083"] = "pc-economy-083.jpg",
+            ["I514600K"] = "cpu-intel-13400f.jpg",
+            ["B650MDS3H"] = "main-msi-b550.png",
+            ["CMK32G6000C36"] = "ram-corsair-ddr5.png",
+            ["DUAL4060O8G"] = "gpu-asus-3090.png",
+            ["SN7701TB"] = "ssd-samsung-990.jpg",
+            ["TUF850GOLD"] = "psu-asus-850.png",
+            ["FA507NULP101W"] = "laptop-asus.jpg",
+            ["83GS001RVN"] = "laptop-lenovo.png",
+            ["ANV155158AN"] = "laptop-acer.png",
+            ["X1504VANJ526W"] = "laptop-asus.jpg",
+            ["RYZEN55600"] = "cpu-amd-7800x3d.jpg",
+            ["N5I5007W1"] = "laptop-dell.jpg",
+            ["KVR32S22S816"] = "ram-kingston-ddr4.jpg",
+            ["4070SUPERWF12"] = "gpu-msi-3060.jpg",
+            ["NV2500GB"] = "ssd-samsung-970.jpg",
+            ["MBAIRM28256"] = "macbook-air-m2.png",
+            ["G413SE"] = "keyboard-g413.jpg",
+            ["240G108F134PA"] = "laptop-hp.jpg",
+            ["G502HERO"] = "mouse-g502.png",
+            ["CLOUDIIWIRED"] = "headset-hyperx.jpg",
+            ["RYZEN75700X"] = "cpu-amd-7800x3d.jpg",
+            ["RYZEN77800X3D"] = "cpu-amd-7800x3d.jpg",
+            ["KF432C16BB8"] = "ram-kingston-ddr4.jpg",
+            ["4060TIVENTUS16"] = "gpu-msi-3060.jpg",
+            ["ST2000DM008"] = "hdd-seagate-2tb.jpg",
+            ["ARCHERAX55"] = "router-tplink.jpg",
+            ["LS1005G"] = "switch-tplink.jpg",
+            ["ULTRAFLAIR128"] = "usb-sandisk.png",
+            ["ANKER555A8383"] = "hub-anker.png",
+            ["27GP850B"] = "monitor-lg.png",
+            ["TUF650PLUSW"] = "main-asus-b760.png",
+            ["AG400"] = "cooler-ag400.jpg",
+            ["NHL9I17XX"] = "cooler-ag400.jpg",
+            ["C6BLACK"] = "case-jonsbo-c6.jpg"
+        };
+
+        private static string GetCatalogImageUrl(string productCode)
+        {
+            if (!CatalogImageFiles.TryGetValue(productCode, out var fileName))
+                throw new InvalidOperationException($"No catalog image mapped for {productCode}.");
+
+            return $"/images/catalog/{fileName}";
+        }
 
         internal static IReadOnlyList<ProductSeed> Products { get; } =
         [
