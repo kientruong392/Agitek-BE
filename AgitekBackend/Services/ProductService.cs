@@ -15,12 +15,14 @@ namespace AgitekBackend.Services
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
         private readonly ISemanticSearchService _semanticSearchService;
+        private readonly IAuditLogService _auditLogService;
 
-        public ProductService(AppDbContext context, IMapper mapper, ISemanticSearchService semanticSearchService)
+        public ProductService(AppDbContext context, IMapper mapper, ISemanticSearchService semanticSearchService, IAuditLogService auditLogService)
         {
             _context = context;
             _mapper = mapper;
             _semanticSearchService = semanticSearchService;
+            _auditLogService = auditLogService;
         }
 
         private IQueryable<Product> ApplyVisibilityFilter(IQueryable<Product> query, CurrentUser? currentUser)
@@ -168,6 +170,7 @@ namespace AgitekBackend.Services
 
                 _context.Products.Add(product);
                 await _context.SaveChangesAsync();
+                await _auditLogService.RecordStockReceiptAsync(product.Id, product.InitialQuantity, currentUserId, product.CreatedAt);
                 await _semanticSearchService.SynchronizeProductAsync(product.Id);
                 await transaction.CommitAsync();
 
@@ -270,7 +273,7 @@ namespace AgitekBackend.Services
             return true;
         }   
 
-        public async Task<bool> UpdateQuantityAsync(int id, int quantity)
+        public async Task<bool> UpdateQuantityAsync(int id, int quantity, int currentUserId)
         {
             if(quantity < 0) throw new BadRequestException("Quantity cannot be negative");
             var product = await _context.Products.FindAsync(id);
@@ -283,7 +286,10 @@ namespace AgitekBackend.Services
 
             product.UpdatedAt = DateTime.Now;
 
-            await _context.SaveChangesAsync();
+            if (quantity > 0)
+                await _auditLogService.RecordStockReceiptAsync(product.Id, quantity, currentUserId, product.UpdatedAt);
+            else
+                await _context.SaveChangesAsync();
             return true;
         }
         public async Task<bool> UpdateInitialQuantityAsync(int id, int initialQuantity)

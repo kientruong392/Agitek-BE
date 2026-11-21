@@ -152,7 +152,10 @@ namespace AgitekBackend.Controllers
             if (!authResult.Succeeded)
                 throw new ForbiddenException("You do not have permission to access this resource");
 
-            await _productService.UpdateQuantityAsync(id, dto.StockQuantity);
+            var currentUser = GetCurrentUser();
+            if (currentUser == null) return Unauthorized();
+
+            await _productService.UpdateQuantityAsync(id, dto.StockQuantity, currentUser.Id);
             return Ok();
         }
 

@@ -1,55 +1,45 @@
+using AgitekBackend.Authorization.Requirements;
+using AgitekBackend.Common.Exceptions;
 using AgitekBackend.DTOs.AuditLogs;
 using AgitekBackend.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace AgitekBackend.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class AuditLogController : ControllerBase
     {
         private readonly IAuditLogService _auditLogService;
+        private readonly IAuthorizationService _authorizationService;
 
-        public AuditLogController(IAuditLogService auditLogService)
+        public AuditLogController(IAuditLogService auditLogService, IAuthorizationService authorizationService)
         {
             _auditLogService = auditLogService;
+            _authorizationService = authorizationService;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<AuditLogDTO>>> GetAll()
+        public async Task<ActionResult<AuditLogPageDTO>> GetAll([FromQuery] AuditLogQueryDTO query)
         {
-            var logs = await _auditLogService.GetAllAsync();
-            return Ok(logs);
+            await EnsureAuthorizedAsync();
+            return Ok(await _auditLogService.GetPageAsync(query));
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<AuditLogDTO>> GetById(int id)
         {
-            var log = await _auditLogService.GetByIdAsync(id);
-            return Ok(log);
+            await EnsureAuthorizedAsync();
+            return Ok(await _auditLogService.GetByIdAsync(id));
         }
 
-        [HttpPost]
-        public async Task<ActionResult<AuditLogDTO>> Create([FromBody] CreateAuditLogDTO dto)
+        private async Task EnsureAuthorizedAsync()
         {
-            var createdLog = await _auditLogService.CreateAsync(dto);
-            return CreatedAtAction(nameof(GetById), new { id = createdLog.Id }, createdLog);
-        }
-
-        [HttpPatch("{id}")]
-        public async Task<ActionResult<AuditLogDTO>> Update(int id, [FromBody] UpdateAuditLogDTO dto)
-        {
-            var updatedLog = await _auditLogService.UpdateAsync(id, dto);
-            return Ok(updatedLog);
-        }
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult> Delete(int id)
-        {
-            await _auditLogService.DeleteAsync(id);
-            return Ok();
+            var result = await _authorizationService.AuthorizeAsync(User, null, new AuditLogManagementRequirement());
+            if (!result.Succeeded)
+                throw new ForbiddenException("You do not have permission to access audit logs");
         }
     }
 }
-
-

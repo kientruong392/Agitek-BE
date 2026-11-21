@@ -13,11 +13,13 @@ namespace AgitekBackend.Services
     {
         private readonly AppDbContext _context;
         private readonly IMapper _mapper;
+        private readonly IAuditLogService _auditLogService;
 
-        public VoucherService(AppDbContext context, IMapper mapper)
+        public VoucherService(AppDbContext context, IMapper mapper, IAuditLogService auditLogService)
         {
             _context = context;
             _mapper = mapper;
+            _auditLogService = auditLogService;
         }
 
         public async Task<IEnumerable<VoucherDTO>> GetAllAsync(CurrentUser? currentUser)
@@ -142,6 +144,9 @@ namespace AgitekBackend.Services
             var voucher = await _context.Vouchers.FindAsync(id);
             if (voucher == null) throw new NotFoundException($"Voucher not found");
 
+            await using var transaction = _context.Database.CurrentTransaction == null
+                ? await _context.Database.BeginTransactionAsync()
+                : null;
             var now = DateTime.Now;
             var updated = await _context.Vouchers
                 .Where(item => item.Id == id &&
@@ -158,6 +163,9 @@ namespace AgitekBackend.Services
 
             if (updated != 1)
                 throw new BadRequestException("Voucher is out of stock");
+
+            await _auditLogService.RecordActionAsync("Voucher", $"Updated #{id} [Quantity, UsedCount, Status]");
+            if (transaction != null) await transaction.CommitAsync();
         }
 
         private bool IsManagementRole(RoleName? role)

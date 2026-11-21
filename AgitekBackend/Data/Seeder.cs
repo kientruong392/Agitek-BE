@@ -8,24 +8,28 @@ namespace AgitekBackend.Data
 {
     public static class Seeder
     {
-        public static async Task SeedDataAsync(this WebApplication app)
+        public static async Task SeedDataAsync(this WebApplication app, bool backfillAuditLogs = true)
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.AuditEnabled = false;
 
             await context.Database.MigrateAsync();
             await SeedUsersAsync(context);
             await SeedCatalogAsync(context);
             await SeedVouchersAsync(context);
             await SeedLocationsAsync(context);
+            if (backfillAuditLogs)
+                await SeedExistingResourceAuditLogsAsync(context);
         }
 
         public static async Task ReseedOrdersAsync(this WebApplication app)
         {
-            await app.SeedDataAsync();
+            await app.SeedDataAsync(backfillAuditLogs: false);
 
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.AuditEnabled = false;
             var orderedQuantities = await context.OrderDetails
                 .AsNoTracking()
                 .GroupBy(detail => detail.ProductId)
@@ -53,6 +57,89 @@ namespace AgitekBackend.Data
 
             await ResetOrderDataIdentitiesAsync(context);
             await SeedOrdersForReviewTestingAsync(context);
+            await SeedExistingResourceAuditLogsAsync(context);
+        }
+
+        public static async Task SeedReportOrdersAsync(this WebApplication app)
+        {
+            await app.SeedDataAsync(backfillAuditLogs: false);
+
+            using var scope = app.Services.CreateScope();
+            var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.AuditEnabled = false;
+
+            if (!await context.Orders.AnyAsync(order => order.TrackingNumber.Contains("SEED")))
+                await SeedOrdersForReviewTestingAsync(context);
+
+            await SeedExistingResourceAuditLogsAsync(context);
+        }
+
+        private static async Task SeedExistingResourceAuditLogsAsync(AppDbContext context)
+        {
+            var products = await context.Products.AsNoTracking()
+                .Select(product => new { product.Id, product.UserId, product.SKU, product.CreatedAt })
+                .ToListAsync();
+            var orders = await context.Orders.AsNoTracking()
+                .Select(order => new { order.Id, order.UserId, order.TrackingNumber, order.CreatedAt })
+                .ToListAsync();
+            var existingLogs = await context.AuditLogs.AsNoTracking()
+                .Where(log => (log.EntityName == nameof(Product) || log.EntityName == nameof(Order)) &&
+                    log.Action.StartsWith("Created #"))
+                .Select(log => new { log.EntityName, log.Action, log.Timestamp })
+                .ToListAsync();
+            var existingActions = existingLogs
+                .Select(log => (log.EntityName, log.Action))
+                .ToHashSet();
+            var normalCreationTimes = existingLogs
+                .Where(log => !log.Action.Contains("[backfill:"))
+                .ToLookup(log => (log.EntityName, log.Action), log => log.Timestamp);
+            var newLogs = new List<AuditLog>();
+
+            bool HasCreationLog(string entityName, int id, DateTime createdAt, string backfillAction)
+            {
+                if (existingActions.Contains((entityName, backfillAction)))
+                    return true;
+
+                var originalAction = $"Created #{id}";
+                return normalCreationTimes[(entityName, originalAction)]
+                    .Any(timestamp => Math.Abs((timestamp - createdAt).TotalHours) <= 24);
+            }
+
+            foreach (var product in products)
+            {
+                var action = $"Created #{product.Id} [backfill:{product.SKU}]";
+                if (HasCreationLog(nameof(Product), product.Id, product.CreatedAt, action))
+                    continue;
+
+                newLogs.Add(new AuditLog
+                {
+                    Timestamp = product.CreatedAt,
+                    UserId = product.UserId,
+                    EntityName = nameof(Product),
+                    Action = action
+                });
+            }
+
+            foreach (var order in orders)
+            {
+                var action = $"Created #{order.Id} [backfill:{order.TrackingNumber}]";
+                if (HasCreationLog(nameof(Order), order.Id, order.CreatedAt, action))
+                    continue;
+
+                newLogs.Add(new AuditLog
+                {
+                    Timestamp = order.CreatedAt,
+                    UserId = order.UserId,
+                    EntityName = nameof(Order),
+                    Action = action
+                });
+            }
+
+            if (newLogs.Count == 0)
+                return;
+
+            context.AuditLogs.AddRange(newLogs);
+            await context.SaveChangesAsync();
         }
 
         private static async Task SeedUsersAsync(AppDbContext context)
@@ -512,6 +599,7 @@ namespace AgitekBackend.Data
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.AuditEnabled = false;
             var semanticSearchService = scope.ServiceProvider.GetRequiredService<ISemanticSearchService>();
 
             await context.Database.MigrateAsync();
@@ -528,6 +616,7 @@ namespace AgitekBackend.Data
             }
 
             await transaction.CommitAsync();
+            await SeedExistingResourceAuditLogsAsync(context);
             app.Logger.LogInformation(
                 "Reseeded {ProductCount} real-world catalog products and synchronized their embeddings. Existing product IDs and order relationships were preserved.",
                 productIds.Count);
@@ -537,6 +626,7 @@ namespace AgitekBackend.Data
         {
             using var scope = app.Services.CreateScope();
             var context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+            context.AuditEnabled = false;
             var brands = await context.Brands.AsNoTracking()
                 .ToDictionaryAsync(brand => brand.Name, brand => brand.Code);
             var products = await context.Products.Include(product => product.Images)

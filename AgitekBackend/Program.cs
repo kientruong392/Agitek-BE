@@ -6,6 +6,7 @@ using AgitekBackend.Common.Settings;
 using AgitekBackend.Middlewares;
 using AgitekBackend.Services;
 using AgitekBackend.Services.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,9 @@ using StackExchange.Redis;
 using SmartComponents.LocalEmbeddings;
 
 var builder = WebApplication.CreateBuilder(args);
+
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddSingleton<AuditLogChangeTracker>();
 
 var connectionString = builder.Configuration.GetConnectionString("AgitekConnection")
     ?? throw new InvalidOperationException("Connection string 'AgitekConnection' not found");
@@ -90,10 +94,21 @@ builder.Services
             },
         };
     })
+    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme, options =>
+    {
+        options.Cookie.HttpOnly     = true;
+        options.Cookie.SameSite     = SameSiteMode.Lax;
+        options.Cookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
+        options.ExpireTimeSpan      = TimeSpan.FromMinutes(5);
+    })
     .AddGoogle(options =>
     {
-        options.ClientId     = builder.Configuration["GoogleAuth:ClientId"]!;
-        options.ClientSecret = builder.Configuration["GoogleAuth:ClientSecret"]!;
+        options.SignInScheme                   = CookieAuthenticationDefaults.AuthenticationScheme;
+        options.ClientId                       = builder.Configuration["GoogleAuth:ClientId"]!;
+        options.ClientSecret                   = builder.Configuration["GoogleAuth:ClientSecret"]!;
+        options.CallbackPath                   = "/Auth/google/callback";
+        options.CorrelationCookie.SameSite     = SameSiteMode.Lax;
+        options.CorrelationCookie.SecurePolicy = CookieSecurePolicy.SameAsRequest;
     });
 
 builder.Services.AddSingleton<IAuthorizationHandler, UserManagementHandler>();
@@ -110,6 +125,8 @@ builder.Services.AddSingleton<IAuthorizationHandler, ReviewManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, WarrantyManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, CloudinaryManagementHandler>();
 builder.Services.AddSingleton<IAuthorizationHandler, PcBuildManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, ReportManagementHandler>();
+builder.Services.AddSingleton<IAuthorizationHandler, AuditLogManagementHandler>();
 
 builder.Services.AddAuthorization();
 
@@ -195,6 +212,7 @@ builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IEmailService, EmailService>();
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IProductService, ProductService>();
+builder.Services.AddScoped<IReportService, ReportService>();
 builder.Services.AddSingleton<LocalEmbedder>();
 builder.Services.AddScoped<ISemanticSearchService, SemanticSearchService>();
 builder.Services.AddHostedService<ProductEmbeddingBackgroundService>();
@@ -235,6 +253,12 @@ if (args.Any(argument => string.Equals(argument, "--reseed-catalog", StringCompa
 if (args.Any(argument => string.Equals(argument, "--reseed-orders", StringComparison.OrdinalIgnoreCase)))
 {
     await app.ReseedOrdersAsync();
+    return;
+}
+
+if (args.Any(argument => string.Equals(argument, "--seed-report-orders", StringComparison.OrdinalIgnoreCase)))
+{
+    await app.SeedReportOrdersAsync();
     return;
 }
 

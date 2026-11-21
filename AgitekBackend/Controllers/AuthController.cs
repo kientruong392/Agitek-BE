@@ -1,6 +1,7 @@
 using AgitekBackend.DTOs.Auths;
 using AgitekBackend.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -111,9 +112,11 @@ namespace AgitekBackend.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> GoogleCallback()
         {
-            var result = await HttpContext.AuthenticateAsync("Google");
+            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             if (!result.Succeeded || result.Principal == null)
                 return Unauthorized();
+
+            await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 
             var email = result.Principal.FindFirstValue(ClaimTypes.Email)
                 ?? throw new InvalidOperationException("Google did not return an email");
@@ -122,8 +125,9 @@ namespace AgitekBackend.Controllers
             var tokens = await _authService.HandleGoogleLoginAsync(email, name);
 
             var frontendUrl = _config["Frontend:Url"] ?? "http://localhost:3000";
+            var accessToken = Uri.EscapeDataString(tokens.AccessToken);
+            var refreshToken = Uri.EscapeDataString(tokens.RefreshToken);
             return Redirect(
-                $"{frontendUrl}/login/success?accessToken={tokens.AccessToken}&refreshToken={tokens.RefreshToken}");
+                $"{frontendUrl}/login/success?accessToken={accessToken}&refreshToken={refreshToken}");
         }
     }
-}

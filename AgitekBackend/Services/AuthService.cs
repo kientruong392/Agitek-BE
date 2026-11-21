@@ -195,8 +195,14 @@ namespace AgitekBackend.Services
                 };
 
                 userDto = await _userService.CreateAsync(createUserDto);
-                await _userService.UpdateVerifyStatusAsync(userDto.Id, true);
             }
+
+            if (!userDto.IsVerified)
+            {
+                await _userService.UpdateVerifyStatusAsync(userDto.Id, true);
+                userDto.IsVerified = true;
+            }
+
             await _userService.AddProviderAsync(userDto.Id, Provider.Google);
 
             return await CreateTokenPairAsync(userDto);

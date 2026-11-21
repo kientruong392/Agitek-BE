@@ -4,7 +4,8 @@ namespace AgitekBackend.DTOs.AuditLogs
     {
         public int Id { get; set; }
         public DateTime Timestamp { get; set; }
-        public int UserId { get; set; }
+        public int? UserId { get; set; }
+        public string? ActorName { get; set; }
         public string EntityName { get; set; } = string.Empty;
         public string Action { get; set; } = string.Empty;
     }

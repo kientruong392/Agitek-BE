@@ -15,7 +15,7 @@ namespace AgitekBackend.Services.Interfaces
         Task<ProductDTO> CreateAsync(CreateProductDTO dto, int currentUserId);
         Task<ProductDTO> UpdateAsync(int id, UpdateProductDTO dto);
         Task<bool> ChangeStatusAsync(int id, ProductStatus newStatus);
-        Task<bool> UpdateQuantityAsync(int id, int stockQuantity);
+        Task<bool> UpdateQuantityAsync(int id, int stockQuantity, int currentUserId);
         Task<bool> UpdateInitialQuantityAsync(int id, int initialQuantity);
         Task<bool> UpdateStockQuantityAsync(int id, int stockQuantity);
         Task<bool> SoftDeleteAsync(int id);

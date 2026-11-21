@@ -269,7 +269,9 @@ namespace AgitekBackend.Services
 
         public async Task<UserDTO?> CheckEmailExists(string email)
         {
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u => u.Email == email);
             return user == null ? null : _mapper.Map<UserDTO>(user);
         }
     }
