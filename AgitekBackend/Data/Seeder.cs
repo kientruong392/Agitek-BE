@@ -15,10 +15,13 @@ namespace AgitekBackend.Data
             context.AuditEnabled = false;
 
             await context.Database.MigrateAsync();
+            await EnsureAuditLogsSchemaAsync(context);
             await SeedUsersAsync(context);
             await SeedCatalogAsync(context);
             await SeedVouchersAsync(context);
             await SeedLocationsAsync(context);
+            await SeedTestUserOrdersAndWarrantiesAsync(context);
+            await SeedCoreI5ReviewsAsync(context);
             if (backfillAuditLogs)
                 await SeedExistingResourceAuditLogsAsync(context);
         }
@@ -57,7 +60,14 @@ namespace AgitekBackend.Data
 
             await ResetOrderDataIdentitiesAsync(context);
             await SeedOrdersForReviewTestingAsync(context);
+            await SeedTestUserOrdersAndWarrantiesAsync(context);
+            await SeedCoreI5ReviewsAsync(context);
             await SeedExistingResourceAuditLogsAsync(context);
+        }
+
+        public static async Task SeedTestUserDataAsync(this WebApplication app)
+        {
+            await app.SeedDataAsync(backfillAuditLogs: true);
         }
 
         public static async Task SeedReportOrdersAsync(this WebApplication app)
@@ -72,6 +82,38 @@ namespace AgitekBackend.Data
                 await SeedOrdersForReviewTestingAsync(context);
 
             await SeedExistingResourceAuditLogsAsync(context);
+        }
+
+        private static async Task EnsureAuditLogsSchemaAsync(AppDbContext context)
+        {
+            await context.Database.ExecuteSqlRawAsync(@"
+IF EXISTS (
+    SELECT 1 FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_SCHEMA = 'dbo' AND TABLE_NAME = 'AuditLogs' AND COLUMN_NAME = 'UserId' AND IS_NULLABLE = 'NO'
+)
+BEGIN
+    IF OBJECT_ID('dbo.FK_AuditLogs_Users_UserId', 'F') IS NOT NULL
+        ALTER TABLE [dbo].[AuditLogs] DROP CONSTRAINT [FK_AuditLogs_Users_UserId];
+
+    IF EXISTS (SELECT 1 FROM sys.indexes WHERE name = 'IX_AuditLogs_UserId' AND object_id = OBJECT_ID('dbo.AuditLogs'))
+        DROP INDEX [IX_AuditLogs_UserId] ON [dbo].[AuditLogs];
+
+    ALTER TABLE [dbo].[AuditLogs] ALTER COLUMN [UserId] INT NULL;
+
+    CREATE NONCLUSTERED INDEX [IX_AuditLogs_UserId] ON [dbo].[AuditLogs]([UserId]);
+
+    ALTER TABLE [dbo].[AuditLogs] WITH CHECK
+        ADD CONSTRAINT [FK_AuditLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([Id]) ON DELETE SET NULL;
+END
+ELSE IF EXISTS (
+    SELECT 1 FROM sys.foreign_keys
+    WHERE name = 'FK_AuditLogs_Users_UserId' AND delete_referential_action_desc <> 'SET_NULL'
+)
+BEGIN
+    ALTER TABLE [dbo].[AuditLogs] DROP CONSTRAINT [FK_AuditLogs_Users_UserId];
+    ALTER TABLE [dbo].[AuditLogs] WITH CHECK
+        ADD CONSTRAINT [FK_AuditLogs_Users_UserId] FOREIGN KEY ([UserId]) REFERENCES [dbo].[Users]([Id]) ON DELETE SET NULL;
+END");
         }
 
         private static async Task SeedExistingResourceAuditLogsAsync(AppDbContext context)
@@ -595,6 +637,703 @@ namespace AgitekBackend.Data
 
             await context.SaveChangesAsync();
         }
+
+        private static async Task SeedTestUserOrdersAndWarrantiesAsync(AppDbContext context)
+        {
+            const string targetUsername = "truongtrungkien030902";
+            const string targetEmailPrefix = "truongtrungkien030902@";
+            string[] seedTrackingNumbers =
+            [
+                "AGTK2601SEED",
+                "AGTK2602SEED",
+                "AGTK2603SEED",
+                "AGTK2604SEED"
+            ];
+            string[] seedWarrantyCodes =
+            [
+                "WRT-KIEN-001",
+                "WRT-KIEN-002",
+                "WRT-KIEN-003",
+                "WRT-KIEN-004"
+            ];
+
+            var existingTrackingCount = await context.Orders
+                .AsNoTracking()
+                .CountAsync(o => seedTrackingNumbers.Contains(o.TrackingNumber));
+            var existingWarrantyCount = await context.Warranties
+                .AsNoTracking()
+                .CountAsync(w => seedWarrantyCodes.Contains(w.Code));
+
+            if (existingTrackingCount == seedTrackingNumbers.Length &&
+                existingWarrantyCount == seedWarrantyCodes.Length)
+            {
+                return;
+            }
+
+            var targetUser = await context.Users
+                .Include(u => u.Profile)
+                .FirstOrDefaultAsync(u =>
+                    (u.Username != null && u.Username.ToLower() == targetUsername) ||
+                    (u.Email != null && u.Email.ToLower().StartsWith(targetEmailPrefix)));
+
+            if (targetUser == null)
+            {
+                targetUser = new User
+                {
+                    Username = targetUsername,
+                    Email = $"{targetUsername}@gmail.com",
+                    PasswordHash = AuthUtils.HashPassword("123123"),
+                    Role = RoleName.Customer,
+                    IsActive = true,
+                    IsVerified = true,
+                    Providers = new List<Provider> { Provider.Credentials },
+                    Profile = new Profile
+                    {
+                        FullName = "Trương Trung Kiên",
+                        PhoneNumber = "0918309020",
+                        Gender = GenderType.Male,
+                        DateOfBirth = new DateTime(2002, 9, 3),
+                        AvatarUrl = "https://ui-avatars.com/api/?name=Truong+Trung+Kien"
+                    }
+                };
+                context.Users.Add(targetUser);
+                await context.SaveChangesAsync();
+            }
+
+            var products = await context.Products
+                .Include(p => p.Images)
+                .Where(p => p.DeletedAt == null && p.WarrantyPeriod > 0 && p.StockQuantity >= 2)
+                .OrderBy(p => p.Id)
+                .Take(10)
+                .ToListAsync();
+
+            if (products.Count < 4)
+            {
+                products = await context.Products
+                    .Include(p => p.Images)
+                    .Where(p => p.DeletedAt == null && p.WarrantyPeriod > 0)
+                    .OrderBy(p => p.Id)
+                    .Take(10)
+                    .ToListAsync();
+            }
+
+            if (products.Count < 4)
+                return;
+
+            var warehouses = await context.Locations
+                .Where(l => l.IsWarehouse && l.Status == LocationStatus.Active)
+                .OrderBy(l => l.Id)
+                .ToListAsync();
+            if (warehouses.Count == 0)
+                return;
+
+            var primaryWarehouse = warehouses.FirstOrDefault(w => w.LocationCode == "SG01") ?? warehouses[0];
+            var transitWarehouse = warehouses.FirstOrDefault(w => w.LocationCode == "CT01")
+                ?? warehouses.FirstOrDefault(w => w.LocationCode == "AG01")
+                ?? primaryWarehouse;
+            var localWarehouse = warehouses.FirstOrDefault(w => w.LocationCode == "AG01") ?? transitWarehouse;
+
+            var approverId = await context.Users
+                .Where(u => u.Role == RoleName.Staff || u.Role == RoleName.Manager || u.Role == RoleName.Admin)
+                .OrderBy(u => u.Id)
+                .Select(u => (int?)u.Id)
+                .FirstOrDefaultAsync();
+            var deliveryUserId = await context.Users
+                .Where(u => u.Role == RoleName.Delivery && u.IsActive)
+                .OrderBy(u => u.Id)
+                .Select(u => (int?)u.Id)
+                .FirstOrDefaultAsync();
+
+            var userAddress = await context.Addresses
+                .Where(a => a.UserId == targetUser.Id)
+                .OrderByDescending(a => a.IsDefault)
+                .ThenBy(a => a.Id)
+                .FirstOrDefaultAsync();
+
+            if (userAddress == null)
+            {
+                userAddress = new Address
+                {
+                    UserId = targetUser.Id,
+                    ReceiverName = targetUser.Profile?.FullName ?? "Trương Trung Kiên",
+                    PhoneNumber = targetUser.Profile?.PhoneNumber ?? "0918309020",
+                    AddressLine = "Số 88 Trần Hưng Đạo, Phường Mỹ Bình, TP. Long Xuyên, Tỉnh An Giang",
+                    IsDefault = true
+                };
+                context.Addresses.Add(userAddress);
+                await context.SaveChangesAsync();
+            }
+
+            var existingOrders = await context.Orders
+                .Include(o => o.OrderDetails)
+                .Where(o => seedTrackingNumbers.Contains(o.TrackingNumber))
+                .ToDictionaryAsync(o => o.TrackingNumber);
+
+            var now = DateTime.UtcNow;
+            var addressSnapshot = $"{userAddress.ReceiverName.Trim()}, {userAddress.PhoneNumber.Trim()}, {userAddress.AddressLine.Trim()}";
+
+            var orderSpecs = new (string Tracking, int DaysAgo, PaymentMethod PaymentMethod, ShippingType ShippingType, string Note, (Product Product, int Qty)[] Items)[]
+            {
+                (
+                    "AGTK2601SEED",
+                    35,
+                    PaymentMethod.Bank,
+                    ShippingType.Express,
+                    "Đơn build PC văn phòng & gaming - giao giờ hành chính.",
+                    new[] { (products[0], 1), (products[1 % products.Count], 1), (products[2 % products.Count], 1) }
+                ),
+                (
+                    "AGTK2602SEED",
+                    18,
+                    PaymentMethod.COD,
+                    ShippingType.Standard,
+                    "Kiểm tra ngoại quan hộp trước khi thanh toán COD.",
+                    new[] { (products[3 % products.Count], 2), (products[4 % products.Count], 1) }
+                ),
+                (
+                    "AGTK2603SEED",
+                    7,
+                    PaymentMethod.Bank,
+                    ShippingType.Express,
+                    "Nâng cấp linh kiện máy tính cá nhân.",
+                    new[] { (products[5 % products.Count], 1), (products[6 % products.Count], 1) }
+                ),
+                (
+                    "AGTK2604SEED",
+                    2,
+                    PaymentMethod.Bank,
+                    ShippingType.Standard,
+                    "Đơn hàng mới giao thành công - sẵn sàng đánh giá, hoàn tiền và bảo hành.",
+                    new[] { (products[7 % products.Count], 1), (products[8 % products.Count], 1), (products[9 % products.Count], 1) }
+                )
+            };
+
+            var createdOrders = new List<Order>();
+            var newLocations = new List<Location>();
+
+            for (var i = 0; i < orderSpecs.Length; i++)
+            {
+                var spec = orderSpecs[i];
+                if (existingOrders.ContainsKey(spec.Tracking))
+                    continue;
+
+                var createdAt = now.AddDays(-spec.DaysAgo);
+                var confirmedAt = createdAt.AddHours(3);
+                var transitAt = confirmedAt.AddHours(8);
+                var deliveredAt = transitAt.AddDays(1);
+
+                var locCode = $"DL{spec.Tracking}";
+                var deliveryLocation = await context.Locations.FirstOrDefaultAsync(l => l.LocationCode == locCode);
+                if (deliveryLocation == null)
+                {
+                    deliveryLocation = new Location
+                    {
+                        LocationCode = locCode,
+                        LocationName = addressSnapshot.Length > 255 ? addressSnapshot[..255] : addressSnapshot,
+                        Latitude = 10.386390m + i * 0.0012m,
+                        Longitude = 105.435180m + i * 0.0012m,
+                        IsWarehouse = false,
+                        Status = LocationStatus.Active
+                    };
+                    newLocations.Add(deliveryLocation);
+                }
+
+                var details = spec.Items.Select(item =>
+                {
+                    var unitPrice = item.Product.DiscountPrice.HasValue && item.Product.DiscountPrice.Value < item.Product.OriginalPrice
+                        ? item.Product.DiscountPrice.Value
+                        : item.Product.OriginalPrice;
+                    return new OrderDetail
+                    {
+                        ProductId = item.Product.Id,
+                        Quantity = item.Qty,
+                        UnitPrice = unitPrice,
+                        TotalPrice = unitPrice * item.Qty
+                    };
+                }).ToList();
+
+                var subtotal = details.Sum(d => d.TotalPrice);
+                var shippingFee = spec.ShippingType == ShippingType.Express ? 50_000m : 30_000m;
+                var discountAmount = i == 0 ? 200_000m : 0m;
+                var totalPrice = Math.Max(0m, subtotal + shippingFee - discountAmount);
+
+                var order = new Order
+                {
+                    TrackingNumber = spec.Tracking,
+                    UserId = targetUser.Id,
+                    ApprovedByUserId = approverId,
+                    DeliveredByUserId = deliveryUserId,
+                    FromLocationId = primaryWarehouse.Id,
+                    AddressId = userAddress.Id,
+                    ToLocation = deliveryLocation,
+                    Address = addressSnapshot,
+                    ShippingType = spec.ShippingType,
+                    SubtotalPrice = subtotal,
+                    ShippingFee = shippingFee,
+                    DiscountAmount = discountAmount,
+                    TotalPrice = totalPrice,
+                    Status = OrderStatus.Delivered,
+                    Note = spec.Note,
+                    CreatedAt = createdAt,
+                    UpdatedAt = deliveredAt,
+                    OrderDetails = details
+                };
+
+                order.Payments.Add(new Payment
+                {
+                    Amount = totalPrice,
+                    PaymentMethod = spec.PaymentMethod,
+                    Status = PaymentStatus.Success,
+                    CreatedAt = createdAt,
+                    PaidAt = spec.PaymentMethod == PaymentMethod.COD ? deliveredAt : createdAt.AddMinutes(8),
+                    TransactionId = spec.PaymentMethod == PaymentMethod.Bank ? $"SEED-KIEN-{i + 1:000}" : null
+                });
+
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    LocationId = primaryWarehouse.Id,
+                    Description = "Đơn hàng đã được tạo và xác nhận.",
+                    Timestamp = createdAt
+                });
+                if (transitWarehouse.Id != primaryWarehouse.Id)
+                {
+                    order.OrderTrackingLogs.Add(new OrderTrackingLog
+                    {
+                        Order = order,
+                        LocationId = transitWarehouse.Id,
+                        Description = "Đơn hàng đã đến kho trung chuyển.",
+                        Timestamp = confirmedAt
+                    });
+                }
+                if (localWarehouse.Id != transitWarehouse.Id && localWarehouse.Id != primaryWarehouse.Id)
+                {
+                    order.OrderTrackingLogs.Add(new OrderTrackingLog
+                    {
+                        Order = order,
+                        LocationId = localWarehouse.Id,
+                        Description = "Đơn hàng đã đến kho giao hàng khu vực An Giang.",
+                        Timestamp = transitAt
+                    });
+                }
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    Location = deliveryLocation,
+                    Description = "Giao hàng thành công đến khách hàng.",
+                    Timestamp = deliveredAt
+                });
+
+                createdOrders.Add(order);
+                existingOrders[spec.Tracking] = order;
+            }
+
+            if (createdOrders.Count > 0)
+            {
+                foreach (var product in products)
+                {
+                    var qty = createdOrders
+                        .SelectMany(o => o.OrderDetails)
+                        .Where(d => d.ProductId == product.Id)
+                        .Sum(d => d.Quantity);
+                    if (qty == 0) continue;
+
+                    product.StockQuantity = Math.Max(0, product.StockQuantity - qty);
+                    product.SoldQuantity += qty;
+                    product.UpdatedAt = now;
+                    UpdateInventoryStatus(product);
+                }
+
+                if (newLocations.Count > 0)
+                    context.Locations.AddRange(newLocations);
+                context.Orders.AddRange(createdOrders);
+                await context.SaveChangesAsync();
+            }
+
+            var existingWarrantyCodeSet = (await context.Warranties
+                .AsNoTracking()
+                .Where(w => seedWarrantyCodes.Contains(w.Code))
+                .Select(w => w.Code)
+                .ToListAsync())
+                .ToHashSet();
+
+            string GetProductMediaUrl(int productId)
+            {
+                var prod = products.FirstOrDefault(p => p.Id == productId);
+                var img = prod?.Images?.FirstOrDefault(img => img.IsPrimary) ?? prod?.Images?.FirstOrDefault();
+                return !string.IsNullOrWhiteSpace(img?.ImageUrl) ? img.ImageUrl : "/images/no-image.png";
+            }
+
+            var order1 = existingOrders.GetValueOrDefault("AGTK2601SEED");
+            var order2 = existingOrders.GetValueOrDefault("AGTK2602SEED");
+            var order3 = existingOrders.GetValueOrDefault("AGTK2603SEED");
+
+            var warrantySpecs = new List<(string Code, Order? Order, int DetailIndex, WarrantyStatus Status, string Condition, string? Response, DateTime CreatedAt, DateTime? StartDate, DateTime? CompletedDate)>
+            {
+                (
+                    "WRT-KIEN-001",
+                    order1,
+                    0,
+                    WarrantyStatus.Completed,
+                    "Quạt tản nhiệt phát tiếng ồn lớn khi chạy tải cao trên 70%.",
+                    "Đã vệ sinh, thay mới cụm quạt chính hãng và kiểm tra ổn định trong 24 giờ. Sản phẩm đã hoàn tất bảo hành.",
+                    now.AddDays(-20),
+                    now.AddDays(-19),
+                    now.AddDays(-14)
+                ),
+                (
+                    "WRT-KIEN-002",
+                    order2,
+                    0,
+                    WarrantyStatus.Processing,
+                    "Sản phẩm thỉnh thoảng tự ngắt tín hiệu sau khoảng 2 giờ sử dụng liên tục.",
+                    "Trung tâm bảo hành AGITEK đã tiếp nhận thiết bị và đang kiểm tra linh kiện nguồn.",
+                    now.AddDays(-5),
+                    now.AddDays(-4),
+                    null
+                ),
+                (
+                    "WRT-KIEN-003",
+                    order3,
+                    0,
+                    WarrantyStatus.Pending,
+                    "Đèn LED RGB không đồng bộ màu và cổng kết nối hơi lỏng khi cắm dây.",
+                    null,
+                    now.AddDays(-1),
+                    null,
+                    null
+                ),
+                (
+                    "WRT-KIEN-004",
+                    order1,
+                    1,
+                    WarrantyStatus.Rejected,
+                    "Thiết bị không lên nguồn sau khi bị đổ nước lên bề mặt.",
+                    "Từ chối bảo hành do sản phẩm có dấu hiệu vào chất lỏng, nằm ngoài phạm vi bảo hành tiêu chuẩn của nhà sản xuất.",
+                    now.AddDays(-12),
+                    null,
+                    null
+                )
+            };
+
+            var warrantiesToAdd = new List<Warranty>();
+            foreach (var wSpec in warrantySpecs)
+            {
+                if (existingWarrantyCodeSet.Contains(wSpec.Code) || wSpec.Order == null)
+                    continue;
+
+                var detailsList = wSpec.Order.OrderDetails.OrderBy(d => d.ProductId).ToList();
+                if (wSpec.DetailIndex >= detailsList.Count)
+                    continue;
+
+                var targetDetail = detailsList[wSpec.DetailIndex];
+                var warranty = new Warranty
+                {
+                    Code = wSpec.Code,
+                    OrderId = wSpec.Order.Id,
+                    ProductId = targetDetail.ProductId,
+                    Quantity = 1,
+                    UserId = targetUser.Id,
+                    FullName = userAddress.ReceiverName,
+                    PhoneNumber = userAddress.PhoneNumber,
+                    Address = userAddress.AddressLine,
+                    ProductCondition = wSpec.Condition,
+                    Status = wSpec.Status,
+                    Response = wSpec.Response,
+                    StartDate = wSpec.StartDate,
+                    CompletedDate = wSpec.CompletedDate,
+                    CreatedAt = wSpec.CreatedAt,
+                    UpdatedAt = wSpec.CompletedDate ?? wSpec.StartDate ?? wSpec.CreatedAt
+                };
+
+                warranty.Media.Add(new Media
+                {
+                    MediaUrl = GetProductMediaUrl(targetDetail.ProductId),
+                    MediaType = MediaType.Image
+                });
+
+                warrantiesToAdd.Add(warranty);
+            }
+
+            if (warrantiesToAdd.Count > 0)
+            {
+                context.Warranties.AddRange(warrantiesToAdd);
+                await context.SaveChangesAsync();
+            }
+        }
+
+        private static async Task SeedCoreI5ReviewsAsync(AppDbContext context)
+        {
+            const string targetSku = "INTEL-CPU-I512400F";
+            const string unboxVideoUrl = "https://res.cloudinary.com/dqwgq5chd/video/upload/v1795585443/agitek/reviews/jq8dknvbrjy21aachqtl.mp4";
+            const string benchVideoUrl = "https://res.cloudinary.com/dqwgq5chd/video/upload/v1795585447/agitek/reviews/jzechclltb0v8kwsjdci.mp4";
+
+            var cpuImg = CatalogImageCloudUrls["cpu-intel-12400f.jpg"];
+            var mainImg = CatalogImageCloudUrls["main-asus-b760.png"];
+            var coolerImg = CatalogImageCloudUrls["cooler-ag400.jpg"];
+            var pcImg = CatalogImageCloudUrls["pc-hacom-022.jpg"];
+            var ramImg = CatalogImageCloudUrls["ram-kingston-ddr4.jpg"];
+            var caseImg = CatalogImageCloudUrls["case-corsair-4000d.png"];
+            var psuImg = CatalogImageCloudUrls["psu-corsair-750.png"];
+
+            var reviewSpecs = new (
+                string Tracking,
+                string Username,
+                string FullName,
+                string Phone,
+                int Rating,
+                int DaysAgo,
+                string Comment,
+                string? Reply,
+                (string Url, MediaType Type)[] Medias)[]
+            {
+                (
+                    "AGTRV2601", "minhanh_pc", "Nguyễn Minh Anh", "0912001001", 5, 28,
+                    "CPU nguyên seal chính hãng Intel, đóng gói chống sốc rất kỹ. Lắp lên main ASUS B760M nhận ngay, chơi Valorant và Liên Minh mượt trên 200 FPS, nhiệt độ mát mẻ chỉ khoảng 54°C với tản khí AG400.",
+                    "Cảm ơn anh Minh Anh đã tin tưởng ủng hộ AGITEK PC! Chúc anh trải nghiệm bộ máy mới thật mượt mà.",
+                    new[] { (cpuImg, MediaType.Image), (coolerImg, MediaType.Image), (unboxVideoUrl, MediaType.Video) }
+                ),
+                (
+                    "AGTRV2602", "quocbao_tech", "Trần Quốc Bảo", "0912001002", 5, 25,
+                    "CPU quốc dân trong tầm giá dưới 3 triệu. 6 nhân 12 luồng chạy đa nhiệm, code Visual Studio và chạy Docker rất ổn áp. Gửi kèm video test nhiệt độ và FPS thực tế sau khi ráp máy cho anh em tham khảo.",
+                    "Cảm ơn anh Quốc Bảo đã chia sẻ video test thực tế rất chi tiết ạ!",
+                    new[] { (pcImg, MediaType.Image), (cpuImg, MediaType.Image), (benchVideoUrl, MediaType.Video) }
+                ),
+                (
+                    "AGTRV2603", "hoangnam_dev", "Lê Hoàng Nam", "0912001003", 5, 22,
+                    "Giao hàng nhanh trong ngày, check mã serial trên trang chủ Intel chuẩn bảo hành 36 tháng. Ghép với RTX 4060 chiến game Full HD không nghẽn cổ chai, rất đáng tiền.",
+                    null,
+                    new[] { (cpuImg, MediaType.Image), (mainImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2604", "thanhha_design", "Phạm Thanh Hà", "0912001004", 5, 19,
+                    "Nâng cấp từ i3 đời cũ lên khác biệt rõ rệt, mở nhiều tab trình duyệt kèm Photoshop và dựng video ngắn CapCut mượt hẳn. Nhân viên tư vấn tương thích mainboard rất nhiệt tình.",
+                    null,
+                    new[] { (cpuImg, MediaType.Image), (ramImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2605", "duykhanh_gm", "Võ Duy Khánh", "0912001005", 4, 16,
+                    "Hiệu năng trên giá thành rất tốt, chạy ổn định. Trừ nhẹ 1 sao vì quạt tản zin đi kèm hơi ồn khi chạy full load, khuyên mọi người nên đầu tư thêm tản tháp khoảng 400k là êm ru.",
+                    "Cảm ơn góp ý của anh Duy Khánh! Tản zin Intel đáp ứng tốt nhu cầu cơ bản, còn khi tải nặng dài hạn AGITEK có sẵn các mẫu tản khí AG400 giá tốt để giảm nhiệt và độ ồn ạ.",
+                    new[] { (cpuImg, MediaType.Image), (coolerImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2606", "ngoclinh_of", "Đặng Ngọc Linh", "0912001006", 4, 13,
+                    "Sản phẩm chính hãng, hộp đẹp, hiệu năng đúng như mô tả. Đơn vị vận chuyển giao trễ hơn dự kiến 1 ngày nhưng shop bọc chống sốc cẩn thận nên hàng vẫn nguyên vẹn.",
+                    null,
+                    new[] { (cpuImg, MediaType.Image), (caseImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2607", "tuananh_bld", "Bùi Tuấn Anh", "0912001007", 3, 10,
+                    "CPU dùng ổn cho làm việc và chơi game phổ thông, nhưng lưu ý bản F không có đồ họa tích hợp nên bắt buộc phải cắm card màn hình rời mới xuất hình được. Người mới tự lắp nên đọc kỹ thông số.",
+                    "Cảm ơn anh Tuấn Anh đã nhắc nhở hữu ích cho các khách hàng khác! Đúng là dòng Intel hậu tố F yêu cầu VGA rời để xuất hình ạ.",
+                    new[] { (cpuImg, MediaType.Image), (mainImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2608", "phuongthao_it", "Huỳnh Phương Thảo", "0912001008", 3, 8,
+                    "Hiệu năng ổn trong tầm giá phổ thông cho học lập trình và giải trí nhẹ, nhưng nếu render video dài hoặc chạy nhiều máy ảo cùng lúc thì hơi đuối, nên cân nhắc lên i5-13400F hoặc i5-14600K.",
+                    null,
+                    new[] { (cpuImg, MediaType.Image), (psuImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2609", "giahuy_pc", "Ngô Gia Huy", "0912001009", 2, 5,
+                    "Nhận hàng thấy góc hộp giấy ngoài bị móp nhẹ do quá trình vận chuyển. CPU bên trong lắp vẫn nhận và chạy bình thường nhưng mong shop gia cố hộp carton cứng hơn cho các đơn giao xa.",
+                    "AGITEK PC thành thật xin lỗi anh Gia Huy về trải nghiệm vận chuyển chưa trọn vẹn. Shop đã phản hồi với đơn vị giao hàng và tăng lớp chống sốc; nếu sản phẩm có bất kỳ vấn đề gì anh cứ liên hệ để được đổi mới ngay ạ.",
+                    new[] { (cpuImg, MediaType.Image) }
+                ),
+                (
+                    "AGTRV2610", "thaovy_lx", "Phan Thảo Vy", "0912001010", 1, 3,
+                    "Lúc đặt mua không để ý bản F không có iGPU tích hợp nên lắp vào máy văn phòng không lên màn hình, mất cả buổi kiểm tra tưởng lỗi mainboard rồi phải đặt thêm card rời.",
+                    "Rất tiếc vì sự bất tiện này ạ! Thông số phiên bản F (không có đồ họa tích hợp) đã được ghi rõ ở mô tả sản phẩm. Nếu chị cần đổi sang bản có GPU tích hợp, vui lòng nhắn AGITEK để được hỗ trợ nhanh nhất.",
+                    new[] { (cpuImg, MediaType.Image), (mainImg, MediaType.Image) }
+                )
+            };
+
+            var product = await context.Products.FirstOrDefaultAsync(p => p.SKU == targetSku && p.DeletedAt == null);
+            if (product == null)
+                return;
+
+            var trackingNumbers = reviewSpecs.Select(s => s.Tracking).ToArray();
+            var existingTrackings = (await context.Orders
+                .AsNoTracking()
+                .Where(o => trackingNumbers.Contains(o.TrackingNumber))
+                .Select(o => o.TrackingNumber)
+                .ToListAsync())
+                .ToHashSet();
+
+            if (existingTrackings.Count == reviewSpecs.Length)
+                return;
+
+            var warehouse = await context.Locations
+                .Where(l => l.IsWarehouse && l.Status == LocationStatus.Active)
+                .OrderBy(l => l.Id)
+                .FirstOrDefaultAsync();
+            if (warehouse == null)
+                return;
+
+            var staffId = await context.Users
+                .Where(u => u.Role == RoleName.Staff || u.Role == RoleName.Manager || u.Role == RoleName.Admin)
+                .OrderBy(u => u.Id)
+                .Select(u => (int?)u.Id)
+                .FirstOrDefaultAsync();
+            var deliveryUserId = await context.Users
+                .Where(u => u.Role == RoleName.Delivery && u.IsActive)
+                .OrderBy(u => u.Id)
+                .Select(u => (int?)u.Id)
+                .FirstOrDefaultAsync();
+
+            var usernames = reviewSpecs.Select(s => s.Username).ToArray();
+            var usersByUsername = await context.Users
+                .Where(u => u.Username != null && usernames.Contains(u.Username))
+                .ToDictionaryAsync(u => u.Username!, StringComparer.OrdinalIgnoreCase);
+
+            var passwordHash = AuthUtils.HashPassword("123123");
+            var newUsers = new List<User>();
+            foreach (var spec in reviewSpecs)
+            {
+                if (usersByUsername.ContainsKey(spec.Username))
+                    continue;
+
+                var user = new User
+                {
+                    Username = spec.Username,
+                    Email = $"{spec.Username}@agitek.demo",
+                    PasswordHash = passwordHash,
+                    Role = RoleName.Customer,
+                    IsActive = true,
+                    IsVerified = true,
+                    Providers = new List<Provider> { Provider.Credentials },
+                    Profile = new Profile
+                    {
+                        FullName = spec.FullName,
+                        PhoneNumber = spec.Phone,
+                        Gender = GenderType.Other,
+                        AvatarUrl = $"https://ui-avatars.com/api/?name={Uri.EscapeDataString(spec.FullName)}&background=random"
+                    }
+                };
+                newUsers.Add(user);
+                usersByUsername[spec.Username] = user;
+            }
+
+            if (newUsers.Count > 0)
+            {
+                context.Users.AddRange(newUsers);
+                await context.SaveChangesAsync();
+            }
+
+            var unitPrice = product.DiscountPrice.HasValue && product.DiscountPrice.Value < product.OriginalPrice
+                ? product.DiscountPrice.Value
+                : product.OriginalPrice;
+            var now = DateTime.UtcNow;
+            var addedOrders = new List<Order>();
+            var addedReviews = new List<Review>();
+
+            foreach (var spec in reviewSpecs)
+            {
+                if (existingTrackings.Contains(spec.Tracking))
+                    continue;
+
+                var reviewer = usersByUsername[spec.Username];
+                var createdAt = now.AddDays(-spec.DaysAgo - 3);
+                var deliveredAt = now.AddDays(-spec.DaysAgo - 1);
+                var reviewedAt = now.AddDays(-spec.DaysAgo);
+                var shippingFee = 30_000m;
+
+                var detail = new OrderDetail
+                {
+                    ProductId = product.Id,
+                    Quantity = 1,
+                    UnitPrice = unitPrice,
+                    TotalPrice = unitPrice
+                };
+
+                var order = new Order
+                {
+                    TrackingNumber = spec.Tracking,
+                    UserId = reviewer.Id,
+                    ApprovedByUserId = staffId,
+                    DeliveredByUserId = deliveryUserId,
+                    FromLocationId = warehouse.Id,
+                    Address = $"{spec.FullName}, {spec.Phone}, TP. Long Xuyên, Tỉnh An Giang",
+                    ShippingType = ShippingType.Standard,
+                    SubtotalPrice = unitPrice,
+                    ShippingFee = shippingFee,
+                    DiscountAmount = 0m,
+                    TotalPrice = unitPrice + shippingFee,
+                    Status = OrderStatus.Delivered,
+                    Note = "Đơn hàng mẫu phục vụ kiểm thử đánh giá sản phẩm i5-12400F.",
+                    CreatedAt = createdAt,
+                    UpdatedAt = deliveredAt,
+                    OrderDetails = new List<OrderDetail> { detail }
+                };
+
+                order.Payments.Add(new Payment
+                {
+                    Amount = order.TotalPrice,
+                    PaymentMethod = PaymentMethod.Bank,
+                    Status = PaymentStatus.Success,
+                    CreatedAt = createdAt,
+                    PaidAt = createdAt.AddMinutes(5),
+                    TransactionId = $"SEED-{spec.Tracking}"
+                });
+
+                order.OrderTrackingLogs.Add(new OrderTrackingLog
+                {
+                    Order = order,
+                    LocationId = warehouse.Id,
+                    Description = "Đơn hàng đã giao thành công.",
+                    Timestamp = deliveredAt
+                });
+
+                var review = new Review
+                {
+                    OrderDetail = detail,
+                    ProductId = product.Id,
+                    UserId = reviewer.Id,
+                    Rating = spec.Rating,
+                    Comment = spec.Comment,
+                    ReplyUserId = spec.Reply != null ? staffId : null,
+                    ReplyComment = spec.Reply,
+                    ReplyCreatedAt = spec.Reply != null ? reviewedAt.AddHours(6) : null,
+                    CreatedAt = reviewedAt,
+                    UpdatedAt = reviewedAt
+                };
+
+                foreach (var (mediaUrl, mediaType) in spec.Medias)
+                {
+                    review.Medias.Add(new Media
+                    {
+                        MediaUrl = mediaUrl,
+                        MediaType = mediaType
+                    });
+                }
+
+                addedOrders.Add(order);
+                addedReviews.Add(review);
+            }
+
+            if (addedOrders.Count > 0)
+            {
+                context.Orders.AddRange(addedOrders);
+                context.Reviews.AddRange(addedReviews);
+                await context.SaveChangesAsync();
+
+                var allRatings = await context.Reviews
+                    .AsNoTracking()
+                    .Where(r => r.ProductId == product.Id)
+                    .Select(r => r.Rating)
+                    .ToListAsync();
+                if (allRatings.Count > 0)
+                {
+                    product.AverageRating = Math.Round(allRatings.Average(), 2);
+                    product.SoldQuantity += addedOrders.Count;
+                    product.StockQuantity = Math.Max(0, product.StockQuantity - addedOrders.Count);
+                    product.UpdatedAt = now;
+                    UpdateInventoryStatus(product);
+                    await context.SaveChangesAsync();
+                }
+            }
+        }
         public static async Task ReseedCatalogAsync(this WebApplication app)
         {
             using var scope = app.Services.CreateScope();
@@ -603,6 +1342,7 @@ namespace AgitekBackend.Data
             var semanticSearchService = scope.ServiceProvider.GetRequiredService<ISemanticSearchService>();
 
             await context.Database.MigrateAsync();
+            await EnsureAuditLogsSchemaAsync(context);
             await SeedUsersAsync(context);
 
             await using var transaction = await context.Database.BeginTransactionAsync();
@@ -861,26 +1601,54 @@ namespace AgitekBackend.Data
 
         private static async Task SeedCatalogBrandsAsync(AppDbContext context)
         {
-            var brandSeeds = new (string Name, string Code)[]
+            var brandSeeds = new (string Name, string Code, string LogoUrl)[]
             {
-                ("ASUS", "ASUS"), ("MSI", "MSI"), ("GIGABYTE", "GIGA"), ("Intel", "INTEL"),
-                ("AMD", "AMD"), ("Kingston", "KING"), ("Samsung", "SAM"), ("Corsair", "COR"),
-                ("Cooler Master", "CMAS"), ("HACOM", "HACOM"), ("Apple", "APPLE"), ("Lenovo", "LENOVO"),
-                ("Acer", "ACER"), ("Dell", "DELL"), ("HP", "HPINC"), ("Western Digital", "WDC"),
-                ("Seagate", "SEAG"), ("Logitech", "LOGI"), ("HyperX", "HYPERX"),
-                ("TP-Link", "TPLINK"), ("SanDisk", "SDISK"), ("Anker", "ANKER"), ("LG", "LGE"),
-                ("DeepCool", "DCOOL"), ("Noctua", "NOCT"), ("Jonsbo", "JON")
+                ("ASUS", "ASUS", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600824/agitek/brands/asus.png"),
+                ("MSI", "MSI", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600827/agitek/brands/msi.png"),
+                ("GIGABYTE", "GIGA", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600829/agitek/brands/gigabyte.png"),
+                ("Intel", "INTEL", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600832/agitek/brands/intel.png"),
+                ("AMD", "AMD", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600835/agitek/brands/amd.png"),
+                ("Kingston", "KING", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600836/agitek/brands/kingston.png"),
+                ("Samsung", "SAM", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600839/agitek/brands/samsung.png"),
+                ("Corsair", "COR", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600840/agitek/brands/corsair.png"),
+                ("Cooler Master", "CMAS", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600843/agitek/brands/cooler-master.png"),
+                ("HACOM", "HACOM", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600845/agitek/brands/hacom.png"),
+                ("Apple", "APPLE", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600846/agitek/brands/apple.png"),
+                ("Lenovo", "LENOVO", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600851/agitek/brands/lenovo.png"),
+                ("Acer", "ACER", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600853/agitek/brands/acer.png"),
+                ("Dell", "DELL", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600856/agitek/brands/dell.png"),
+                ("HP", "HPINC", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600860/agitek/brands/hp.png"),
+                ("Western Digital", "WDC", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600863/agitek/brands/western-digital.png"),
+                ("Seagate", "SEAG", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600866/agitek/brands/seagate.png"),
+                ("Logitech", "LOGI", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600869/agitek/brands/logitech.png"),
+                ("HyperX", "HYPERX", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600870/agitek/brands/hyperx.png"),
+                ("TP-Link", "TPLINK", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600873/agitek/brands/tp-link.png"),
+                ("SanDisk", "SDISK", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600875/agitek/brands/sandisk.png"),
+                ("Anker", "ANKER", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600877/agitek/brands/anker.png"),
+                ("LG", "LGE", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600879/agitek/brands/lg.png"),
+                ("DeepCool", "DCOOL", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600883/agitek/brands/deepcool.png"),
+                ("Noctua", "NOCT", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600884/agitek/brands/noctua.png"),
+                ("Jonsbo", "JON", "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795600889/agitek/brands/jonsbo.png")
             };
-            var existingNames = await context.Brands.Select(brand => brand.Name).ToListAsync();
-            foreach (var (name, code) in brandSeeds)
+            var existingBrands = await context.Brands.ToListAsync();
+            foreach (var (name, code, logoUrl) in brandSeeds)
             {
-                if (existingNames.Contains(name, StringComparer.OrdinalIgnoreCase)) continue;
+                var existing = existingBrands.FirstOrDefault(brand =>
+                    brand.Name.Equals(name, StringComparison.OrdinalIgnoreCase) ||
+                    brand.Code.Equals(code, StringComparison.OrdinalIgnoreCase));
+                if (existing != null)
+                {
+                    if (string.IsNullOrWhiteSpace(existing.LogoUrl))
+                        existing.LogoUrl = logoUrl;
+                    continue;
+                }
 
                 context.Brands.Add(new Brand
                 {
                     Code = code,
                     Name = name,
-                    Slug = Helpers.GenerateSlug(name)
+                    Slug = Helpers.GenerateSlug(name),
+                    LogoUrl = logoUrl
                 });
             }
 
@@ -926,7 +1694,47 @@ namespace AgitekBackend.Data
             (string Name, string Value)[] Specifications,
             string? ImageUrl = null);
 
-        // Files live in agitek-frontend/public/images/catalog; sources.json records their public sources.
+        // Product catalog images are hosted on Cloudinary under folder "agitek/products".
+        private static readonly Dictionary<string, string> CatalogImageCloudUrls = new(StringComparer.OrdinalIgnoreCase)
+        {
+            ["case-corsair-4000d.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580004/agitek/products/tc4jixisgb6lmvz04kok.png",
+            ["case-jonsbo-c6.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580005/agitek/products/zra7yggutrqklpboxjmm.jpg",
+            ["cooler-ag400.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580006/agitek/products/xgmktlrbtqndufkbztib.jpg",
+            ["cpu-amd-7800x3d.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580007/agitek/products/c6hm3ymnxpzfw9igatkn.jpg",
+            ["cpu-intel-12400f.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580008/agitek/products/atykkypyc0q6dgxtbhyh.jpg",
+            ["cpu-intel-13400f.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580009/agitek/products/qcint3ab736mazk4pvrh.jpg",
+            ["gpu-asus-3090.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580011/agitek/products/v9fxsoutgekkxzfynlph.png",
+            ["gpu-msi-3060.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580012/agitek/products/zonzwrdrvt2ou5ko1nle.jpg",
+            ["hdd-seagate-2tb.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580013/agitek/products/fkxcgn1ueu0utnicerls.jpg",
+            ["headset-hyperx.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580014/agitek/products/sw3ma69fu4japfxqhfzy.jpg",
+            ["hub-anker.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580015/agitek/products/us4yb3twpjx7gidt5i9e.png",
+            ["keyboard-g413.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580015/agitek/products/mqs6cx6hllc2mqm9ued3.jpg",
+            ["laptop-acer.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580016/agitek/products/qxd06bl4cmckxw7r3ave.png",
+            ["laptop-asus.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580017/agitek/products/jcuc5z4oqkv5xm9judnz.jpg",
+            ["laptop-dell.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580018/agitek/products/zmarlhemgbalwmncbc6a.jpg",
+            ["laptop-hp.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580019/agitek/products/sn5qx08iwvzbtslpym8a.jpg",
+            ["laptop-lenovo.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580020/agitek/products/dgqg59i097g4xk7e8rck.png",
+            ["mac-mini-m2.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580020/agitek/products/dgio0oghwb2a95spvrua.jpg",
+            ["macbook-air-m2.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580021/agitek/products/k9mtyhj3ogi7e7matnn9.png",
+            ["main-asus-b760.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580023/agitek/products/yjajkfbaglmlnz6shqmy.png",
+            ["main-msi-b550.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580024/agitek/products/anqrmh1ow4c3whkg0beh.png",
+            ["monitor-lg.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580025/agitek/products/is1s8pxbz1s7jfmpi8bz.png",
+            ["mouse-g502.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580025/agitek/products/xqm5e2glaa2fpyo3n7gx.png",
+            ["pc-economy-035.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580026/agitek/products/ajejanpjkrkd4eze8qmm.jpg",
+            ["pc-economy-083.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580027/agitek/products/yujzrkkptvigmwnbuy8z.jpg",
+            ["pc-hacom-022.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580028/agitek/products/twmgcoxapiikst39u63m.jpg",
+            ["pc-poseidon-3090.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580028/agitek/products/qaqbvgazyq87jzdqzzlq.jpg",
+            ["psu-asus-850.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580031/agitek/products/ztbkefsgu8ok6yfvuv0b.png",
+            ["psu-corsair-750.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580032/agitek/products/mj76xxfxuoc5flu22dog.png",
+            ["ram-corsair-ddr5.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580033/agitek/products/srypqp0hn3q5djhtuxap.png",
+            ["ram-kingston-ddr4.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580034/agitek/products/ksbgpc2aaeewoa1njsuo.jpg",
+            ["router-tplink.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580034/agitek/products/fyjjzxej9dt1f6ylwhte.jpg",
+            ["ssd-samsung-970.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580035/agitek/products/hb7uioal9yeifygyexoc.jpg",
+            ["ssd-samsung-990.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580036/agitek/products/bmyjkkrwfvebyrm2kqp1.jpg",
+            ["switch-tplink.jpg"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580037/agitek/products/v0cignyospzmbmofair0.jpg",
+            ["usb-sandisk.png"] = "https://res.cloudinary.com/dqwgq5chd/image/upload/v1795580038/agitek/products/ogtboqsaddphtb7ikjdc.png"
+        };
+
         private static readonly Dictionary<string, string> CatalogImageFiles = new()
         {
             ["I512400F"] = "cpu-intel-12400f.jpg",
@@ -989,8 +1797,10 @@ namespace AgitekBackend.Data
         {
             if (!CatalogImageFiles.TryGetValue(productCode, out var fileName))
                 throw new InvalidOperationException($"No catalog image mapped for {productCode}.");
+            if (!CatalogImageCloudUrls.TryGetValue(fileName, out var cloudUrl))
+                throw new InvalidOperationException($"No Cloudinary URL mapped for catalog image {fileName}.");
 
-            return $"/images/catalog/{fileName}";
+            return cloudUrl;
         }
 
         internal static IReadOnlyList<ProductSeed> Products { get; } =

@@ -52,5 +52,13 @@ namespace AgitekBackend.Controllers
             var payment = await _paymentService.GetPublicByOrderAsync(orderId, trackingNumber);
             return Ok(payment);
         }
+
+        [HttpPost("payment/{orderId:int}/resume")]
+        [AllowAnonymous]
+        public async Task<ActionResult<PublicPaymentDTO>> ResumePayment(int orderId, [FromQuery] string trackingNumber)
+        {
+            var payment = await _paymentService.ResumeOrCreateBankPaymentAsync(orderId, trackingNumber);
+            return Ok(payment);
+        }
     }
 }

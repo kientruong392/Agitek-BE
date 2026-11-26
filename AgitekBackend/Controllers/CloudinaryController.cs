@@ -25,6 +25,7 @@ namespace AgitekBackend.Controllers
         {
             var operation = folder.ToLowerInvariant() switch
             {
+                "agitek/avatars" => CloudinaryOperation.UploadAvatar,
                 "agitek/orders/proof" => CloudinaryOperation.UploadOrderProof,
                 "agitek/reviews" => CloudinaryOperation.UploadReview,
                 "agitek/refunds" => CloudinaryOperation.UploadRefund,

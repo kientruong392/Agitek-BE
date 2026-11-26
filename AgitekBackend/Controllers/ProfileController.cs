@@ -1,3 +1,4 @@
+using System.Security.Claims;
 using AgitekBackend.Authorization.Requirements;
 using AgitekBackend.Common.Exceptions;
 using AgitekBackend.DTOs.Profiles;
@@ -35,9 +36,12 @@ namespace AgitekBackend.Controllers
         [HttpGet("{userId:int}")]
         public async Task<ActionResult<ProfileDTO>> GetById(int userId)
         {
-            var authResult = await _authorizationService.AuthorizeAsync(User, userId, new UserManagementRequirement(UserOperation.Read));
-            if (!authResult.Succeeded)
-                throw new ForbiddenException("You do not have permission to access this resource");
+            if (GetCurrentUserId() != userId)
+            {
+                var authResult = await _authorizationService.AuthorizeAsync(User, userId, new UserManagementRequirement(UserOperation.Read));
+                if (!authResult.Succeeded)
+                    throw new ForbiddenException("You do not have permission to access this resource");
+            }
 
             return Ok(await _profileService.GetByUserIdAsync(userId));
         }
@@ -45,11 +49,22 @@ namespace AgitekBackend.Controllers
         [HttpPatch("{userId:int}")]
         public async Task<ActionResult<ProfileDTO>> Update(int userId, [FromBody] UpdateProfileDTO dto)
         {
-            var authResult = await _authorizationService.AuthorizeAsync(User, userId, new UserManagementRequirement(UserOperation.Update));
-            if (!authResult.Succeeded)
-                throw new ForbiddenException("You do not have permission to access this resource");
+            if (GetCurrentUserId() != userId)
+            {
+                var authResult = await _authorizationService.AuthorizeAsync(User, userId, new UserManagementRequirement(UserOperation.Update));
+                if (!authResult.Succeeded)
+                    throw new ForbiddenException("You do not have permission to access this resource");
+            }
 
             return Ok(await _profileService.UpdateAsync(userId, dto));
+        }
+
+        private int? GetCurrentUserId()
+        {
+            var claim = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("sub")
+                ?? User.FindFirstValue("id");
+            return int.TryParse(claim, out var userId) ? userId : null;
         }
     }
 }

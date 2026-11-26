@@ -75,6 +75,21 @@ namespace AgitekBackend.Controllers
             return Ok();
         }
 
+        [HttpPost("set-password")]
+        public async Task<IActionResult> SetPassword([FromBody] SetPasswordDTO dto)
+        {
+            var userIdStr = User.FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? User.FindFirstValue("sub")
+                ?? User.FindFirstValue("id")
+                ?? throw new UnauthorizedAccessException("User ID not found in token");
+
+            if (!int.TryParse(userIdStr, out var userId))
+                return Unauthorized();
+
+            await _authService.SetPasswordAsync(userId, dto);
+            return Ok();
+        }
+
         [HttpPost("refresh")]
         [AllowAnonymous]
         public async Task<ActionResult<TokenResponseDTO>> Refresh([FromBody] TokenResponseDTO body)
@@ -131,3 +146,4 @@ namespace AgitekBackend.Controllers
                 $"{frontendUrl}/login/success?accessToken={accessToken}&refreshToken={refreshToken}");
         }
     }
+}

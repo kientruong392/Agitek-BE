@@ -262,6 +262,12 @@ if (args.Any(argument => string.Equals(argument, "--seed-report-orders", StringC
     return;
 }
 
+if (args.Any(argument => string.Equals(argument, "--seed-test-user", StringComparison.OrdinalIgnoreCase)))
+{
+    await app.SeedTestUserDataAsync();
+    return;
+}
+
 app.UseMiddleware<GlobalExceptionMiddleware>();
 
 if (app.Environment.IsDevelopment())

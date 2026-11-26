@@ -9,7 +9,8 @@ namespace AgitekBackend.DTOs.Mappers
         public UserMapper()
         {
             CreateMap<CreateUserDTO, User>();
-            CreateMap<User, UserDTO>();
+            CreateMap<User, UserDTO>()
+                .ForMember(dest => dest.HasPassword, opt => opt.MapFrom(src => !string.IsNullOrEmpty(src.PasswordHash)));
             CreateMap<User, GrantedByUserDTO>();
         }
     }

@@ -5,6 +5,7 @@ namespace AgitekBackend.Authorization.Requirements
     public enum CloudinaryOperation
     {
         Upload,
+        UploadAvatar,
         UploadOrderProof,
         UploadReview,
         UploadRefund,

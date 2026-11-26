@@ -11,6 +11,9 @@ namespace AgitekBackend.DTOs.Orders
     {
         public int Id { get; set; }
         public int? PaymentId { get; set; }
+        public PaymentMethod? PaymentMethod { get; set; }
+        public PaymentStatus? PaymentStatus { get; set; }
+        public DateTime? PaymentExpiresAt { get; set; }
         public string TrackingNumber { get; set; } = string.Empty;
         public int UserId { get; set; }
         public string? CustomerName { get; set; }

@@ -1,3 +1,4 @@
+using AgitekBackend.Common;
 using AgitekBackend.DTOs.OrderDetails;
 using AgitekBackend.DTOs.Orders;
 using AgitekBackend.DTOs.OrderTrackingLogs;
@@ -17,6 +18,16 @@ namespace AgitekBackend.DTOs.Mappers
             CreateMap<Order, OrderDTO>()
                 .ForMember(dest => dest.PaymentId, opts => opts.MapFrom(src =>
                     src.Payments.OrderByDescending(payment => payment.Id).Select(payment => (int?)payment.Id).FirstOrDefault()))
+                .ForMember(dest => dest.PaymentMethod, opts => opts.MapFrom(src =>
+                    src.Payments.OrderByDescending(payment => payment.Id).Select(payment => (PaymentMethod?)payment.PaymentMethod).FirstOrDefault()))
+                .ForMember(dest => dest.PaymentStatus, opts => opts.MapFrom(src =>
+                    src.Payments.OrderByDescending(payment => payment.Id).Select(payment => (PaymentStatus?)payment.Status).FirstOrDefault()))
+                .ForMember(dest => dest.PaymentExpiresAt, opts => opts.MapFrom(src =>
+                    src.Payments.OrderByDescending(payment => payment.Id)
+                        .Select(payment => payment.ExpiresAt.HasValue
+                            ? (DateTime?)DateTime.SpecifyKind(payment.ExpiresAt.Value, DateTimeKind.Utc)
+                            : null)
+                        .FirstOrDefault()))
                 .ForMember(dest => dest.CustomerName, opts => opts.MapFrom(src => src.User.Profile.FullName))
                 .ForMember(dest => dest.CustomerPhone, opts => opts.MapFrom(src => src.User.Profile.PhoneNumber))
                 .ForMember(dest => dest.ToLocation, opts => opts.MapFrom(src => src.ToLocation))
