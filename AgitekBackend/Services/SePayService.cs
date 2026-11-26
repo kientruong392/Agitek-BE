@@ -56,7 +56,11 @@ namespace AgitekBackend.Services
 
             var payment = await _context.Payments
                 .Include(item => item.Order)
-                .FirstOrDefaultAsync(item => item.OrderId == orderId.Value && item.PaymentMethod == PaymentMethod.Bank);
+                .Where(item => item.OrderId == orderId.Value &&
+                    item.PaymentMethod == PaymentMethod.Bank &&
+                    item.Status == PaymentStatus.Pending)
+                .OrderByDescending(item => item.Id)
+                .FirstOrDefaultAsync();
             if (payment == null)
                 return;
 

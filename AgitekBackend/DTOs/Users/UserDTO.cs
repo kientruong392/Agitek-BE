@@ -18,6 +18,7 @@ namespace AgitekBackend.DTOs.Users
         public DateTime? RoleGrantedAt { get; set; }
         public bool IsActive { get; set; }
         public bool IsVerified { get; set; }
+        public bool HasPassword { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
         public DateTime? DeletedAt { get; set; }

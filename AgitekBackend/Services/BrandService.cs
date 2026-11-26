@@ -35,14 +35,20 @@ namespace AgitekBackend.Services
         
         public async Task<BrandDTO> GetByIdWithProductsAsync(int id)
         {
-            var brand = await _context.Brands.Include(b => b.Products).FirstOrDefaultAsync(b => b.Id == id);
+            var brand = await _context.Brands
+                .Include(b => b.Products)
+                    .ThenInclude(p => p.Images)
+                .FirstOrDefaultAsync(b => b.Id == id);
             if (brand == null) throw new NotFoundException($"Brand not found");
             return _mapper.Map<BrandDTO>(brand);
         }
 
         public async Task<BrandDTO> GetBySlugWithProductsAsync(string slug)
         {
-            var brand = await _context.Brands.Include(b => b.Products).FirstOrDefaultAsync(b => b.Slug == slug);
+            var brand = await _context.Brands
+                .Include(b => b.Products)
+                    .ThenInclude(p => p.Images)
+                .FirstOrDefaultAsync(b => b.Slug == slug);
             if (brand == null) throw new NotFoundException($"Brand not found");
             return _mapper.Map<BrandDTO>(brand);
         }

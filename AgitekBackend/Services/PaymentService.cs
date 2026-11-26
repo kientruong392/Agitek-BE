@@ -79,8 +79,9 @@ namespace AgitekBackend.Services
         public async Task<PaymentDTO?> GetPendingPaymentAsync(int orderId)
         {
             var payment = await PaymentsWithOrderDetails()
-                .Where(p => p.OrderId == orderId)
-                .FirstOrDefaultAsync(p => p.Status == PaymentStatus.Pending);
+                .Where(p => p.OrderId == orderId && p.Status == PaymentStatus.Pending)
+                .OrderByDescending(p => p.Id)
+                .FirstOrDefaultAsync();
             return payment == null ? null : ToPaymentDTO(payment);
         }
 
@@ -94,6 +95,112 @@ namespace AgitekBackend.Services
             if (payment == null || payment.PaymentMethod != PaymentMethod.Bank)
                 throw new NotFoundException("Payment not found");
 
+            return ToPublicPaymentDTO(payment);
+        }
+
+        public async Task<PublicPaymentDTO> ResumeOrCreateBankPaymentAsync(int orderId, string trackingNumber)
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync(
+                System.Data.IsolationLevel.Serializable);
+
+            var order = await _context.Orders
+                .Include(o => o.Payments)
+                .Include(o => o.OrderDetails)
+                .FirstOrDefaultAsync(o => o.Id == orderId && o.TrackingNumber == trackingNumber);
+
+            if (order == null)
+                throw new NotFoundException("Order not found");
+
+            var bankPayments = order.Payments
+                .Where(p => p.PaymentMethod == PaymentMethod.Bank)
+                .OrderByDescending(p => p.Id)
+                .ToList();
+
+            if (bankPayments.Count == 0)
+                throw new BadRequestException("Order does not use SePay bank transfer");
+
+            var paidPayment = bankPayments.FirstOrDefault(p => p.Status == PaymentStatus.Success);
+            if (order.Status == OrderStatus.Paid || paidPayment != null)
+            {
+                await transaction.CommitAsync();
+                return ToPublicPaymentDTO(paidPayment ?? bankPayments[0]);
+            }
+
+            var now = DateTime.UtcNow;
+            var latestPayment = bankPayments[0];
+            var latestExpiresAtUtc = latestPayment.ExpiresAt.HasValue
+                ? DateTime.SpecifyKind(latestPayment.ExpiresAt.Value, DateTimeKind.Utc)
+                : (DateTime?)null;
+
+            if (order.Status == OrderStatus.Ordered &&
+                latestPayment.Status == PaymentStatus.Pending &&
+                latestExpiresAtUtc.HasValue &&
+                latestExpiresAtUtc.Value > now)
+            {
+                await transaction.CommitAsync();
+                return ToPublicPaymentDTO(latestPayment);
+            }
+
+            if (order.Status != OrderStatus.Ordered && order.Status != OrderStatus.Cancelled)
+                throw new BadRequestException("Order cannot resume payment in its current status");
+
+            if (order.Status == OrderStatus.Cancelled)
+            {
+                var productIds = order.OrderDetails.Select(d => d.ProductId).Distinct().ToList();
+                var products = await _context.Products
+                    .Where(p => productIds.Contains(p.Id))
+                    .ToDictionaryAsync(p => p.Id);
+
+                foreach (var detail in order.OrderDetails)
+                {
+                    if (!products.TryGetValue(detail.ProductId, out var product) ||
+                        product.Status == ProductStatus.Deleted ||
+                        product.Status == ProductStatus.Hidden)
+                    {
+                        throw new BadRequestException("Some products in this order are no longer available");
+                    }
+
+                    if (product.StockQuantity < detail.Quantity)
+                    {
+                        throw new BadRequestException($"Insufficient stock for '{product.ProductName}'");
+                    }
+
+                    product.StockQuantity -= detail.Quantity;
+                    product.SoldQuantity += detail.Quantity;
+                    product.UpdatedAt = now;
+                    product.Status = ResolveStockStatus(product);
+                }
+
+                order.Status = OrderStatus.Ordered;
+                order.UpdatedAt = now;
+            }
+
+            foreach (var stalePayment in bankPayments.Where(p => p.Status == PaymentStatus.Pending))
+            {
+                stalePayment.Status = PaymentStatus.Expired;
+                stalePayment.ExpiresAt = null;
+            }
+
+            var newPayment = new Payment
+            {
+                OrderId = order.Id,
+                Order = order,
+                Amount = order.TotalPrice,
+                PaymentMethod = PaymentMethod.Bank,
+                Status = PaymentStatus.Pending,
+                CreatedAt = now,
+                ExpiresAt = now.AddMinutes(15)
+            };
+
+            _context.Payments.Add(newPayment);
+            await _context.SaveChangesAsync();
+            await transaction.CommitAsync();
+
+            return ToPublicPaymentDTO(newPayment);
+        }
+
+        private PublicPaymentDTO ToPublicPaymentDTO(Payment payment)
+        {
             var paymentDto = ToPaymentDTO(payment);
             return new PublicPaymentDTO
             {
@@ -101,8 +208,12 @@ namespace AgitekBackend.Services
                 Amount = payment.Amount,
                 PaymentMethod = payment.PaymentMethod,
                 Status = payment.Status,
-                ExpiresAt = payment.ExpiresAt,
-                PaidAt = payment.PaidAt,
+                ExpiresAt = payment.ExpiresAt.HasValue
+                    ? DateTime.SpecifyKind(payment.ExpiresAt.Value, DateTimeKind.Utc)
+                    : null,
+                PaidAt = payment.PaidAt.HasValue
+                    ? DateTime.SpecifyKind(payment.PaidAt.Value, DateTimeKind.Utc)
+                    : null,
                 OrderStatus = payment.Order.Status,
                 QrCodeUrl = paymentDto.QrCodeUrl,
                 BankId = paymentDto.BankId,
@@ -112,9 +223,30 @@ namespace AgitekBackend.Services
             };
         }
 
+        private static ProductStatus ResolveStockStatus(Product product)
+        {
+            if (product.Status != ProductStatus.InStock &&
+                product.Status != ProductStatus.LowStock &&
+                product.Status != ProductStatus.OutOfStock)
+                return product.Status;
+
+            if (product.StockQuantity <= 0)
+                return ProductStatus.OutOfStock;
+
+            if (product.InitialQuantity > 0 &&
+                (decimal)product.StockQuantity * 100m <= (decimal)product.InitialQuantity * 20m)
+                return ProductStatus.LowStock;
+
+            return ProductStatus.InStock;
+        }
+
         private PaymentDTO ToPaymentDTO(Payment payment)
         {
             var dto = _mapper.Map<PaymentDTO>(payment);
+            if (dto.ExpiresAt.HasValue)
+                dto.ExpiresAt = DateTime.SpecifyKind(dto.ExpiresAt.Value, DateTimeKind.Utc);
+            if (dto.PaidAt.HasValue)
+                dto.PaidAt = DateTime.SpecifyKind(dto.PaidAt.Value, DateTimeKind.Utc);
             var order = payment.Order;
 
             if (payment.PaymentMethod == PaymentMethod.Bank)

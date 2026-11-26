@@ -11,6 +11,7 @@ namespace AgitekBackend.Services.Interfaces
         Task ResendVerifyCodeAsync(string userId);
         Task ForgotPasswordAsync(string email);
         Task ResetPasswordAsync(ResetPasswordDTO dto);
+        Task SetPasswordAsync(int userId, SetPasswordDTO dto);
         Task<TokenResponseDTO> RefreshTokenAsync(string refreshToken);
         Task LogoutAsync(string refreshToken);
         Task<TokenResponseDTO> HandleGoogleLoginAsync(string email, string name);

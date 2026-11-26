@@ -45,6 +45,7 @@ namespace AgitekBackend.Services
         {
             var normalizedCode = code.ToUpperInvariant();
             var voucher = await _context.Vouchers
+                .AsNoTracking()
                 .FirstOrDefaultAsync(item => item.Code.ToUpper() == normalizedCode);
             if (voucher == null ||
                 (voucher.Status != VoucherStatus.Active && voucher.Status != VoucherStatus.LowStock) ||

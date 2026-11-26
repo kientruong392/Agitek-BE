@@ -72,7 +72,10 @@ namespace AgitekBackend.Services
             else if (userId.HasValue)
                 query = query.Where(order => order.UserId == userId.Value);
 
-            var orders = await query.ToListAsync();
+            var orders = await query
+                .OrderByDescending(order => order.CreatedAt)
+                .ThenByDescending(order => order.Id)
+                .ToListAsync();
             return _mapper.Map<IEnumerable<OrderDTO>>(orders);
         }
 
@@ -365,7 +368,7 @@ namespace AgitekBackend.Services
                 throw new BadRequestException("Order total is outside the supported range");
 
             order.TransactionId = null;
-            order.Voucher = voucher == null ? null : new Voucher { Id = voucher.VoucherId };
+            order.Voucher = null;
             order.TrackingNumber = await GenerateTrackingNumberAsync();
             order.UserId = currentUserId;
             order.CreatedAt = DateTime.UtcNow;
@@ -440,6 +443,7 @@ namespace AgitekBackend.Services
                 order.TotalPrice = Math.Max(0m, order.SubtotalPrice + order.ShippingFee - order.DiscountAmount);
                 var pendingPayment = await _context.Payments
                     .Where(payment => payment.OrderId == order.Id && payment.Status == PaymentStatus.Pending)
+                    .OrderByDescending(payment => payment.Id)
                     .FirstOrDefaultAsync();
                 if (pendingPayment != null)
                     pendingPayment.Amount = order.TotalPrice;
@@ -484,10 +488,18 @@ namespace AgitekBackend.Services
                 throw new BadRequestException("Order approval can only set status to Confirmed");
             if (order.Status != OrderStatus.Ordered && order.Status != OrderStatus.Paid)
                 throw new BadRequestException("Only unpaid or paid new orders can be confirmed");
-            if (order.Payments.Any(payment => payment.PaymentMethod != PaymentMethod.COD && payment.Status != PaymentStatus.Success))
-                throw new BadRequestException("Order payment must be successful before confirmation");
-            if (order.Payments.Any(payment => payment.Status == PaymentStatus.Expired || payment.Status == PaymentStatus.Failed || payment.Status == PaymentStatus.Refunded))
-                throw new BadRequestException("Order payment is no longer valid");
+            var latestPayment = order.Payments
+                .OrderByDescending(payment => payment.Id)
+                .FirstOrDefault();
+            if (latestPayment != null)
+            {
+                if (latestPayment.PaymentMethod != PaymentMethod.COD && latestPayment.Status != PaymentStatus.Success)
+                    throw new BadRequestException("Order payment must be successful before confirmation");
+                if (latestPayment.Status == PaymentStatus.Expired ||
+                    latestPayment.Status == PaymentStatus.Failed ||
+                    latestPayment.Status == PaymentStatus.Refunded)
+                    throw new BadRequestException("Order payment is no longer valid");
+            }
 
             if (order.DeliveredByUserId.HasValue)
                 throw new BadRequestException("Delivery user has already been assigned");

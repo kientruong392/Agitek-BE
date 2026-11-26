@@ -1,6 +1,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using System.Text.Json;
 using System.Text.RegularExpressions;
 using AgitekBackend.Common;
 using AgitekBackend.Common.Exceptions;
@@ -156,24 +157,124 @@ namespace AgitekBackend.Services
             await _redis.KeyDeleteAsync($"forgot-password-user:{userId}");
         }
 
+        private sealed record RotatedRefreshRecord(int UserId, string AccessToken, string RefreshToken);
+        private static readonly TimeSpan RefreshRotationGraceWindow = TimeSpan.FromMinutes(5);
+
+        public async Task SetPasswordAsync(int userId, SetPasswordDTO dto)
+        {
+            if (string.IsNullOrWhiteSpace(dto.Password) || dto.Password.Length < 6 || dto.Password.Length > 100)
+                throw new BadRequestException("Password must be between 6 and 100 characters", "INVALID_PASSWORD");
+
+            if (dto.Password != dto.ConfirmPassword)
+                throw new BadRequestException("Passwords do not match", "PASSWORD_MISMATCH");
+
+            var user = await _userService.GetByIdAsync(userId);
+            if (user.HasPassword)
+                throw new BadRequestException("This account already has a password", "PASSWORD_ALREADY_SET");
+
+            await _userService.ChangePasswordAsync(userId, dto.Password);
+            await _userService.AddProviderAsync(userId, Provider.Credentials);
+        }
+
         public async Task<TokenResponseDTO> RefreshTokenAsync(string refreshToken)
         {
-            var storedUserId = await _redis.StringGetAsync($"refresh:{refreshToken}");
-            if (!storedUserId.HasValue)
+            if (string.IsNullOrWhiteSpace(refreshToken))
                 throw new UnauthorizedException("Invalid or expired refresh token", "REFRESH_TOKEN_INVALID");
 
-            var user = await _userService.GetByIdAsync(int.Parse(storedUserId.ToString()));
+            var refreshKey = $"refresh:{refreshToken}";
+            var rotatedKey = $"refresh-rotated:{refreshToken}";
+            var lockKey = $"refresh-lock:{refreshToken}";
+
+            // 1. Idempotent grace window: if this refresh token was just rotated by a concurrent
+            //    request (e.g. parallel Server Actions / RSC / middleware), return the same pair.
+            var cachedRotated = await TryGetRotatedTokensAsync(rotatedKey);
+            if (cachedRotated != null)
+                return cachedRotated;
+
+            // 2. Acquire short distributed lock per refresh token so concurrent requests don't race.
+            var lockValue = Guid.NewGuid().ToString("N");
+            var lockAcquired = false;
+            for (var attempt = 0; attempt < 25; attempt++)
+            {
+                lockAcquired = await _redis.StringSetAsync(lockKey, lockValue, TimeSpan.FromSeconds(10), When.NotExists);
+                if (lockAcquired) break;
+
+                await Task.Delay(80);
+                cachedRotated = await TryGetRotatedTokensAsync(rotatedKey);
+                if (cachedRotated != null)
+                    return cachedRotated;
+            }
+
+            try
+            {
+                cachedRotated = await TryGetRotatedTokensAsync(rotatedKey);
+                if (cachedRotated != null)
+                    return cachedRotated;
+
+                var storedUserId = await _redis.StringGetAsync(refreshKey);
+                if (!storedUserId.HasValue)
+                    throw new UnauthorizedException("Invalid or expired refresh token", "REFRESH_TOKEN_INVALID");
+
+                var user = await _userService.GetByIdAsync(int.Parse(storedUserId.ToString()));
+                if (user == null || !user.IsActive)
+                    throw new UnauthorizedException("This account has been locked or not found", "ACCOUNT_LOCKED");
+
+                var newTokens = await CreateTokenPairAsync(user);
+
+                var recordJson = JsonSerializer.Serialize(new RotatedRefreshRecord(
+                    user.Id,
+                    newTokens.AccessToken,
+                    newTokens.RefreshToken));
+                await _redis.StringSetAsync(rotatedKey, recordJson, RefreshRotationGraceWindow);
+                await _redis.KeyDeleteAsync(refreshKey);
+
+                return newTokens;
+            }
+            finally
+            {
+                if (lockAcquired)
+                {
+                    var currentLock = await _redis.StringGetAsync(lockKey);
+                    if (currentLock == lockValue)
+                        await _redis.KeyDeleteAsync(lockKey);
+                }
+            }
+        }
+
+        private async Task<TokenResponseDTO?> TryGetRotatedTokensAsync(string rotatedKey)
+        {
+            var rotatedRaw = await _redis.StringGetAsync(rotatedKey);
+            if (!rotatedRaw.HasValue) return null;
+
+            var record = JsonSerializer.Deserialize<RotatedRefreshRecord>(rotatedRaw.ToString());
+            if (record == null) return null;
+
+            var user = await _userService.GetByIdAsync(record.UserId);
             if (user == null || !user.IsActive)
                 throw new UnauthorizedException("This account has been locked or not found", "ACCOUNT_LOCKED");
 
-            await _redis.KeyDeleteAsync($"refresh:{refreshToken}");
-            return await CreateTokenPairAsync(user);
+            return new TokenResponseDTO
+            {
+                AccessToken = record.AccessToken,
+                RefreshToken = record.RefreshToken,
+            };
         }
 
         public async Task LogoutAsync(string refreshToken)
         {
-            if (!string.IsNullOrWhiteSpace(refreshToken))
-                await _redis.KeyDeleteAsync($"refresh:{refreshToken}");
+            if (string.IsNullOrWhiteSpace(refreshToken)) return;
+
+            var rotatedKey = $"refresh-rotated:{refreshToken}";
+            var rotatedRaw = await _redis.StringGetAsync(rotatedKey);
+            if (rotatedRaw.HasValue)
+            {
+                var record = JsonSerializer.Deserialize<RotatedRefreshRecord>(rotatedRaw.ToString());
+                if (record != null && !string.IsNullOrWhiteSpace(record.RefreshToken))
+                    await _redis.KeyDeleteAsync($"refresh:{record.RefreshToken}");
+                await _redis.KeyDeleteAsync(rotatedKey);
+            }
+
+            await _redis.KeyDeleteAsync($"refresh:{refreshToken}");
         }
 
         public async Task<TokenResponseDTO> HandleGoogleLoginAsync(string email, string name)
@@ -211,10 +312,12 @@ namespace AgitekBackend.Services
         private async Task<UserDTO> ValidateCredentialsAsync(string usernameOrEmail, string password)
         {
             var user = await _userService.GetByUsernameOrEmailAsync(usernameOrEmail);
-            if (user == null || !AuthUtils.VerifyPassword(password, user.PasswordHash!))
+            if (user == null)
                 throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
-            if(user.PasswordHash == null)
-                throw new UnauthorizedException("This account is invalid", "INVALID_ACCOUNT");
+            if (string.IsNullOrEmpty(user.PasswordHash))
+                throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
+            if (!AuthUtils.VerifyPassword(password, user.PasswordHash))
+                throw new UnauthorizedException("Invalid credentials", "INVALID_CREDENTIALS");
             if (!user.IsActive)
                 throw new UnauthorizedException("This account has been deactivated", "ACCOUNT_LOCKED");
 

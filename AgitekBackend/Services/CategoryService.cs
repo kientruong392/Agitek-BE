@@ -1,3 +1,4 @@
+using AgitekBackend.Common;
 using AgitekBackend.Data;
 using AgitekBackend.DTOs.Categories;
 using AgitekBackend.Models;
@@ -53,7 +54,10 @@ namespace AgitekBackend.Services
 
         public async Task<CategoryDTO> GetByIdWithProducts(int id)
         {
-            var category = await _context.Categories.Include(c => c.Products).FirstOrDefaultAsync(c => c.Id == id);
+            var category = await _context.Categories
+                .Include(c => c.Products)
+                    .ThenInclude(p => p.Images)
+                .FirstOrDefaultAsync(c => c.Id == id);
             if (category == null) throw new NotFoundException($"Category not found");
             return _mapper.Map<CategoryDTO>(category);
         }
@@ -62,19 +66,29 @@ namespace AgitekBackend.Services
         {
             var category = await _context.Categories.FirstOrDefaultAsync(c => c.Slug == slug);
             if (category == null) throw new NotFoundException($"Category not found");
-            if(category.ParentCategoryId != null)
+            if (category.ParentCategoryId != null)
             {
                 category.Products = await _context.Products
-                    .Where(p => p.CategoryId == category.Id)
+                    .Include(p => p.Images)
+                    .Where(p => p.CategoryId == category.Id &&
+                        p.Status != ProductStatus.Deleted &&
+                        p.Status != ProductStatus.Hidden &&
+                        p.Status != ProductStatus.Pending)
                     .ToListAsync();
             }
             else
             {
-                var subCategories = await _context.Categories
+                var subCategoryIds = await _context.Categories
                     .Where(c => c.ParentCategoryId == category.Id)
-                    .Include(c => c.Products)
+                    .Select(c => c.Id)
                     .ToListAsync();
-                category.Products = subCategories.SelectMany(c => c.Products).ToList();
+                category.Products = await _context.Products
+                    .Include(p => p.Images)
+                    .Where(p => (p.CategoryId == category.Id || subCategoryIds.Contains(p.CategoryId)) &&
+                        p.Status != ProductStatus.Deleted &&
+                        p.Status != ProductStatus.Hidden &&
+                        p.Status != ProductStatus.Pending)
+                    .ToListAsync();
             }
             return _mapper.Map<CategoryDTO>(category);
         }
